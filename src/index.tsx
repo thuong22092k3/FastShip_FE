@@ -1,19 +1,27 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import React, { useState } from "react";
+import { createRoot } from "react-dom/client";
+import { MantineProvider, createTheme } from "@mantine/core";
+import App from "./App";
 
-const root = ReactDOM.createRoot(
-  document.getElementById('root') as HTMLElement
-);
+const container = document.getElementById("root");
+const root = createRoot(container!);
+
+const theme = createTheme({
+  /** Tùy chỉnh theme */
+});
+
+function Root() {
+  const [colorScheme, setColorScheme] = useState<"light" | "dark">("light");
+
+  return (
+    <MantineProvider theme={theme} defaultColorScheme={colorScheme}>
+      <App />
+    </MantineProvider>
+  );
+}
+
 root.render(
   <React.StrictMode>
-    <App />
+    <Root />
   </React.StrictMode>
 );
-
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
