@@ -1,10 +1,10 @@
 import { ReactNode } from "react";
-import { FONT_WEIGHT, FONT_WEIGHT_MAP } from "../../constants/fonts";
+import { FONT_WEIGHT } from "../../constants/fonts";
 import { COLORS } from "../../constants/colors";
 
 interface TextButtonComponentProps {
   children: ReactNode;
-  fontWeight?: FONT_WEIGHT;
+  fontWeight?: keyof typeof FONT_WEIGHT;
   fontSize?: number | string;
   color?: string;
   onClick?: () => void;
@@ -17,7 +17,7 @@ const TextButtonComponent = ({
   children,
   fontWeight = "normal",
   fontSize = 14,
-  color = COLORS.mediumBlue,
+  color = COLORS.black,
   onClick,
   disabled = false,
   style,
@@ -33,7 +33,7 @@ const TextButtonComponent = ({
         padding: 0,
         margin: 0,
         cursor: disabled ? "not-allowed" : "pointer",
-        fontWeight: FONT_WEIGHT_MAP[fontWeight],
+        fontWeight: FONT_WEIGHT.medium,
         fontSize,
         color: disabled ? "#ccc" : color,
         textDecoration: underlineOnHover ? "underline" : "none",

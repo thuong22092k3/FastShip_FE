@@ -1,17 +1,17 @@
 import { Checkbox } from "@mantine/core";
 import { COLORS } from "../../constants/colors";
 import { BORDER_RADIUS, RADIUS_MAP } from "../../constants/styles";
-import { FONT_WEIGHT_MAP } from "../../constants/fonts";
+import { FONT_WEIGHT } from "../../constants/fonts";
 
 interface CheckboxComponentProps {
   size?: number | string;
   color?: string;
   isChecked: boolean;
   setIsChecked: (val: boolean) => void;
-  label?: string;
+  label?: React.ReactNode;
   borderRadius?: BORDER_RADIUS;
   labelFontSize?: number | string;
-  labelFontWeight?: keyof typeof FONT_WEIGHT_MAP;
+  labelFontWeight?: keyof typeof FONT_WEIGHT;
 }
 
 const CheckboxComponent = ({
@@ -35,12 +35,22 @@ const CheckboxComponent = ({
           height: size,
           borderRadius: RADIUS_MAP[borderRadius],
           borderColor: color,
+          backgroundColor: isChecked ? color : "transparent",
+          // Ẩn dấu tick
+          "&:checked": {
+            backgroundImage: "none",
+            backgroundColor: color,
+          },
         },
         label: {
           fontSize: labelFontSize,
-          fontWeight: FONT_WEIGHT_MAP[labelFontWeight],
-          color,
+          fontWeight: FONT_WEIGHT.medium,
+          color: COLORS.black,
           marginLeft: 8,
+        },
+        icon: {
+          // Ẩn icon tick
+          display: "none",
         },
       }}
     />

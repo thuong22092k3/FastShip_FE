@@ -1,12 +1,12 @@
 import { Button, ButtonProps } from "@mantine/core";
 import { ReactNode } from "react";
-import { FONT_WEIGHT, FONT_WEIGHT_MAP } from "../../constants/fonts";
+import { FONT_WEIGHT } from "../../constants/fonts";
 import { BORDER_RADIUS, RADIUS_MAP } from "../../constants/styles";
 import { COLORS } from "../../constants/colors";
 
 interface CustomButtonProps extends Omit<ButtonProps, "color"> {
   label: string;
-  fontWeight?: FONT_WEIGHT;
+  fontWeight?: keyof typeof FONT_WEIGHT;
   fontSize?: number | string;
   paddingHorizontal?: number | string;
   paddingVertical?: number | string;
@@ -16,6 +16,9 @@ interface CustomButtonProps extends Omit<ButtonProps, "color"> {
   backgroundColor?: string;
   disabledOverlay?: boolean;
   labelColor?: string;
+  borderWidth?: number;
+  borderColor?: string;
+  width?: number | string;
 }
 
 const ButtonComponent = ({
@@ -41,13 +44,15 @@ const ButtonComponent = ({
         position: "relative",
         padding: `${paddingVertical}px ${paddingHorizontal}px`,
         borderRadius: RADIUS_MAP[borderRadius],
+        borderWidth: 0,
         fontSize,
-        fontWeight: FONT_WEIGHT_MAP[fontWeight],
+        fontWeight: FONT_WEIGHT.medium,
         backgroundColor,
         color: labelColor,
         display: "flex",
         alignItems: "center",
         gap: "0.5rem",
+        width: "100%",
         ...style,
       }}
       {...props}

@@ -1,8 +1,8 @@
-import { Button, Card, Text, Title } from "@mantine/core";
+import LoginScreen from "./views/Authentication/LoginScreen";
 import SignUpScreen from "./views/Authentication/SignUpScreen";
 
 function App() {
-  return <SignUpScreen />;
+  return <LoginScreen />;
 }
 
 export default App;

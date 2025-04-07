@@ -1,9 +1,9 @@
 import { ReactNode } from "react";
-import { FONT_WEIGHT, FONT_WEIGHT_MAP } from "../../constants/fonts";
+import { FONT_WEIGHT } from "../../constants/fonts";
 import { COLORS } from "../../constants/colors";
 
 interface TextComponentProps {
-  fontWeight?: FONT_WEIGHT;
+  fontWeight?: keyof typeof FONT_WEIGHT;
   fontSize?: number | string;
   color?: string;
   letterSpacing?: number | string;
@@ -22,7 +22,7 @@ const TextComponent = ({
   return (
     <span
       style={{
-        fontWeight: FONT_WEIGHT_MAP[fontWeight],
+        fontWeight: FONT_WEIGHT.medium,
         fontSize,
         color,
         letterSpacing,

@@ -1,11 +1,11 @@
-export type FONT_WEIGHT =
-  | "normal"
-  | "medium"
-  | "semibold"
-  | "bold"
-  | "extraMedium";
+// export type FONT_WEIGHT =
+//   | "normal"
+//   | "medium"
+//   | "semibold"
+//   | "bold"
+//   | "extraMedium";
 
-export const FONT_WEIGHT_MAP: Record<FONT_WEIGHT, number> = {
+export const FONT_WEIGHT = {
   normal: 400,
   medium: 500,
   semibold: 600,

@@ -1,55 +1,22 @@
-import { TextInput, TextInputProps, Input, InputWrapper } from "@mantine/core";
-import { ReactNode, KeyboardEvent } from "react";
-import { FONT_WEIGHT, FONT_WEIGHT_MAP } from "../../constants/fonts";
-import { BORDER_RADIUS, RADIUS_MAP } from "../../constants/styles";
+import { Input } from "@mantine/core";
+import { KeyboardEvent } from "react";
+import { FONT_WEIGHT } from "../../constants/fonts";
+import { RADIUS_MAP } from "../../constants/styles";
 import { COLORS } from "../../constants/colors";
+import { CustomInputProps } from "./InputType";
 
-interface CustomTextInputProps extends Omit<TextInputProps, "size"> {
-  label?: string;
-  labelFontWeight?: FONT_WEIGHT;
-  labelFontSize?: number | string;
-  labelColor?: string;
-  placeHolder?: string;
-  id?: string;
-  inputType?: string;
-  borderRadius?: BORDER_RADIUS;
-  width?: number | string;
-  textInputColor?: string;
-  borderColor?: string;
-  textInputSize?: number | string;
-  icon?: ReactNode;
-  iconLeft?: ReactNode;
-  onIconClick?: () => void;
-  required?: boolean;
-  value?: any;
-  setValue?: (val: any) => void;
-  style?: React.CSSProperties;
-  outStyle?: React.CSSProperties;
-  register?: any;
-  registerName?: string;
-  readOnly?: boolean;
-  onClick?: () => void;
-  enterAction?: () => void;
-  pattern?: string;
-  minLength?: number;
-  disabled?: boolean;
-  min?: number;
-  rightContent?: ReactNode;
-}
-
-const TextInputComponent = ({
+const TextInputCustom = ({
   label,
   labelFontWeight = "normal",
   labelFontSize = 12,
   labelColor = COLORS.white,
   placeHolder = "",
   id,
-  inputType = "text",
-  borderRadius = "md",
-  width = 200,
+  borderRadius = "sm",
+  width = "100%",
   textInputColor = COLORS.black,
-  borderColor = "gray",
-  textInputSize = 16,
+  borderColor = COLORS.gray,
+  textInputSize = 14,
   icon,
   onIconClick = () => {},
   required = false,
@@ -68,8 +35,54 @@ const TextInputComponent = ({
   disabled = false,
   min,
   rightContent,
+
   ...props
-}: CustomTextInputProps) => {
+}: CustomInputProps) => {
+  const commonProps = {
+    id,
+    placeholder: placeHolder,
+    value,
+    readOnly,
+    onClick,
+    onChange: (e: any) => setValue?.(e.target.value),
+    onKeyDown: (e: KeyboardEvent<HTMLInputElement>) => {
+      if (e.key === "Enter") enterAction();
+    },
+    icon: iconLeft,
+    disabled,
+    radius: RADIUS_MAP[borderRadius],
+    styles: {
+      input: {
+        fontSize: textInputSize,
+        color: textInputColor,
+        padding: "8px 12px",
+        border: `1px solid ${borderColor}`,
+        borderRadius: RADIUS_MAP[borderRadius],
+        "&:focus-within": {
+          borderColor: COLORS.mediumBlue,
+          boxShadow: `0 0 0 1px ${COLORS.mediumBlue}`,
+        },
+      },
+      // wrapper: {
+      //   border: `1px solid ${borderColor}`,
+      //   borderRadius: RADIUS_MAP[borderRadius],
+      //   "&:focus-within": {
+      //     borderColor: COLORS.mediumBlue,
+      //     boxShadow: `0 0 0 1px ${COLORS.mediumBlue}`,
+      //   },
+      // },
+    },
+    ...(register && registerName
+      ? register(registerName, {
+          required,
+          pattern,
+          minLength,
+          min,
+        })
+      : {}),
+    ...props,
+  };
+
   return (
     <div style={{ width, ...outStyle }}>
       {label && (
@@ -77,8 +90,9 @@ const TextInputComponent = ({
           htmlFor={id}
           style={{
             display: "block",
-            marginBottom: 6,
-            fontWeight: FONT_WEIGHT_MAP[labelFontWeight],
+            marginBottom: 5,
+            marginTop: 15,
+            fontWeight: FONT_WEIGHT.normal,
             fontSize: labelFontSize,
             color: labelColor,
           }}
@@ -89,50 +103,23 @@ const TextInputComponent = ({
       )}
       <Input
         component="input"
-        type={inputType}
-        id={id}
-        placeholder={placeHolder}
-        value={value}
-        readOnly={readOnly}
-        onClick={onClick}
-        onChange={(e) => setValue?.(e.target.value)}
-        onKeyDown={(e: KeyboardEvent<HTMLInputElement>) => {
-          if (e.key === "Enter") {
-            enterAction();
-          }
-        }}
-        icon={iconLeft}
-        disabled={disabled}
-        radius={RADIUS_MAP[borderRadius]}
-        style={{
-          fontSize: textInputSize,
-          color: textInputColor,
-          borderColor,
-          borderWidth: 1,
-          borderStyle: "solid",
-          padding: "8px 12px",
-          ...style,
-        }}
+        type="text"
         rightSection={
-          rightContent ||
-          (icon && (
-            <div onClick={onIconClick} style={{ cursor: "pointer" }}>
-              {icon}
-            </div>
-          ))
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              cursor: icon ? "pointer" : "default",
+            }}
+            onClick={onIconClick}
+          >
+            {rightContent || icon}
+          </div>
         }
-        {...(register && registerName
-          ? register(registerName, {
-              required,
-              pattern,
-              minLength,
-              min,
-            })
-          : {})}
-        {...props}
+        {...commonProps}
       />
     </div>
   );
 };
 
-export default TextInputComponent;
+export default TextInputCustom;

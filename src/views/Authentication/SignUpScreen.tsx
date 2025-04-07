@@ -1,9 +1,12 @@
 import { useState } from "react";
 import TextInputComponent from "../../components/TextInput/TextInputComponent";
 import CheckboxComponent from "../../components/CheckBox/CheckBoxComponent";
-import TextButtonComponent from "../../components/TextButton/TextButtonComponent";
+import ButtonComponent from "../../components/Button/ButtonComponent";
 import TextComponent from "../../components/Text/TextComponent";
+import TextButtonComponent from "../../components/TextButton/TextButtonComponent";
 import { COLORS } from "../../constants/colors";
+import { BORDER_RADIUS, RADIUS_MAP } from "../../constants/styles";
+import { FONT_WEIGHT } from "../../constants/fonts";
 
 const SignUpScreen = () => {
   const [businessName, setBusinessName] = useState("");
@@ -16,162 +19,142 @@ const SignUpScreen = () => {
   return (
     <div
       style={{
+        minHeight: "100vh",
+        backgroundColor: "#f0f0f0",
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        height: "100vh",
-        backgroundColor: "#f4f4f4",
+        padding: 20,
+        width: "100%",
       }}
     >
       <div
         style={{
-          width: 400,
           backgroundColor: "#fff",
-          padding: "30px",
-          borderRadius: "8px",
-          boxShadow: "0px 0px 10px rgba(0,0,0,0.1)",
+          padding: 40,
+          borderRadius: 8,
+          width: "100%", // Đảm bảo chiều rộng là 100%
+          maxWidth: 500,
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          flexDirection: "column",
         }}
       >
-        {/* Logo */}
-        <div style={{ textAlign: "center", marginBottom: 20 }}>
-          <img src="assets\images\Logorm.png" alt="FastShip Logo" width={100} />
+        <div style={{ textAlign: "center" }}>
+          <img
+            src={require("../../assets/images/Logorm.png")}
+            alt="image"
+            style={{ height: 130, objectFit: "contain" }}
+          />
         </div>
 
-        {/* Title */}
         <TextComponent
-          fontSize={24}
-          fontWeight="bold"
-          style={{ textAlign: "center" }}
+          style={{
+            textAlign: "center",
+            marginBottom: 8,
+            fontSize: 36,
+            fontWeight: 500,
+          }}
         >
           Create an account
         </TextComponent>
-
-        {/* Subtitle */}
         <TextComponent
-          fontSize={14}
-          color={COLORS.gray}
-          style={{ textAlign: "center", marginBottom: 20 }}
+          style={{ textAlign: "center", marginBottom: 24, color: "#000" }}
         >
           Lorem ipsum dolor sit amet consectetur. Sapien odio rhoncus amet
           dignissim.
         </TextComponent>
 
-        {/* Form Fields */}
+        {/* <div style={{ display: "flex", flexDirection: "column" }}> */}
         <TextInputComponent
           label="Business name"
-          placeHolder="Enter your business name"
+          placeholder="Enter your name"
+          borderRadius="md"
           value={businessName}
-          setValue={setBusinessName}
+          onChange={(e) => setBusinessName(e.target.value)}
+          labelColor={COLORS.black}
+          outStyle={{ width: "100%" }}
         />
+
         <TextInputComponent
           label="Email"
-          placeHolder="Email"
+          labelColor={COLORS.black}
+          placeholder="Email"
+          borderRadius="md"
           value={email}
-          setValue={setEmail}
+          onChange={(e) => setEmail(e.target.value)}
+          outStyle={{ width: "100%" }}
         />
+
         <TextInputComponent
           label="Phone"
-          placeHolder="Phone number"
+          labelColor={COLORS.black}
+          placeholder="Phone number"
+          borderRadius="md"
           value={phone}
-          setValue={setPhone}
+          onChange={(e) => setPhone(e.target.value)}
+          outStyle={{ width: "100%" }}
         />
+
         <TextInputComponent
           label="Password"
-          placeHolder="Password"
-          inputType="password"
+          labelColor={COLORS.black}
+          placeholder="Password"
+          borderRadius="md"
+          type="password"
           value={password}
-          setValue={setPassword}
-        />
-        <TextInputComponent
-          label="Confirm Password"
-          placeHolder="Confirm Password"
-          inputType="password"
-          value={confirmPassword}
-          setValue={setConfirmPassword}
+          onChange={(e) => setPassword(e.target.value)}
+          outStyle={{ width: "100%" }}
         />
 
-        {/* Terms & Conditions */}
-        <div
-          style={{ display: "flex", alignItems: "center", margin: "10px 0" }}
-        >
+        <TextInputComponent
+          label="Confirm password"
+          labelColor={COLORS.black}
+          placeholder="Confirm Password"
+          borderRadius="md"
+          type="password"
+          value={confirmPassword}
+          onChange={(e) => setConfirmPassword(e.target.value)}
+          outStyle={{ width: "100%" }}
+        />
+        {/* </div> */}
+
+        <div style={{ display: "flex", flexDirection: "row", marginTop: 16 }}>
           <CheckboxComponent
-            size="16px"
-            color={COLORS.mediumBlue}
             isChecked={isChecked}
             setIsChecked={setIsChecked}
+            label={
+              <span>
+                I Agree to the{" "}
+                <TextButtonComponent
+                  onClick={() => console.log("Terms clicked")}
+                >
+                  terms and conditions
+                </TextButtonComponent>{" "}
+                and{" "}
+                <TextButtonComponent
+                  onClick={() => console.log("Privacy clicked")}
+                >
+                  privacy policy
+                </TextButtonComponent>
+              </span>
+            }
           />
-          <TextComponent
-            fontSize={12}
-            color={COLORS.black}
-            style={{ marginLeft: 8 }}
-          >
-            I agree to the{" "}
-            <TextButtonComponent color={COLORS.mediumBlue} underlineOnHover>
-              terms and conditions
-            </TextButtonComponent>{" "}
-            and{" "}
-            <TextButtonComponent color={COLORS.mediumBlue} underlineOnHover>
-              privacy policy
-            </TextButtonComponent>
-          </TextComponent>
         </div>
 
-        {/* Sign Up Button */}
-        <button
-          style={{
-            width: "100%",
-            padding: "12px",
-            backgroundColor: COLORS.mediumBlue,
-            color: "#fff",
-            border: "none",
-            borderRadius: "4px",
-            fontSize: 16,
-            cursor: "pointer",
-            marginBottom: 10,
-          }}
-        >
-          Sign up
-        </button>
-
-        {/* Divider */}
-        <TextComponent
-          fontSize={14}
-          color={COLORS.gray}
-          style={{ textAlign: "center", marginBottom: 10 }}
-        >
-          Or
-        </TextComponent>
-
-        {/* Social Sign Up Buttons */}
-        <button style={socialButtonStyle}>Sign up with Google</button>
-        <button style={socialButtonStyle}>Sign up with Apple</button>
-
-        {/* Login Link */}
-        <TextComponent
-          fontSize={14}
-          color={COLORS.black}
-          style={{ textAlign: "center", marginTop: 10 }}
-        >
-          Already have an account?{" "}
-          <TextButtonComponent color={COLORS.mediumBlue} underlineOnHover>
-            Login
-          </TextButtonComponent>
-        </TextComponent>
+        <div style={{ marginTop: 24 }}>
+          <ButtonComponent
+            label="Create account"
+            fullWidth
+            backgroundColor={COLORS.mediumBlue}
+            labelColor="#fff"
+            width={"100%"}
+          />
+        </div>
       </div>
     </div>
   );
-};
-
-// Style for social sign-up buttons
-const socialButtonStyle: React.CSSProperties = {
-  width: "100%",
-  padding: "10px",
-  border: "1px solid #ccc",
-  borderRadius: "4px",
-  fontSize: 14,
-  cursor: "pointer",
-  backgroundColor: "white",
-  marginBottom: 8,
 };
 
 export default SignUpScreen;
