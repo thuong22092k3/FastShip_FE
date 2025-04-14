@@ -8,6 +8,8 @@ import { COLORS } from "../../constants/colors";
 import { BORDER_RADIUS, RADIUS_MAP } from "../../constants/styles";
 import { FONT_WEIGHT } from "../../constants/fonts";
 import { Flex } from "@mantine/core";
+import { useNavigate } from "react-router-dom";
+import { NAV_LINK } from "../../routes/components/NAV_LINK";
 
 const LoginScreen = () => {
   const [businessName, setBusinessName] = useState("");
@@ -16,7 +18,7 @@ const LoginScreen = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [isChecked, setIsChecked] = useState(false);
-
+  const navigate = useNavigate();
   return (
     <div
       style={{
@@ -31,9 +33,12 @@ const LoginScreen = () => {
       <div
         style={{
           backgroundColor: "#fff",
-          padding: 40,
+          paddingTop: 40,
+          paddingBottom: 40,
+          paddingLeft: 100,
+          paddingRight: 100,
           borderRadius: 8,
-          width: 500,
+          width: 400,
           maxWidth: "100%",
           display: "flex",
           justifyContent: "center",
@@ -72,24 +77,24 @@ const LoginScreen = () => {
 
         {/* <div style={{ display: "flex", flexDirection: "column" }}> */}
         <TextInputComponent
-          label="Business name"
-          placeholder="Enter your name"
-          borderRadius="md"
+          label="Username or Email"
+          placeholder="Username or Email"
+          borderRadius="sm"
           value={businessName}
           onChange={(e) => setBusinessName(e.target.value)}
           labelColor={COLORS.black}
-          outStyle={{ width: "100%" }} // Thêm dòng này
+          width="100%"
         />
 
         <TextInputComponent
           label="Password"
           labelColor={COLORS.black}
           placeholder="Password"
-          borderRadius="md"
+          borderRadius="sm"
           type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          outStyle={{ width: "100%" }} // Thêm dòng này
+          width="100%"
         />
 
         <div
@@ -101,16 +106,19 @@ const LoginScreen = () => {
             color: COLORS.black,
           }}
         >
-          <TextButtonComponent> Forgot password</TextButtonComponent>
+          <TextButtonComponent style={{ marginTop: 8 }}>
+            Forgot password
+          </TextButtonComponent>
         </div>
-        <div style={{ marginTop: 24 }}>
+        <div style={{ marginTop: 24, width: "100%" }}>
           <ButtonComponent
             label="Login"
             fullWidth
             backgroundColor={COLORS.mediumBlue}
             labelColor="#fff"
-            width={"100%"}
-            // textDecoration="underline"
+            onClick={() => {
+              navigate(NAV_LINK.STATISTICS);
+            }}
           />
         </div>
       </div>

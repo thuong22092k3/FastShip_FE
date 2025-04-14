@@ -19,6 +19,9 @@ interface CustomButtonProps extends Omit<ButtonProps, "color"> {
   borderWidth?: number;
   borderColor?: string;
   width?: number | string;
+  fullWidth?: boolean;
+  textAlign?: "left" | "center" | "right";
+  onClick?: () => void;
 }
 
 const ButtonComponent = ({
@@ -34,25 +37,35 @@ const ButtonComponent = ({
   disabledOverlay = true,
   disabled = false,
   labelColor = COLORS.black,
+  width,
+  fullWidth = false,
+  textAlign = "center", // Giá trị mặc định cho textAlign
   style,
   ...props
 }: CustomButtonProps) => {
   return (
     <Button
       disabled={disabled}
+      fullWidth={fullWidth}
       style={{
         position: "relative",
         padding: `${paddingVertical}px ${paddingHorizontal}px`,
         borderRadius: RADIUS_MAP[borderRadius],
         borderWidth: 0,
         fontSize,
-        fontWeight: FONT_WEIGHT.medium,
+        fontWeight: FONT_WEIGHT[fontWeight],
         backgroundColor,
         color: labelColor,
         display: "flex",
         alignItems: "center",
+        justifyContent:
+          textAlign === "left"
+            ? "flex-start"
+            : textAlign === "right"
+            ? "flex-end"
+            : "center",
         gap: "0.5rem",
-        width: "100%",
+        width: fullWidth ? "100%" : width,
         ...style,
       }}
       {...props}

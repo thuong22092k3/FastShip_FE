@@ -1,20 +1,15 @@
 import React, { useState } from "react";
 import { createRoot } from "react-dom/client";
-import { MantineProvider, createTheme } from "@mantine/core";
-// Import font trước các import khác
-import "@fontsource/roboto/400.css"; // Regular
-import "@fontsource/roboto/500.css"; // Medium
-import "@fontsource/roboto/700.css"; // Bold
+import { MantineProvider } from "@mantine/core";
+import "@fontsource/roboto/400.css";
+import "@fontsource/roboto/500.css";
+import "@fontsource/roboto/700.css";
 import App from "./App";
+import { store } from "./state_management/store/store";
+import { Provider } from "react-redux";
 
 const container = document.getElementById("root");
 const root = createRoot(container!);
-
-const theme = createTheme({
-  fontFamily: "Roboto, sans-serif",
-  fontFamilyMonospace: "Roboto Mono, monospace",
-  headings: { fontFamily: "Roboto, sans-serif" },
-});
 
 const globalStyles = document.createElement("style");
 globalStyles.innerHTML = `
@@ -27,18 +22,12 @@ globalStyles.innerHTML = `
 `;
 document.head.appendChild(globalStyles);
 
-function Root() {
-  const [colorScheme, setColorScheme] = useState<"light" | "dark">("light");
-
-  return (
-    <MantineProvider theme={theme} defaultColorScheme={colorScheme}>
-      <App />
-    </MantineProvider>
-  );
-}
-
 root.render(
   <React.StrictMode>
-    <Root />
+    <Provider store={store}>
+      <MantineProvider>
+        <App />
+      </MantineProvider>
+    </Provider>
   </React.StrictMode>
 );

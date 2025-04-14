@@ -35,7 +35,6 @@ const TextInputCustom = ({
   disabled = false,
   min,
   rightContent,
-
   ...props
 }: CustomInputProps) => {
   const commonProps = {
@@ -56,21 +55,33 @@ const TextInputCustom = ({
         fontSize: textInputSize,
         color: textInputColor,
         padding: "8px 12px",
+        border: "none",
+        outline: "none",
+        boxShadow: "none",
+        borderRadius: 10,
+        "&:focus": {
+          border: "none",
+          outline: "none",
+          boxShadow: "none",
+        },
+        "&:focus-within": {
+          border: "none",
+          outline: "none",
+          boxShadow: "none",
+        },
+      },
+      wrapper: {
         border: `1px solid ${borderColor}`,
         borderRadius: RADIUS_MAP[borderRadius],
+        width: "100%",
         "&:focus-within": {
           borderColor: COLORS.mediumBlue,
           boxShadow: `0 0 0 1px ${COLORS.mediumBlue}`,
         },
+        "&:hover": {
+          borderColor: COLORS.mediumBlue,
+        },
       },
-      // wrapper: {
-      //   border: `1px solid ${borderColor}`,
-      //   borderRadius: RADIUS_MAP[borderRadius],
-      //   "&:focus-within": {
-      //     borderColor: COLORS.mediumBlue,
-      //     boxShadow: `0 0 0 1px ${COLORS.mediumBlue}`,
-      //   },
-      // },
     },
     ...(register && registerName
       ? register(registerName, {
@@ -104,6 +115,7 @@ const TextInputCustom = ({
       <Input
         component="input"
         type="text"
+        style={{ width: "100%" }}
         rightSection={
           <div
             style={{

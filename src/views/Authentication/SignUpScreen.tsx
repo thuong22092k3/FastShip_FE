@@ -9,7 +9,7 @@ import { BORDER_RADIUS, RADIUS_MAP } from "../../constants/styles";
 import { FONT_WEIGHT } from "../../constants/fonts";
 
 const SignUpScreen = () => {
-  const [businessName, setBusinessName] = useState("");
+  const [username, setusername] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
@@ -31,10 +31,13 @@ const SignUpScreen = () => {
       <div
         style={{
           backgroundColor: "#fff",
-          padding: 40,
+          paddingTop: 40,
+          paddingBottom: 40,
+          paddingLeft: 100,
+          paddingRight: 100,
           borderRadius: 8,
           width: "100%", // Đảm bảo chiều rộng là 100%
-          maxWidth: 500,
+          maxWidth: 400,
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
@@ -68,11 +71,11 @@ const SignUpScreen = () => {
 
         {/* <div style={{ display: "flex", flexDirection: "column" }}> */}
         <TextInputComponent
-          label="Business name"
+          label="Username"
           placeholder="Enter your name"
-          borderRadius="md"
-          value={businessName}
-          onChange={(e) => setBusinessName(e.target.value)}
+          borderRadius="sm"
+          value={username}
+          onChange={(e) => setusername(e.target.value)}
           labelColor={COLORS.black}
           outStyle={{ width: "100%" }}
         />
@@ -81,7 +84,7 @@ const SignUpScreen = () => {
           label="Email"
           labelColor={COLORS.black}
           placeholder="Email"
-          borderRadius="md"
+          borderRadius="sm"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           outStyle={{ width: "100%" }}
@@ -91,7 +94,7 @@ const SignUpScreen = () => {
           label="Phone"
           labelColor={COLORS.black}
           placeholder="Phone number"
-          borderRadius="md"
+          borderRadius="sm"
           value={phone}
           onChange={(e) => setPhone(e.target.value)}
           outStyle={{ width: "100%" }}
@@ -101,7 +104,7 @@ const SignUpScreen = () => {
           label="Password"
           labelColor={COLORS.black}
           placeholder="Password"
-          borderRadius="md"
+          borderRadius="sm"
           type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
@@ -112,7 +115,7 @@ const SignUpScreen = () => {
           label="Confirm password"
           labelColor={COLORS.black}
           placeholder="Confirm Password"
-          borderRadius="md"
+          borderRadius="sm"
           type="password"
           value={confirmPassword}
           onChange={(e) => setConfirmPassword(e.target.value)}
@@ -143,13 +146,13 @@ const SignUpScreen = () => {
           />
         </div>
 
-        <div style={{ marginTop: 24 }}>
+        <div style={{ marginTop: 24, width: "100%" }}>
           <ButtonComponent
             label="Create account"
-            fullWidth
+            width="100%"
             backgroundColor={COLORS.mediumBlue}
             labelColor="#fff"
-            width={"100%"}
+            // width={"100%"}
           />
         </div>
       </div>

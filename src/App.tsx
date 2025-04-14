@@ -1,8 +1,12 @@
-import LoginScreen from "./views/Authentication/LoginScreen";
-import SignUpScreen from "./views/Authentication/SignUpScreen";
+import { BrowserRouter } from "react-router-dom";
+import { RootRoutes } from "./routes/routes/RootRoutes";
 
 function App() {
-  return <LoginScreen />;
+  return (
+    <BrowserRouter>
+      <RootRoutes />
+    </BrowserRouter>
+  );
 }
 
 export default App;

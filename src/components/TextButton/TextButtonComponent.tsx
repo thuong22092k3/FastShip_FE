@@ -31,12 +31,13 @@ const TextButtonComponent = ({
         background: "none",
         border: "none",
         padding: 0,
-        margin: 0,
+        margin: 4,
         cursor: disabled ? "not-allowed" : "pointer",
         fontWeight: FONT_WEIGHT.medium,
         fontSize,
         color: disabled ? "#ccc" : color,
         textDecoration: underlineOnHover ? "underline" : "none",
+
         ...style,
       }}
     >
