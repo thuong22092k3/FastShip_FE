@@ -34,4 +34,11 @@ export interface CustomInputProps extends Omit<TextInputProps, "size"> {
   disabled?: boolean;
   min?: number;
   rightContent?: ReactNode;
+  labelTextAlign?: "left" | "center" | "right";
+  labelMargin?: {
+    top?: number | string;
+    bottom?: number | string;
+    left?: number | string;
+    right?: number | string;
+  };
 }

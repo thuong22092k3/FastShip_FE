@@ -10,6 +10,8 @@ const TextInputCustom = ({
   labelFontWeight = "normal",
   labelFontSize = 12,
   labelColor = COLORS.white,
+  labelTextAlign = "left",
+  labelMargin = { top: 15, bottom: 5 },
   placeHolder = "",
   id,
   borderRadius = "sm",
@@ -101,11 +103,13 @@ const TextInputCustom = ({
           htmlFor={id}
           style={{
             display: "block",
-            marginBottom: 5,
-            marginTop: 15,
-            fontWeight: FONT_WEIGHT.normal,
+            marginTop: labelMargin.top,
+            marginBottom: labelMargin.bottom,
+            fontWeight: FONT_WEIGHT[labelFontWeight] || FONT_WEIGHT.normal,
             fontSize: labelFontSize,
             color: labelColor,
+            textAlign: labelTextAlign,
+            width: "100%",
           }}
         >
           {label}

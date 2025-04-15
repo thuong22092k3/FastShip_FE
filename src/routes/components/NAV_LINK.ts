@@ -3,6 +3,9 @@ export const NAV_LINK = {
   AUTH: "/*",
   LOGIN: "/",
   SIGN_UP: "/signup",
+  FORGOTPASSWORD: "/forgotpassword",
+  VERIFY: "/verify",
+  CHANGEPASSWORD: "/changepassword",
 
   VEHICLE_MANAGEMENT: "/home/vehicle",
   // ADD_VEHICLE: "/vehicles/add",

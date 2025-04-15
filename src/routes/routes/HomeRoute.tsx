@@ -13,64 +13,68 @@ import PartnerManagementScreen from "../../views/Partner/PartnerManagement";
 import StatisticScreen from "../../views/Statistics/StatisticsScreen";
 import VehicleManagementScreen from "../../views/Vehicle/VehicleManagement";
 
+const ROUTES = [
+  {
+    path: "employee",
+    element: <EmployeeManagementScreen />,
+    name: "Employee Management",
+  },
+  {
+    path: "order",
+    element: <OrderManagementScreen />,
+    name: "Order Management",
+  },
+  {
+    path: "partner",
+    element: <PartnerManagementScreen />,
+    name: "Partner Management",
+  },
+  {
+    path: "vehicle",
+    element: <VehicleManagementScreen />,
+    name: "Vehicle Management",
+  },
+  {
+    path: "statistic",
+    element: <StatisticScreen />,
+    name: "Statistics",
+  },
+];
+
 export default function HomeRoutes() {
   const { openDrawer } = useSelector((state: RootState) => state.controlSlice);
-
-  const ROUTES = [
-    {
-      path: "employee",
-      element: <EmployeeManagementScreen />,
-      name: "Employee Management",
-    },
-    {
-      path: "order",
-      element: <OrderManagementScreen />,
-      name: "Order Management",
-    },
-    {
-      path: "partner",
-      element: <PartnerManagementScreen />,
-      name: "Partner Management",
-    },
-    {
-      path: "vehicle",
-      element: <VehicleManagementScreen />,
-      name: "Vehicle Management",
-    },
-    {
-      path: "statistic",
-      element: <StatisticScreen />,
-      name: "Statistics",
-    },
-  ];
-
   const location = useLocation();
+
   const title = useMemo(
-    () => ROUTES.find((r) => location.pathname.endsWith(r.path))?.name,
+    () => ROUTES.find((r) => location.pathname.includes(r.path))?.name,
     [location]
   );
 
   return (
-    <AppShell
-      padding="md"
-      navbar={{ width: 250, breakpoint: "sm", collapsed: { mobile: false } }}
-      header={{ height: 60 }}
-    >
-      <AppShell.Navbar>
-        <Drawer />
-      </AppShell.Navbar>
+    <div style={{ display: "flex", height: "100vh" }}>
+      <Drawer />
 
-      <AppShell.Header>
-        <CustomHeader title={title} />
-      </AppShell.Header>
+      <div
+        style={{
+          flex: 1,
+          display: "flex",
+          flexDirection: "column",
+          height: "100vh",
+        }}
+      >
+        <CustomHeader />
 
-      <AppShell.Main>
-        <Routes>
-          {ROUTES.map((route, i) => (
-            <Route path={route.path} element={route.element} key={i} />
-          ))}
-        </Routes>
-      </AppShell.Main>
-    </AppShell>
+        {/* <ScrollArea style={{ flex: 1, padding: 24 }}> */}
+        <div style={{ paddingLeft: 20 }}>
+          <Routes>
+            {ROUTES.map((route, i) => (
+              <Route path={route.path} element={route.element} key={i} />
+            ))}
+          </Routes>
+        </div>
+
+        {/* </ScrollArea> */}
+      </div>
+    </div>
   );
 }

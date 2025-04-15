@@ -76,13 +76,15 @@ const SignUpScreen = () => {
           borderRadius="sm"
           value={username}
           onChange={(e) => setusername(e.target.value)}
-          labelColor={COLORS.black}
+          labelFontSize={14}
+          labelColor={COLORS.gray}
           outStyle={{ width: "100%" }}
         />
 
         <TextInputComponent
           label="Email"
-          labelColor={COLORS.black}
+          labelFontSize={14}
+          labelColor={COLORS.gray}
           placeholder="Email"
           borderRadius="sm"
           value={email}
@@ -92,7 +94,8 @@ const SignUpScreen = () => {
 
         <TextInputComponent
           label="Phone"
-          labelColor={COLORS.black}
+          labelFontSize={14}
+          labelColor={COLORS.gray}
           placeholder="Phone number"
           borderRadius="sm"
           value={phone}
@@ -102,7 +105,8 @@ const SignUpScreen = () => {
 
         <TextInputComponent
           label="Password"
-          labelColor={COLORS.black}
+          labelFontSize={14}
+          labelColor={COLORS.gray}
           placeholder="Password"
           borderRadius="sm"
           type="password"
@@ -113,13 +117,14 @@ const SignUpScreen = () => {
 
         <TextInputComponent
           label="Confirm password"
-          labelColor={COLORS.black}
           placeholder="Confirm Password"
           borderRadius="sm"
           type="password"
           value={confirmPassword}
           onChange={(e) => setConfirmPassword(e.target.value)}
           outStyle={{ width: "100%" }}
+          labelFontSize={14}
+          labelColor={COLORS.gray}
         />
         {/* </div> */}
 
@@ -146,7 +151,7 @@ const SignUpScreen = () => {
           />
         </div>
 
-        <div style={{ marginTop: 24, width: "100%" }}>
+        <div style={{ marginTop: 50, width: "100%" }}>
           <ButtonComponent
             label="Create account"
             width="100%"

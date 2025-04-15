@@ -11,7 +11,7 @@ import { Flex } from "@mantine/core";
 import { useNavigate } from "react-router-dom";
 import { NAV_LINK } from "../../routes/components/NAV_LINK";
 
-const LoginScreen = () => {
+const Verifyscreen = () => {
   const [businessName, setBusinessName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
@@ -60,43 +60,22 @@ const LoginScreen = () => {
             marginBottom: 8,
             fontSize: 36,
             fontWeight: 500,
+            lineHeight: 1.6,
           }}
         >
-          Login
-        </TextComponent>
-        <TextComponent
-          style={{
-            textAlign: "center",
-            marginBottom: 24,
-            color: "#000",
-            fontWeight: 400,
-          }}
-        >
-          Welcome back!
+          Verification
         </TextComponent>
 
-        {/* <div style={{ display: "flex", flexDirection: "column" }}> */}
         <TextInputComponent
-          label="Username or Email"
-          placeholder="Username or Email"
+          label="Enter OTP"
+          placeholder="OTP"
           borderRadius="sm"
           value={businessName}
           onChange={(e) => setBusinessName(e.target.value)}
+          width="50%"
           labelFontSize={14}
           labelColor={COLORS.gray}
-          width="100%"
-        />
-
-        <TextInputComponent
-          label="Password"
-          labelFontSize={14}
-          labelColor={COLORS.gray}
-          placeholder="Password"
-          borderRadius="sm"
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          width="100%"
+          labelTextAlign="center"
         />
 
         <div
@@ -107,24 +86,15 @@ const LoginScreen = () => {
             width: "100%",
             color: COLORS.black,
           }}
-        >
-          <TextButtonComponent
-            style={{ marginTop: 8 }}
-            onClick={() => {
-              navigate(NAV_LINK.FORGOTPASSWORD);
-            }}
-          >
-            Forgot password
-          </TextButtonComponent>
-        </div>
+        ></div>
         <div style={{ marginTop: 50, width: "100%" }}>
           <ButtonComponent
-            label="Login"
+            label="Continue"
             fullWidth
             backgroundColor={COLORS.mediumBlue}
             labelColor="#fff"
             onClick={() => {
-              navigate(NAV_LINK.STATISTICS);
+              navigate(NAV_LINK.CHANGEPASSWORD);
             }}
           />
         </div>
@@ -133,4 +103,4 @@ const LoginScreen = () => {
   );
 };
 
-export default LoginScreen;
+export default Verifyscreen;

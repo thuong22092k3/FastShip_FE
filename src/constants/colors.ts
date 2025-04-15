@@ -5,4 +5,5 @@ export const COLORS = {
   primary: "#FFC107",
   white: "#FFFFFF",
   black: "#000000",
+  lightGray: "#E8E8E8",
 };

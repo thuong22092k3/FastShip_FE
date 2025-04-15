@@ -11,7 +11,7 @@ import { Flex } from "@mantine/core";
 import { useNavigate } from "react-router-dom";
 import { NAV_LINK } from "../../routes/components/NAV_LINK";
 
-const LoginScreen = () => {
+const ChangePasswordScreen = () => {
   const [businessName, setBusinessName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
@@ -62,7 +62,7 @@ const LoginScreen = () => {
             fontWeight: 500,
           }}
         >
-          Login
+          Create a new password
         </TextComponent>
         <TextComponent
           style={{
@@ -75,51 +75,40 @@ const LoginScreen = () => {
           Welcome back!
         </TextComponent>
 
-        {/* <div style={{ display: "flex", flexDirection: "column" }}> */}
-        <TextInputComponent
-          label="Username or Email"
-          placeholder="Username or Email"
-          borderRadius="sm"
-          value={businessName}
-          onChange={(e) => setBusinessName(e.target.value)}
-          labelFontSize={14}
-          labelColor={COLORS.gray}
-          width="100%"
-        />
-
-        <TextInputComponent
-          label="Password"
-          labelFontSize={14}
-          labelColor={COLORS.gray}
-          placeholder="Password"
-          borderRadius="sm"
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          width="100%"
-        />
-
         <div
           style={{
             display: "flex",
-            justifyContent: "end",
-            alignItems: "end",
+            flexDirection: "column",
             width: "100%",
-            color: COLORS.black,
+            gap: 10,
           }}
         >
-          <TextButtonComponent
-            style={{ marginTop: 8 }}
-            onClick={() => {
-              navigate(NAV_LINK.FORGOTPASSWORD);
-            }}
-          >
-            Forgot password
-          </TextButtonComponent>
+          <TextInputComponent
+            label="New password"
+            placeholder="Enter new password"
+            borderRadius="sm"
+            value={businessName}
+            onChange={(e) => setBusinessName(e.target.value)}
+            labelFontSize={14}
+            labelColor={COLORS.gray}
+            width="100%"
+          />
+
+          <TextInputComponent
+            label="Confirm password"
+            labelFontSize={14}
+            labelColor={COLORS.gray}
+            placeholder="Enter confirm password"
+            borderRadius="sm"
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            width="100%"
+          />
         </div>
         <div style={{ marginTop: 50, width: "100%" }}>
           <ButtonComponent
-            label="Login"
+            label="Confirm"
             fullWidth
             backgroundColor={COLORS.mediumBlue}
             labelColor="#fff"
@@ -133,4 +122,4 @@ const LoginScreen = () => {
   );
 };
 
-export default LoginScreen;
+export default ChangePasswordScreen;
