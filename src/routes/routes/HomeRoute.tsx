@@ -1,7 +1,7 @@
 import { Route, Routes, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useMemo } from "react";
-import { AppShell, ScrollArea } from "@mantine/core";
+import { AppShell, Box, ScrollArea } from "@mantine/core";
 
 import { RootState } from "../../state_management/reducers/rootReducer";
 import Drawer from "../components/Drawer";
@@ -64,16 +64,22 @@ export default function HomeRoutes() {
       >
         <CustomHeader />
 
-        {/* <ScrollArea style={{ flex: 1, padding: 24 }}> */}
-        <div style={{ paddingLeft: 20 }}>
-          <Routes>
-            {ROUTES.map((route, i) => (
-              <Route path={route.path} element={route.element} key={i} />
-            ))}
-          </Routes>
-        </div>
-
-        {/* </ScrollArea> */}
+        <ScrollArea.Autosize
+          mah="calc(100vh - 64px)"
+          offsetScrollbars
+          scrollbarSize={8}
+          style={{ flex: 1 }}
+        >
+          <Box p={24}>
+            {" "}
+            {/* Add padding here */}
+            <Routes>
+              {ROUTES.map((route, i) => (
+                <Route path={route.path} element={route.element} key={i} />
+              ))}
+            </Routes>
+          </Box>
+        </ScrollArea.Autosize>
       </div>
     </div>
   );

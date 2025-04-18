@@ -27,8 +27,8 @@ const CustomHeader = () => {
         justifyContent: "space-between",
         alignItems: "center",
         // width: "100%",
-        width: "80vw", // Full width
-        position: "sticky", // Giữ header trên cùng nếu cần
+        width: "80vw",
+        position: "sticky",
         top: 0,
         zIndex: 1000,
       }}
@@ -74,7 +74,7 @@ const CustomHeader = () => {
       </div>
 
       <div style={{ display: "flex", justifyContent: "space-around", gap: 20 }}>
-        <IconUserCircle size={35}></IconUserCircle>
+        <IconUserCircle size={35} color={COLORS.white}></IconUserCircle>
         <div style={{ color: "white", fontSize: 14 }}>
           <div>Transport logistic</div>
           <div style={{ fontWeight: 400, marginTop: 4 }}>Admin</div>

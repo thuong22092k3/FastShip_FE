@@ -24,10 +24,18 @@ document.head.appendChild(globalStyles);
 
 root.render(
   <React.StrictMode>
-    <Provider store={store}>
-      <MantineProvider>
-        <App />
-      </MantineProvider>
-    </Provider>
+    <div
+      style={{
+        display: "flex",
+        height: "100vh",
+        overflow: "hidden",
+      }}
+    >
+      <Provider store={store}>
+        <MantineProvider>
+          <App />
+        </MantineProvider>
+      </Provider>
+    </div>
   </React.StrictMode>
 );
