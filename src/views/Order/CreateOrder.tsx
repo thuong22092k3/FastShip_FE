@@ -31,8 +31,11 @@ export default function CreateOrderModal({
       title="Tạo đơn hàng mới"
       size="80%"
       centered
-      padding="md"
-      radius="md"
+      withCloseButton
+      styles={{
+        root: { position: "fixed", zIndex: 1000 },
+        overlay: { backgroundColor: "rgba(0,0,0,0.5)" },
+      }}
     >
       <Grid gutter="md">
         <Grid.Col span={{ base: 12, md: 8 }}>

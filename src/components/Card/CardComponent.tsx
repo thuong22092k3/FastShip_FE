@@ -17,8 +17,8 @@ const OrderStatsCard = ({
   return (
     <Card
       shadow="sm"
-      radius="md"
-      p="lg"
+      radius="lg"
+      p="xl"
       style={{
         width: "240px",
         border: "1px solid #eaeaea",
@@ -35,10 +35,6 @@ const OrderStatsCard = ({
       <Title order={2} mt="sm" mb="xs">
         {value}
       </Title>
-
-      <Text size="xs" color="gray">
-        {updatedText}
-      </Text>
     </Card>
   );
 };

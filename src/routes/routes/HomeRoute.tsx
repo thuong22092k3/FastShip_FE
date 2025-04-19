@@ -72,7 +72,6 @@ export default function HomeRoutes() {
         >
           <Box p={24}>
             {" "}
-            {/* Add padding here */}
             <Routes>
               {ROUTES.map((route, i) => (
                 <Route path={route.path} element={route.element} key={i} />

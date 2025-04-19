@@ -36,7 +36,7 @@ const SignUpScreen = () => {
           paddingLeft: 100,
           paddingRight: 100,
           borderRadius: 8,
-          width: "100%", // Đảm bảo chiều rộng là 100%
+          width: "100%",
           maxWidth: 400,
           display: "flex",
           justifyContent: "center",

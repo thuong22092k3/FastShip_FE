@@ -5,89 +5,176 @@ import {
   Container,
   Flex,
   Group,
-  ScrollArea,
-  Select,
-  Text,
   TextInput,
   Title,
   Pagination,
 } from "@mantine/core";
-import { IconSearch, IconPlus, IconBox, IconCheck } from "@tabler/icons-react";
-import { useState } from "react";
+import { IconSearch, IconPlus } from "@tabler/icons-react";
+import { useEffect, useState } from "react";
 import { OrderTable } from "../../components/Table/OrderTable";
-import { mockOrders } from "../../api/type/OrderType";
+import { Order } from "../../api/type/OrderType";
 import CardComponent from "../../components/Card/CardComponent";
-import CreateOrderModal from "./CreateOrder";
+import NewModal from "./NewModal";
+import { orderService } from "../../api/service/OrderService";
+import { OrderDetailModal } from "./OrderDtail";
+import { DeleteConfirmationModal } from "./DeleteConfirmationModal";
+import { showNotification } from "@mantine/notifications";
 
 export default function OrderManagementScreen() {
-  const [filter, setFilter] = useState("Tất cả");
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
-
-  const filteredOrders = mockOrders.filter((order) => {
-    const matchesSearch =
-      order.NguoiGui.toLowerCase().includes(search.toLowerCase()) ||
-      order.NguoiNhan.toLowerCase().includes(search.toLowerCase());
-
-    const matchesStatus =
-      filter === "Tất cả" ||
-      order.TrangThai.toLowerCase() === filter.toLowerCase();
-
-    return matchesSearch && matchesStatus;
-  });
+  const [loading, setLoading] = useState(true);
+  const [orders, setOrders] = useState<Order[]>([]);
+  const [error, setError] = useState("");
+  const [refreshKey, setRefreshKey] = useState(0);
   const [openCreateModal, setOpenCreateModal] = useState(false);
 
+  const fetchOrders = async () => {
+    try {
+      setLoading(true);
+      const response = await orderService.getOrder();
+      if (response && Array.isArray(response.orders)) {
+        setOrders(response.orders);
+      } else {
+        setOrders([]);
+      }
+    } catch (err) {
+      setError("Không thể tải dữ liệu đơn hàng");
+      setOrders([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchOrders();
+  }, [refreshKey]);
+
+  const filteredOrders = orders.filter(
+    (order) =>
+      order.NguoiNhan.toLowerCase().includes(search.toLowerCase()) ||
+      order.SDT.includes(search)
+  );
+
+  const handleOrderCreated = () => {
+    setRefreshKey((prev) => prev + 1);
+    setOpenCreateModal(false);
+  };
+  const [detailModalOpened, setDetailModalOpened] = useState(false);
+  const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
+  const [detailLoading, setDetailLoading] = useState(false);
+  const handleViewDetail = async (order: Order) => {
+    try {
+      setDetailLoading(true);
+      const detailedOrder = await orderService.getDetailOrder(order.DonHangId);
+      setSelectedOrder(detailedOrder);
+      setDetailModalOpened(true);
+    } catch (error) {
+      console.error("Failed to fetch order details:", error);
+    } finally {
+      setDetailLoading(false);
+    }
+  };
+  const [deleteModalOpened, setDeleteModalOpened] = useState(false);
+  const [orderToDelete, setOrderToDelete] = useState<string | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  const handleDeleteClick = (donHangId: string) => {
+    setOrderToDelete(donHangId);
+    setDeleteModalOpened(true);
+    console.log("123");
+  };
+
+  const handleConfirmDelete = async () => {
+    if (!orderToDelete) return;
+
+    try {
+      setIsDeleting(true);
+      await orderService.deleteOrder(orderToDelete);
+      showNotification({
+        title: "Thành công",
+        message: "Đã xóa đơn hàng thành công",
+        color: "green",
+      });
+
+      setRefreshKey((prev) => prev + 1);
+      setDeleteModalOpened(false);
+    } catch (error) {
+      showNotification({
+        title: "Lỗi",
+        message: "Không thể xóa đơn hàng",
+        color: "red",
+      });
+    } finally {
+      setIsDeleting(false);
+    }
+  };
+
   return (
-    <Container
-      size="xl"
-      py="md"
-      fluid
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        gap: 16,
-        padding: "16px",
-      }} // Added padding here
-    >
-      <Title order={2}>Quản lý đơn hàng</Title>
-      <Box>
-        <CardComponent
-          title="Total Orders"
-          value="233"
-          icon={<IconBox size={32} />}
-        />
-        <CardComponent
-          title="Active Orders"
-          value="233"
-          icon={<IconBox size={32} />}
-        />
-        <CardComponent
-          title="Completed Orders"
-          value="233"
-          icon={<IconCheck size={32} />}
-        />
-      </Box>
-      <Flex justify="space-between" align="center" wrap="wrap" gap="sm">
-        <Group>
+    <Container size="xl" p="md" fluid>
+      <Box p="md">
+        <Title order={2}>Quản lý đơn hàng</Title>
+
+        <Flex justify="space-between" align="center" mt="md" mb="xl">
           <TextInput
-            placeholder="Tìm theo người gửi / người nhận"
+            placeholder="Tìm kiếm đơn hàng"
             value={search}
             onChange={(e) => setSearch(e.currentTarget.value)}
             leftSection={<IconSearch size={16} />}
+            style={{ width: 300 }}
           />
-        </Group>
-        <Button onClick={() => setOpenCreateModal(true)}>Tạo đơn hàng</Button>
-        <CreateOrderModal
+          <Button
+            leftSection={<IconPlus size={18} />}
+            onClick={() => setOpenCreateModal(true)}
+          >
+            Tạo đơn hàng mới
+          </Button>
+          <Button onClick={() => setDeleteModalOpened(true)}>
+            Test Open Delete Modal
+          </Button>
+        </Flex>
+
+        {loading ? (
+          <Box py="xl">Đang tải dữ liệu...</Box>
+        ) : error ? (
+          <Box py="xl">{error}</Box>
+        ) : filteredOrders.length === 0 ? (
+          <Box py="xl">Không tìm thấy đơn hàng nào</Box>
+        ) : (
+          <>
+            <OrderTable
+              data={filteredOrders}
+              onViewDetail={handleViewDetail}
+              onDelete={handleDeleteClick}
+            />
+
+            <Pagination
+              total={Math.ceil(filteredOrders.length / 10)}
+              value={page}
+              onChange={setPage}
+              mt="xl"
+            />
+          </>
+        )}
+
+        <NewModal
           open={openCreateModal}
           onClose={() => setOpenCreateModal(false)}
+          onOrderCreated={handleOrderCreated}
         />
-      </Flex>
-      <Box style={{ flex: 1, minHeight: 300, width: 1100 }}>
-        <OrderTable data={filteredOrders} />
+        <OrderDetailModal
+          opened={detailModalOpened}
+          onClose={() => setDetailModalOpened(false)}
+          order={selectedOrder}
+          loading={detailLoading}
+        />
+        <DeleteConfirmationModal
+          opened={deleteModalOpened}
+          onClose={() => setDeleteModalOpened(false)}
+          onConfirm={handleConfirmDelete}
+          isLoading={isDeleting}
+        />
       </Box>
-      <Flex justify="end" mt="md">
-        <Pagination total={1} value={page} onChange={setPage} />
-      </Flex>
     </Container>
   );
 }

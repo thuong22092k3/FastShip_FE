@@ -1,4 +1,5 @@
 export type Order = {
+  _id: string;
   DonHangId: string;
   NhanVienId: string;
   NguoiGui: string;
@@ -11,6 +12,7 @@ export type Order = {
   CreatedAt: string;
   UpdatedAt: string;
   GhiChu: string;
+  __v?: number;
 };
 
 export const mockOrders = [
