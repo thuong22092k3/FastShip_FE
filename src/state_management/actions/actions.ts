@@ -3,7 +3,7 @@ import { createAction } from "@reduxjs/toolkit";
 export const RESET_ALL_STORES = createAction("RESET_ALL_STORES");
 
 export const ADD_ORDER = createAction<TOrder>("ADD_ORDER");
-export const DELETE_ORDER = createAction<TOrder[]>("DELETE_ORDER");
+export const DELETE_ORDER = createAction<string[]>("DELETE_ORDER");
 export const UPDATE_ORDER = createAction<TOrder>("UPDATE_ORDER");
 
 export const ADD_EMPLOYEE = createAction<TEmployee>("ADD_EMPLOYEE");

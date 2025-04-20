@@ -18,17 +18,25 @@ export function DeleteConfirmationModal({
   isLoading = false,
 }: DeleteConfirmationModalProps) {
   return (
-    <Modal opened={opened} onClose={onClose} title={title} centered>
+    <Modal
+      opened={opened}
+      onClose={onClose}
+      title={title}
+      centered
+      overlayProps={{
+        zIndex: 1000,
+        backgroundOpacity: 0.55,
+        blur: 3,
+      }}
+    >
       <Text>{message}</Text>
-      <Group mt="xl" justify="flex-end">
-        <Button variant="outline" onClick={onClose}>
+      <Group justify="flex-end" mt="xl">
+        <Button variant="default" onClick={onClose}>
           Hủy
         </Button>
         <Button
           color="red"
-          onClick={async () => {
-            await onConfirm();
-          }}
+          onClick={async () => await onConfirm()}
           loading={isLoading}
         >
           Xác nhận xóa

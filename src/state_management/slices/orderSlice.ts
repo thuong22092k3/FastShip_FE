@@ -18,10 +18,8 @@ const orderSlice = createSlice({
     builder.addCase(ADD_ORDER, (state, action: PayloadAction<TOrder>) => {
       state.unshift(action.payload);
     });
-    builder.addCase(DELETE_ORDER, (state, action: PayloadAction<TOrder[]>) => {
-      return state.filter(
-        (order) => !action.payload.some((o) => o.DonHangId === order.DonHangId)
-      );
+    builder.addCase(DELETE_ORDER, (state, action: PayloadAction<string[]>) => {
+      return state.filter((order) => !action.payload.includes(order.DonHangId));
     });
     builder.addCase(UPDATE_ORDER, (state, action: PayloadAction<TOrder>) => {
       const index = state.findIndex(

@@ -6,10 +6,16 @@ import {
   Checkbox,
   Group,
   ActionIcon,
+  Select,
 } from "@mantine/core";
 import { Order } from "../../api/type/OrderType";
 import CheckboxComponent from "../CheckBox/CheckBoxComponent";
 import { IconEdit, IconEye, IconTrash } from "@tabler/icons-react";
+import { orderService } from "../../api/service/OrderService";
+import { showNotification } from "@mantine/notifications";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../state_management/reducers/rootReducer";
+import { UPDATE_ORDER } from "../../state_management/actions/actions";
 
 type Props = {
   data: Order[];
@@ -58,6 +64,8 @@ export const OrderTable: React.FC<Props> = ({
   const [selectedRows, setSelectedRows] = useState<string[]>([]);
   const [detailModalOpened, setDetailModalOpened] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
+  const dispatch = useDispatch();
+  const orders = useSelector((state: RootState) => state.orderSlice);
   const handleSelectAll = (checked: boolean) => {
     if (checked) {
       setSelectedRows(data.map((order) => order.DonHangId));
@@ -86,6 +94,74 @@ export const OrderTable: React.FC<Props> = ({
     padding: "8px",
     backgroundColor: "#f8f8f8",
   };
+  const statusOptions = [
+    { value: "Chờ xác nhận", label: "Chờ xác nhận" },
+    { value: "Đang giao", label: "Đang giao" },
+    { value: "Đã giao", label: "Đã giao" },
+    { value: "Hủy", label: "Hủy" },
+  ];
+  // const handleUpdateStatus = async (orderId: string, newStatus: string) => {
+  //   try {
+  //     const result = await orderService.updateStatusOrder(orderId, newStatus);
+
+  //     if (result.success) {
+  //       setOrders((prevOrders) =>
+  //         prevOrders.map((order) =>
+  //           order.DonHangId === orderId
+  //             ? {
+  //                 ...order,
+  //                 TrangThai: newStatus,
+  //                 UpdateAt: new Date().toISOString(),
+  //               }
+  //             : order
+  //         )
+  //       );
+
+  //       showNotification({
+  //         title: "Cập nhật thành công",
+  //         message: "Trạng thái đơn hàng đã được cập nhật",
+  //         color: "green",
+  //       });
+  //     }
+  //   } catch (error) {
+  //     showNotification({
+  //       title: "Lỗi",
+  //       message: "Không thể cập nhật trạng thái đơn hàng",
+  //       color: "red",
+  //     });
+  //   }
+  // };
+  const handleUpdateStatus = async (orderId: string, newStatus: string) => {
+    try {
+      const result = await orderService.updateStatusOrder(orderId, newStatus);
+
+      if (result.success) {
+        const order = data.find((o) => o.DonHangId === orderId);
+        if (!order) return;
+
+        const updatedOrder = {
+          ...order,
+          TrangThai: newStatus,
+          UpdateAt: new Date().toISOString(),
+          CreateAt: order.CreatedAt ?? order.CreatedAt,
+        };
+
+        dispatch(UPDATE_ORDER(updatedOrder));
+        console.log("status: ", updatedOrder);
+        showNotification({
+          title: "Cập nhật thành công",
+          message: "Trạng thái đơn hàng đã được cập nhật",
+          color: "green",
+        });
+      }
+    } catch (error) {
+      showNotification({
+        title: "Lỗi",
+        message: "Không thể cập nhật trạng thái đơn hàng",
+        color: "red",
+      });
+    }
+  };
 
   const rows = data.map((order) => {
     const isSelected = selectedRows.includes(order.DonHangId);
@@ -111,9 +187,31 @@ export const OrderTable: React.FC<Props> = ({
         <Table.Td style={cellStyle}>{order.DiaChiGiaoHang}</Table.Td>
         <Table.Td style={cellStyle}>{order.CuocPhi.toLocaleString()}₫</Table.Td>
         <Table.Td style={cellStyle}>
-          <Badge color={getStatusColor(order.TrangThai)} variant="light">
-            {order.TrangThai}
-          </Badge>
+          <div style={{ position: "relative" }}>
+            <Badge
+              color={getStatusColor(order.TrangThai)}
+              size="xs"
+              style={{
+                position: "absolute",
+                left: 8,
+                top: "50%",
+                transform: "translateY(-50%)",
+                zIndex: 1,
+                pointerEvents: "none",
+              }}
+            />
+            <Select
+              value={order.TrangThai}
+              onChange={(value) => {
+                if (value && value !== order.TrangThai) {
+                  handleUpdateStatus(order.DonHangId, value);
+                }
+              }}
+              data={statusOptions}
+              size="xs"
+              style={{ width: "100%", minWidth: "120px", paddingLeft: "30px" }}
+            />
+          </div>
         </Table.Td>
         <Table.Td style={cellStyle}>
           {new Date(order.CreatedAt).toLocaleString()}
@@ -127,21 +225,33 @@ export const OrderTable: React.FC<Props> = ({
             <ActionIcon
               variant="light"
               color="blue"
-              onClick={() => onViewDetail(order)}
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                onViewDetail(order);
+              }}
             >
               <IconEye size={18} />{" "}
             </ActionIcon>
             <ActionIcon
               variant="light"
               color="blue"
-              onClick={() => console.log("Edit", order.DonHangId)}
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                console.log("Edit", order.DonHangId);
+              }}
             >
               <IconEdit size={18} />
             </ActionIcon>
             <ActionIcon
               variant="light"
               color="red"
-              onClick={() => onDelete(order.DonHangId)}
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                onDelete(order.DonHangId);
+              }}
             >
               <IconTrash size={18} />
             </ActionIcon>

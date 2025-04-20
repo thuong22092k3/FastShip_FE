@@ -10,7 +10,7 @@ import {
   Pagination,
 } from "@mantine/core";
 import { IconSearch, IconPlus } from "@tabler/icons-react";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { OrderTable } from "../../components/Table/OrderTable";
 import { Order } from "../../api/type/OrderType";
 import CardComponent from "../../components/Card/CardComponent";
@@ -19,28 +19,34 @@ import { orderService } from "../../api/service/OrderService";
 import { OrderDetailModal } from "./OrderDtail";
 import { DeleteConfirmationModal } from "./DeleteConfirmationModal";
 import { showNotification } from "@mantine/notifications";
+import { SimpleDeleteModal } from "./SimpleModalDelete";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../state_management/reducers/rootReducer";
+import { uploadOrders } from "../../state_management/slices/orderSlice";
+import { DELETE_ORDER } from "../../state_management/actions/actions";
 
 export default function OrderManagementScreen() {
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(true);
-  const [orders, setOrders] = useState<Order[]>([]);
+  // const [orders, setOrders] = useState<Order[]>([]);
   const [error, setError] = useState("");
   const [refreshKey, setRefreshKey] = useState(0);
   const [openCreateModal, setOpenCreateModal] = useState(false);
-
+  const dispatch = useDispatch();
+  const orders = useSelector((state: RootState) => state.orderSlice);
   const fetchOrders = async () => {
     try {
       setLoading(true);
       const response = await orderService.getOrder();
       if (response && Array.isArray(response.orders)) {
-        setOrders(response.orders);
+        dispatch(uploadOrders(response.orders));
       } else {
-        setOrders([]);
+        dispatch(uploadOrders([]));
       }
     } catch (err) {
       setError("Không thể tải dữ liệu đơn hàng");
-      setOrders([]);
+      dispatch(uploadOrders([]));
     } finally {
       setLoading(false);
     }
@@ -52,8 +58,8 @@ export default function OrderManagementScreen() {
 
   const filteredOrders = orders.filter(
     (order) =>
-      order.NguoiNhan.toLowerCase().includes(search.toLowerCase()) ||
-      order.SDT.includes(search)
+      (order.NguoiNhan?.toLowerCase() ?? "").includes(search.toLowerCase()) ||
+      (order.SDT ?? "").includes(search)
   );
 
   const handleOrderCreated = () => {
@@ -75,14 +81,13 @@ export default function OrderManagementScreen() {
       setDetailLoading(false);
     }
   };
-  const [deleteModalOpened, setDeleteModalOpened] = useState(false);
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [orderToDelete, setOrderToDelete] = useState<string | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
 
   const handleDeleteClick = (donHangId: string) => {
     setOrderToDelete(donHangId);
-    setDeleteModalOpened(true);
-    console.log("123");
+    setDeleteModalOpen(true);
   };
 
   const handleConfirmDelete = async () => {
@@ -90,7 +95,10 @@ export default function OrderManagementScreen() {
 
     try {
       setIsDeleting(true);
+
       await orderService.deleteOrder(orderToDelete);
+
+      dispatch(DELETE_ORDER([orderToDelete]));
       showNotification({
         title: "Thành công",
         message: "Đã xóa đơn hàng thành công",
@@ -98,7 +106,7 @@ export default function OrderManagementScreen() {
       });
 
       setRefreshKey((prev) => prev + 1);
-      setDeleteModalOpened(false);
+      setDeleteModalOpen(false);
     } catch (error) {
       showNotification({
         title: "Lỗi",
@@ -109,6 +117,16 @@ export default function OrderManagementScreen() {
       setIsDeleting(false);
     }
   };
+  console.log("Delete modal state:", deleteModalOpen);
+  console.log("Order to delete:", orderToDelete);
+
+  // const [orderToDelete, setOrderToDelete] = useState<string | null>(null);
+
+  // const handleDeleteClick = (donHangId: string) => {
+  //   setOrderToDelete(donHangId);
+  //   setDeleteModalOpen(true);
+  // };
+  // Trong DeleteConfirmationModal
 
   return (
     <Container size="xl" p="md" fluid>
@@ -129,7 +147,7 @@ export default function OrderManagementScreen() {
           >
             Tạo đơn hàng mới
           </Button>
-          <Button onClick={() => setDeleteModalOpened(true)}>
+          <Button onClick={() => setDeleteModalOpen(true)}>
             Test Open Delete Modal
           </Button>
         </Flex>
@@ -168,9 +186,9 @@ export default function OrderManagementScreen() {
           order={selectedOrder}
           loading={detailLoading}
         />
-        <DeleteConfirmationModal
-          opened={deleteModalOpened}
-          onClose={() => setDeleteModalOpened(false)}
+        <SimpleDeleteModal
+          open={deleteModalOpen}
+          onClose={() => setDeleteModalOpen(false)}
           onConfirm={handleConfirmDelete}
           isLoading={isDeleting}
         />

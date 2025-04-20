@@ -28,6 +28,7 @@ declare type TEmployee = {
   HieuSuat: number;
 };
 declare type TOrder = {
+  _id: string;
   DonHangId: string;
   NhanVienId: string;
   NguoiGui: string;
@@ -37,8 +38,8 @@ declare type TOrder = {
   DiaChiGiaoHang: string;
   CuocPhi: number;
   TrangThai: string;
-  CreateAt: string;
-  UpdateAt: string;
+  CreatedAt: string;
+  UpdatedAt: string;
   GhiChu: string;
 };
 declare type TDriver = {

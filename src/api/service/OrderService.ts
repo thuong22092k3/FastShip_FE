@@ -1,8 +1,12 @@
 import axios from "axios";
 import { ENDPOINTS } from "../End_Point";
 import { Order } from "../type/OrderType";
+import { store } from "../../state_management/store/store";
+import { UPDATE_ORDER } from "../../state_management/actions/actions";
 
 export const orderService = {
+  // const dispatch = useDispatch();
+  // const orders = useSelector((state: RootState) => state.orderSlice);
   createOrder: async (data: {
     NhanVienId?: string;
     NguoiGui: string;
@@ -19,13 +23,45 @@ export const orderService = {
     return response.data;
   },
 
-  // updateStatusOrder: async (DonHangId: string, TrangThai: string) => {
-  //   const response = await axios.put(
-  //     ENDPOINTS.ORDERS.UPDATE(DonHangId)
-  //     { TrangThai },
-  //   );
-  //   return response.data;
-  // },
+  updateStatusOrder: async (DonHangId: string, TrangThai: string) => {
+    try {
+      const response = await axios.put(
+        `https://fastship-be.onrender.com/api/order/updateStatusOrder?id=${DonHangId}`,
+        { TrangThai },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      // dispatch(
+      //   UPDATE_ORDER({
+      //     DonHangId,
+      //     TrangThai,
+      //     UpdateAt: new Date().toISOString(),
+      //   } as TOrder)
+      // );
+      return {
+        success: true,
+        data: response.data,
+        updatedOrder: { DonHangId, TrangThai },
+      };
+    } catch (error) {
+      console.error("Update status error:", error);
+
+      // Thêm thông tin chi tiết lỗi
+      if (axios.isAxiosError(error)) {
+        console.error("Error details:", {
+          url: error.config?.url,
+          status: error.response?.status,
+          data: error.response?.data,
+          message: error.message,
+        });
+      }
+
+      throw error;
+    }
+  },
 
   deleteOrder: async (DonHangId: string) => {
     const response = await axios.delete(ENDPOINTS.ORDERS.DELETE(DonHangId));

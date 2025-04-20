@@ -13,7 +13,8 @@ import {
 import { useState } from "react";
 import { Order } from "../../api/type/OrderType";
 import { orderService } from "../../api/service/OrderService";
-
+import { useDispatch } from "react-redux";
+import { ADD_ORDER } from "../../state_management/actions/actions";
 interface NewModalProps {
   open: boolean;
   onClose: () => void;
@@ -31,7 +32,7 @@ export default function NewModal({
 
   const [formData, setFormData] = useState<Partial<Order>>({
     TrangThai: "Chờ xác nhận",
-    CuocPhi: 50000, // Giá trị mặc định
+    CuocPhi: 50000,
     NguoiGui: "CÔNG TY TNHH MORIMURA BROS. (VIETNAM)",
     DiaChiLayHang: "123 Đường ABC, Quận 1, TP.HCM",
   });
@@ -39,7 +40,6 @@ export default function NewModal({
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
-    // Clear error khi người dùng nhập
     if (errors[name]) {
       setErrors((prev) => ({ ...prev, [name]: "" }));
     }
@@ -56,7 +56,7 @@ export default function NewModal({
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
-
+  const dispatch = useDispatch();
   const handleSubmit = async () => {
     if (!validateForm()) return;
 
@@ -76,8 +76,8 @@ export default function NewModal({
 
       console.log("Payload gửi lên:", payload);
 
-      await orderService.createOrder(payload);
-
+      // const createdOrder = await orderService.createOrder(payload);
+      // dispatch(ADD_ORDER(createdOrder));
       onOrderCreated();
       onClose();
     } catch (error) {
