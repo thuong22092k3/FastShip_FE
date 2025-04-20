@@ -9,7 +9,13 @@ import {
   Title,
   Pagination,
 } from "@mantine/core";
-import { IconSearch, IconPlus } from "@tabler/icons-react";
+import {
+  IconSearch,
+  IconPlus,
+  IconArchive,
+  IconCircleCheck,
+  IconFolderCheck,
+} from "@tabler/icons-react";
 import { useCallback, useEffect, useState } from "react";
 import { OrderTable } from "../../components/Table/OrderTable";
 import { Order } from "../../api/type/OrderType";
@@ -132,7 +138,29 @@ export default function OrderManagementScreen() {
     <Container size="xl" p="md" fluid>
       <Box p="md">
         <Title order={2}>Quản lý đơn hàng</Title>
-
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-around",
+            flexWrap: "wrap",
+          }}
+        >
+          <CardComponent
+            title="Tổng đơn hàng"
+            value={orders.length}
+            icon={<IconArchive size={24} />}
+          />
+          <CardComponent
+            title="Các đơn hàng đang hoạt động"
+            value={filteredOrders.length}
+            icon={<IconFolderCheck size={24} />}
+          />
+          <CardComponent
+            title="Các đơn hàng đã hoàn thành"
+            value={filteredOrders.length}
+            icon={<IconCircleCheck size={24} />}
+          />
+        </div>
         <Flex justify="space-between" align="center" mt="md" mb="xl">
           <TextInput
             placeholder="Tìm kiếm đơn hàng"
@@ -147,9 +175,9 @@ export default function OrderManagementScreen() {
           >
             Tạo đơn hàng mới
           </Button>
-          <Button onClick={() => setDeleteModalOpen(true)}>
+          {/* <Button onClick={() => setDeleteModalOpen(true)}>
             Test Open Delete Modal
-          </Button>
+          </Button> */}
         </Flex>
 
         {loading ? (

@@ -1,19 +1,19 @@
 import { Card, Text, Title } from "@mantine/core";
 import { IconBox } from "@tabler/icons-react";
 
-interface OrderStatsCardProps {
+interface CardProps {
   title: string;
   value: string | number;
   updatedText?: string;
   icon?: React.ReactNode;
 }
 
-const OrderStatsCard = ({
+const CardComponent = ({
   title = "Total Orders",
   value = "233",
   updatedText = "Recently updated",
   icon = <IconBox size={24} />,
-}: OrderStatsCardProps) => {
+}: CardProps) => {
   return (
     <Card
       shadow="sm"
@@ -23,9 +23,22 @@ const OrderStatsCard = ({
         width: "240px",
         border: "1px solid #eaeaea",
         backgroundColor: "#ffffff",
+        borderRadius: "16px",
+        padding: "15px",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
       }}
     >
-      <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: "8px",
+          justifyContent: "space-around",
+        }}
+      >
         {icon}
         <Text size="sm" color="dimmed">
           {title}
@@ -39,4 +52,4 @@ const OrderStatsCard = ({
   );
 };
 
-export default OrderStatsCard;
+export default CardComponent;

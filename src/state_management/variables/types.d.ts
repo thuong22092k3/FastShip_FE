@@ -11,12 +11,12 @@ declare type TPartner = {
 };
 declare type TVehicle = {
   PhuongTienId: string;
+  HangXe: string;
   TaiXeId: string;
   BienSo: string;
   LoaiXe: string;
   SucChua: number;
   TrangThai: string;
-  GPSLocation: string;
   BaoDuong: string;
 };
 declare type TEmployee = {

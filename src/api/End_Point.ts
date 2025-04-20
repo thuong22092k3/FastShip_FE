@@ -22,5 +22,13 @@ export const ENDPOINTS = {
     LIST: `${BASE_URL}/api/partners`,
     CREATE: `${BASE_URL}/api/partners`,
   },
+
+  VEHICLES: {
+    CREATE: `${BASE_URL}/api/vehicle/createVehicle`,
+    LIST: `${BASE_URL}/api/vehicle/getAllVehicle`,
+    // DETAIL: (id: string) => `${BASE_URL}/api/order/getOrderDetail/?id=${id}`,
+    UPDATE: (id: string) => `${BASE_URL}/api/vehicle/updateVehicle?id=${id}`,
+    DELETE: (id: string) => `${BASE_URL}/api/vehicle/deleteVehicle?id=${id}`,
+  },
   // Thêm các nhóm khác nếu cần
 };
