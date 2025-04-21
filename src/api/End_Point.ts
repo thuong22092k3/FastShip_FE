@@ -27,8 +27,11 @@ export const ENDPOINTS = {
     CREATE: `${BASE_URL}/api/vehicle/createVehicle`,
     LIST: `${BASE_URL}/api/vehicle/getAllVehicle`,
     // DETAIL: (id: string) => `${BASE_URL}/api/order/getOrderDetail/?id=${id}`,
-    UPDATE: (id: string) => `${BASE_URL}/api/vehicle/updateVehicle?id=${id}`,
-    DELETE: (id: string) => `${BASE_URL}/api/vehicle/deleteVehicle?id=${id}`,
+    // UPDATE: (PhuongTienId: string) =>
+    //   `${BASE_URL}/api/vehicle/updateVehicle?PhuongTienId=${PhuongTienId}`,
+    DELETE: (PhuongTienId: string) =>
+      `${BASE_URL}/api/vehicle/deleteVehicle?PhuongTienId=${PhuongTienId}`,
+    UPDATE: `${BASE_URL}/api/vehicle/updateVehicle`,
   },
   // Thêm các nhóm khác nếu cần
 };

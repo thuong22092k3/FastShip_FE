@@ -23,10 +23,10 @@ export const vehicleService = {
 
   updateVehicle: async (PhuongTienId: string, updateData: Partial<Vehicle>) => {
     try {
-      const response = await axios.put(
-        `${ENDPOINTS.VEHICLES.UPDATE}?PhuongTienId=${PhuongTienId}`,
-        updateData
-      );
+      const response = await axios.put(ENDPOINTS.VEHICLES.UPDATE, {
+        PhuongTienId,
+        ...updateData,
+      });
       return response.data;
     } catch (error) {
       console.error("Error updating vehicle:", error);
@@ -37,7 +37,7 @@ export const vehicleService = {
   deleteVehicle: async (PhuongTienId: string) => {
     try {
       const response = await axios.delete(
-        `${ENDPOINTS.VEHICLES.DELETE}?PhuongTienId=${PhuongTienId}`
+        ENDPOINTS.VEHICLES.DELETE(PhuongTienId)
       );
       return response.data;
     } catch (error) {

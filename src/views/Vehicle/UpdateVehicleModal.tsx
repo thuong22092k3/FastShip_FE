@@ -8,33 +8,54 @@ import {
   Text,
   Title,
 } from "@mantine/core";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Vehicle } from "../../api/type/VehicleType";
 import { vehicleService } from "../../api/service/VehicleService";
-import { useDispatch } from "react-redux";
-import { ADD_VEHICLE } from "../../state_management/actions/actions";
 import { showNotification } from "@mantine/notifications";
 import TextInputCustom from "../../components/TextInput/TextInputComponent";
 
-interface AddVehicleModalProps {
+interface UpdateVehicleModalProps {
   open: boolean;
   onClose: () => void;
-  onVehicleCreated: () => void;
+  onVehicleUpdated: () => void;
+  vehicleData: Vehicle | null;
 }
 
-export default function AddVehicleModal({
+export default function UpdateVehicleModal({
   open,
   onClose,
-  onVehicleCreated,
-}: AddVehicleModalProps) {
+  onVehicleUpdated,
+  vehicleData,
+}: UpdateVehicleModalProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
-  const dispatch = useDispatch();
+
   const [formData, setFormData] = useState<Partial<Vehicle>>({
+    PhuongTienId: "",
+    HangXe: "",
+    TaiXeId: "",
+    BienSo: "",
+    LoaiXe: "",
+    SucChua: 0,
     TrangThai: "Hoạt động",
-    BaoDuong: "Đã bảo dưỡng tháng 3/2024",
-    SucChua: 1000,
+    BaoDuong: "Đã bảo dưỡng",
   });
+
+  // Cập nhật formData khi vehicleData thay đổi
+  useEffect(() => {
+    if (vehicleData) {
+      setFormData({
+        PhuongTienId: vehicleData.PhuongTienId,
+        HangXe: vehicleData.HangXe,
+        TaiXeId: vehicleData.TaiXeId,
+        BienSo: vehicleData.BienSo,
+        LoaiXe: vehicleData.LoaiXe,
+        SucChua: vehicleData.SucChua,
+        TrangThai: vehicleData.TrangThai,
+        BaoDuong: vehicleData.BaoDuong,
+      });
+    }
+  }, [vehicleData]);
 
   const handleInputChange = (name: string, value: string) => {
     if (name === "SucChua") {
@@ -66,38 +87,33 @@ export default function AddVehicleModal({
   };
 
   const handleSubmit = async () => {
-    if (!validateForm()) return;
+    if (!validateForm() || !formData.PhuongTienId) return;
 
     setIsSubmitting(true);
     try {
-      const payload: Vehicle = {
-        PhuongTienId: `PT${Math.floor(100 + Math.random() * 900)}`,
-        HangXe: formData.HangXe || "",
-        TaiXeId: formData.TaiXeId || "TX134",
-        BienSo: formData.BienSo || "",
-        LoaiXe: formData.LoaiXe || "",
-        SucChua: Number(formData.SucChua) || 0,
-        TrangThai: formData.TrangThai || "Hoạt động",
-        BaoDuong: formData.BaoDuong || "Đã bảo dưỡng tháng 3/2024",
-      };
-
-      const createdVehicle = await vehicleService.createVehicle(payload);
-      dispatch(ADD_VEHICLE(createdVehicle));
+      await vehicleService.updateVehicle(formData.PhuongTienId, {
+        HangXe: formData.HangXe,
+        TaiXeId: formData.TaiXeId,
+        BienSo: formData.BienSo,
+        LoaiXe: formData.LoaiXe,
+        SucChua: Number(formData.SucChua),
+        TrangThai: formData.TrangThai,
+        BaoDuong: formData.BaoDuong,
+      });
 
       showNotification({
         title: "Thành công",
-        message: "Đã thêm phương tiện mới thành công",
+        message: "Đã cập nhật phương tiện thành công",
         color: "green",
       });
 
-      onVehicleCreated();
+      onVehicleUpdated();
       onClose();
-      resetForm();
     } catch (error) {
-      console.error("Error creating vehicle:", error);
+      console.error("Error updating vehicle:", error);
       showNotification({
         title: "Lỗi",
-        message: "Không thể thêm phương tiện mới",
+        message: "Không thể cập nhật phương tiện",
         color: "red",
       });
     } finally {
@@ -105,16 +121,7 @@ export default function AddVehicleModal({
     }
   };
 
-  const resetForm = () => {
-    setFormData({
-      TrangThai: "Hoạt động",
-      BaoDuong: "Đã bảo dưỡng tháng 3/2024",
-      SucChua: 1000,
-    });
-    setErrors({});
-  };
-
-  if (!open) return null;
+  if (!open || !vehicleData) return null;
 
   return (
     <div
@@ -161,10 +168,22 @@ export default function AddVehicleModal({
           </button>
 
           <Title order={3} mb="xl">
-            Thêm phương tiện mới
+            Cập nhật phương tiện
           </Title>
 
           <Grid gutter="xl">
+            <Grid.Col span={6}>
+              <TextInputCustom
+                label="ID Phương tiện"
+                labelFontWeight="bold"
+                placeHolder=""
+                name="PhuongTienId"
+                value={formData.PhuongTienId || ""}
+                setValue={() => {}}
+                readOnly
+              />
+            </Grid.Col>
+
             <Grid.Col span={6}>
               <TextInputCustom
                 label="Hãng xe"
@@ -210,7 +229,7 @@ export default function AddVehicleModal({
                 labelFontWeight="bold"
                 placeHolder="Nhập sức chứa"
                 name="SucChua"
-                value={formData.SucChua?.toString() || "1000"}
+                value={formData.SucChua?.toString() || "0"}
                 setValue={(value) => handleInputChange("SucChua", value)}
                 error={errors.SucChua}
                 required
@@ -224,7 +243,7 @@ export default function AddVehicleModal({
                 labelFontWeight="bold"
                 placeHolder="Nhập mã tài xế"
                 name="TaiXeId"
-                value={formData.TaiXeId || "TX134"}
+                value={formData.TaiXeId || ""}
                 setValue={(value) => handleInputChange("TaiXeId", value)}
               />
             </Grid.Col>
@@ -235,28 +254,37 @@ export default function AddVehicleModal({
               </Text>
               <Select
                 data={[
-                  { value: "Hoạt động", label: "Hoạt động" },
-                  { value: "Không hoạt động", label: "Không hoạt động" },
-                  { value: "Bảo trì", label: "Bảo trì" },
+                  { value: "Đang hoạt động", label: "Đang hoạt động" },
+                  { value: "Đang bảo dưỡng", label: "Đang bảo dưỡng" },
+                  { value: "Ngừng hoạt động", label: "Ngừng hoạt động" },
                 ]}
                 value={formData.TrangThai}
                 onChange={(value) =>
                   setFormData((prev) => ({
                     ...prev,
-                    TrangThai: value || "Hoạt động",
+                    TrangThai: value || "Đang hoạt động",
                   }))
                 }
               />
             </Grid.Col>
 
-            <Grid.Col span={12}>
-              <TextInputCustom
-                label="Tình trạng bảo dưỡng"
-                labelFontWeight="bold"
-                placeHolder="Nhập tình trạng bảo dưỡng"
-                name="BaoDuong"
-                value={formData.BaoDuong || "Đã bảo dưỡng tháng 3/2024"}
-                setValue={(value) => handleInputChange("BaoDuong", value)}
+            <Grid.Col span={6}>
+              <Text fw={500} mb="sm">
+                Tình trạng bảo dưỡng
+              </Text>
+              <Select
+                data={[
+                  { value: "Đã bảo dưỡng", label: "Đã bảo dưỡng" },
+                  { value: "Đang bảo dưỡng", label: "Đang bảo dưỡng" },
+                  { value: "Chờ bảo dưỡng", label: "Chờ bảo dưỡng" },
+                ]}
+                value={formData.BaoDuong}
+                onChange={(value) =>
+                  setFormData((prev) => ({
+                    ...prev,
+                    BaoDuong: value || "Đã bảo dưỡng",
+                  }))
+                }
               />
             </Grid.Col>
           </Grid>
@@ -266,7 +294,7 @@ export default function AddVehicleModal({
               Hủy
             </Button>
             <Button onClick={handleSubmit} color="green" loading={isSubmitting}>
-              Thêm mới
+              Cập nhật
             </Button>
           </Group>
         </div>

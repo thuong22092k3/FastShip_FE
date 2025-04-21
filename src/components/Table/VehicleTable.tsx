@@ -20,10 +20,11 @@ type Props = {
   error?: string;
   onViewDetail: (vehicle: Vehicle) => void;
   onDelete: (phuongTienId: string) => void;
+  onEdit: (vehicle: Vehicle) => void;
 };
 
 const getStatusColor = (status: string) => {
-  switch (status.toLowerCase()) {
+  switch (status?.toLowerCase()) {
     case "đang hoạt động":
       return "green";
     case "đang bảo dưỡng":
@@ -36,7 +37,7 @@ const getStatusColor = (status: string) => {
 };
 
 const getMaintenanceColor = (status: string) => {
-  switch (status.toLowerCase()) {
+  switch (status?.toLowerCase()) {
     case "đã bảo dưỡng":
       return "green";
     case "đang bảo dưỡng":
@@ -67,6 +68,7 @@ export const VehicleTable: React.FC<Props> = ({
   error,
   onViewDetail,
   onDelete,
+  onEdit,
 }) => {
   const [selectedRows, setSelectedRows] = useState<string[]>([]);
   const [isChecked, setIsChecked] = useState(false);
@@ -238,17 +240,7 @@ export const VehicleTable: React.FC<Props> = ({
               onClick={(e) => {
                 e.preventDefault();
                 e.stopPropagation();
-                onViewDetail(vehicle);
-              }}
-            >
-              <IconEye size={18} />{" "}
-            </ActionIcon>
-            <ActionIcon
-              variant="light"
-              color="blue"
-              onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
+                onEdit(vehicle);
                 console.log("Edit", vehicle.PhuongTienId);
               }}
             >
@@ -272,7 +264,7 @@ export const VehicleTable: React.FC<Props> = ({
   });
 
   return (
-    <ScrollArea style={{ width: "1100px", overflowX: "auto" }}>
+    <ScrollArea style={{ width: "500px", overflowX: "auto" }}>
       <Table
         striped
         highlightOnHover

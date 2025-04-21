@@ -33,6 +33,7 @@ import { showNotification } from "@mantine/notifications";
 import { Vehicle } from "../../api/type/VehicleType";
 import AddVehicleModal from "./AddVehicleModal";
 import { DeleteVehicleModal } from "./DeleteVehicleModal";
+import UpdateVehicleModal from "./UpdateVehicleModal";
 
 export default function VehicleManagementScreen() {
   const [search, setSearch] = useState("");
@@ -153,6 +154,12 @@ export default function VehicleManagementScreen() {
       setIsDeleting(false);
     }
   };
+  const [updateModalOpen, setUpdateModalOpen] = useState(false);
+  const [vehicleToUpdate, setVehicleToUpdate] = useState<Vehicle | null>(null);
+  const handleEditClick = (vehicle: Vehicle) => {
+    setVehicleToUpdate(vehicle);
+    setUpdateModalOpen(true);
+  };
   return (
     <Container size="xl" p="md" fluid>
       <Box p="md">
@@ -212,6 +219,7 @@ export default function VehicleManagementScreen() {
               data={filteredVehicles}
               onViewDetail={handleViewDetail}
               onDelete={handleDeleteClick}
+              onEdit={handleEditClick}
             />
             <Pagination
               total={Math.ceil(filteredVehicles.length / 10)}
@@ -233,6 +241,12 @@ export default function VehicleManagementScreen() {
           vehicle={selectedVehicle}
           loading={detailLoading}
         /> */}
+        <UpdateVehicleModal
+          open={updateModalOpen}
+          onClose={() => setUpdateModalOpen(false)}
+          onVehicleUpdated={() => setRefreshKey((prev) => prev + 1)}
+          vehicleData={vehicleToUpdate}
+        />
         <DeleteVehicleModal
           open={deleteModalOpen}
           onClose={() => setDeleteModalOpen(false)}
