@@ -1,0 +1,260 @@
+import {
+  Box,
+  Button,
+  Grid,
+  Group,
+  LoadingOverlay,
+  Select,
+  Text,
+  Title,
+} from "@mantine/core";
+import { useState, useEffect } from "react";
+import { NhanVien } from "../../api/type/EmployeeType";
+import { employeeService } from "../../api/service/EmployeeService";
+import { showNotification } from "@mantine/notifications";
+import TextInputCustom from "../../components/TextInput/TextInputComponent";
+
+interface UpdateEmployeeModalProps {
+  open: boolean;
+  onClose: () => void;
+  onEmployeeUpdated: () => void;
+  employeeData: NhanVien | null;
+}
+
+export default function UpdateEmployeeModal({
+  open,
+  onClose,
+  onEmployeeUpdated,
+  employeeData,
+}: UpdateEmployeeModalProps) {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [errors, setErrors] = useState<Record<string, string>>({});
+
+  const [formData, setFormData] = useState<Partial<NhanVien>>({
+    NhanVienID: "",
+    HoTen: "",
+    Email: "",
+    Password: "",
+    UserName: "",
+    HieuSuat: 0,
+  });
+
+  // Update formData when employeeData changes
+  useEffect(() => {
+    if (employeeData) {
+      setFormData({
+        NhanVienID: employeeData.NhanVienID,
+        HoTen: employeeData.HoTen,
+        Email: employeeData.Email,
+        UserName: employeeData.UserName,
+        Password: employeeData.Password,
+        HieuSuat: employeeData.HieuSuat,
+      });
+    }
+  }, [employeeData]);
+
+  const handleInputChange = (name: string, value: string) => {
+    if (name === "Salary") {
+      if (value === "" || /^[0-9]*$/.test(value)) {
+        setFormData((prev) => ({
+          ...prev,
+          [name]: value === "" ? 0 : Number(value),
+        }));
+      }
+    } else {
+      setFormData((prev) => ({ ...prev, [name]: value }));
+    }
+
+    if (errors[name]) {
+      setErrors((prev) => ({ ...prev, [name]: "" }));
+    }
+  };
+
+  const validateForm = () => {
+    const newErrors: Record<string, string> = {};
+    if (!formData.HoTen) newErrors.FullName = "Vui lòng nhập họ và tên";
+    if (!formData.Email) newErrors.Department = "Vui lòng nhập email";
+    if (!formData.UserName) newErrors.UserName = "Vui lòng nhập Username";
+    if (!formData.Password) newErrors.Password = "Vui lòng nhập password";
+    if (!formData.HieuSuat || formData.HieuSuat <= 0)
+      newErrors.HieuSuat = "Vui lòng nhập hiệu suất";
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleSubmit = async () => {
+    if (!validateForm() || !formData.NhanVienID) return;
+
+    setIsSubmitting(true);
+    try {
+      await employeeService.updateUser({
+        HoTen: formData?.HoTen,
+        UserName: formData?.UserName || "",
+        Email: formData?.Email,
+        HieuSuat: Number(formData?.HieuSuat),
+        Password: formData?.Password,
+      });
+
+      showNotification({
+        title: "Thành công",
+        message: "Đã cập nhật nhân viên thành công",
+        color: "green",
+      });
+
+      onEmployeeUpdated();
+      onClose();
+    } catch (error) {
+      console.error("Error updating employee:", error);
+      showNotification({
+        title: "Lỗi",
+        message: "Không thể cập nhật nhân viên",
+        color: "red",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  if (!open || !employeeData) return null;
+
+  return (
+    <div
+      style={{
+        position: "fixed",
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        background: "rgba(0,0,0,0.5)",
+        zIndex: 1000,
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        padding: "20px",
+      }}
+    >
+      <div
+        style={{
+          background: "white",
+          width: "600px",
+          maxHeight: "90vh",
+          borderRadius: "8px",
+          overflow: "auto",
+          position: "relative",
+        }}
+      >
+        <LoadingOverlay visible={isSubmitting} />
+        <div style={{ padding: "30px", position: "relative" }}>
+          <button
+            onClick={onClose}
+            style={{
+              position: "absolute",
+              top: "15px",
+              right: "15px",
+              background: "none",
+              border: "none",
+              fontSize: "1.5rem",
+              cursor: "pointer",
+            }}
+            disabled={isSubmitting}
+          >
+            ×
+          </button>
+
+          <Title order={3} mb="xl">
+            Cập nhật thông tin nhân viên
+          </Title>
+
+          <Grid gutter="xl">
+            <Grid.Col span={6}>
+              <TextInputCustom
+                label="ID Nhân viên"
+                labelFontWeight="bold"
+                placeHolder=""
+                name="EmployeeId"
+                value={formData.NhanVienID || ""}
+                setValue={() => {}}
+                readOnly
+              />
+            </Grid.Col>
+
+            <Grid.Col span={6}>
+              <TextInputCustom
+                label="Họ và tên"
+                labelFontWeight="bold"
+                placeHolder="Nhập họ và tên"
+                name="FullName"
+                value={formData.HoTen || ""}
+                setValue={(value) => handleInputChange("FullName", value)}
+                error={errors.FullName}
+                required
+              />
+            </Grid.Col>
+
+            <Grid.Col span={6}>
+              <TextInputCustom
+                label="UserName"
+                labelFontWeight="bold"
+                placeHolder="Nhập username"
+                name="UserName"
+                value={formData.UserName || ""}
+                setValue={(value) => handleInputChange("UserName", value)}
+                error={errors.UserName}
+                required
+              />
+            </Grid.Col>
+
+            <Grid.Col span={6}>
+              <TextInputCustom
+                label="Email"
+                labelFontWeight="bold"
+                placeHolder="Nhập email"
+                name="Email"
+                value={formData.Email || ""}
+                setValue={(value) => handleInputChange("Email", value)}
+                error={errors.Email}
+                required
+              />
+            </Grid.Col>
+
+            <Grid.Col span={6}>
+              <TextInputCustom
+                label="Password"
+                labelFontWeight="bold"
+                placeHolder="Nhập password"
+                name="Password"
+                value={formData.Password || ""}
+                setValue={(value) => handleInputChange("Password", value)}
+                error={errors.Password}
+                required
+              />
+            </Grid.Col>
+
+            <Grid.Col span={6}>
+              <TextInputCustom
+                label="Hiệu suất"
+                labelFontWeight="bold"
+                placeHolder="Nhập hiệu suất"
+                name="HieuSuat"
+                value={formData.HieuSuat?.toString() || "0"}
+                setValue={(value) => handleInputChange("HieuSuat", value)}
+                error={errors.HieuSuat}
+                required
+                pattern="[0-9]*"
+              />
+            </Grid.Col>
+          </Grid>
+          <Group justify="flex-end" mt="xl">
+            <Button variant="outline" onClick={onClose} disabled={isSubmitting}>
+              Hủy
+            </Button>
+            <Button onClick={handleSubmit} color="green" loading={isSubmitting}>
+              Cập nhật
+            </Button>
+          </Group>
+        </div>
+      </div>
+    </div>
+  );
+}

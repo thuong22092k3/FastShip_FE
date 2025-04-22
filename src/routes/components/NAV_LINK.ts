@@ -14,6 +14,7 @@ export const NAV_LINK = {
   // VEHICLE_MAINTENANCE: "/vehicles/maintenance",
 
   EMPLOYEE_MANAGEMENT: "/home/employee",
+  DRIVER_MANAGEMENT: "/home/driver",
   // CREATE_EMPLOYEE: "/employees/create",
   // EDIT_EMPLOYEE: "/employees/edit",
   // ASSIGN_TASK: "/employees/assign-task",

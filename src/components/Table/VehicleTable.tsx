@@ -264,7 +264,7 @@ export const VehicleTable: React.FC<Props> = ({
   });
 
   return (
-    <ScrollArea style={{ width: "500px", overflowX: "auto" }}>
+    <ScrollArea style={{ width: "1250px", overflowX: "auto" }}>
       <Table
         striped
         highlightOnHover

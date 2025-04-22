@@ -1,22 +1,25 @@
-import { Title, Card, Text, Button, Group, Stack } from "@mantine/core";
+import { Title, Card, Text, Button, Group, Stack, Tabs } from "@mantine/core";
 import { IconUserPlus } from "@tabler/icons-react";
+import { DriverTab } from "./DriverScreen";
+import EmployeeTab from "./EmployeeScreen";
 
 export default function EmployeeManagementScreen() {
   return (
     <Stack gap="md">
-      <Group justify="space-between">
-        <Title order={2}>Quản lý nhân viên</Title>
-        <Button leftSection={<IconUserPlus />} variant="filled" color="blue">
-          Thêm nhân viên
-        </Button>
-      </Group>
+      <Title order={2}>Quản lý nhân viên</Title>
+      <Tabs defaultValue="first">
+        <Tabs.List>
+          <Tabs.Tab value="employee">Nhân viên</Tabs.Tab>
+          <Tabs.Tab value="driver">Tài xế</Tabs.Tab>
+        </Tabs.List>
+        <Tabs.Panel value="employee" pt="xs">
+          <EmployeeTab />
+        </Tabs.Panel>
 
-      <Card withBorder shadow="sm" radius="md" p="md">
-        <Text>Danh sách nhân viên sẽ được hiển thị tại đây.</Text>
-        <Text c="dimmed" size="sm">
-          (Chức năng xem, sửa, xóa sẽ được cập nhật sau)
-        </Text>
-      </Card>
+        <Tabs.Panel value="driver" pt="xs">
+          <DriverTab />
+        </Tabs.Panel>
+      </Tabs>
     </Stack>
   );
 }
