@@ -16,13 +16,14 @@ import { showNotification } from "@mantine/notifications";
 import { RootState } from "../../state_management/reducers/rootReducer";
 import { TaiXe } from "../../api/type/EmployeeType";
 import { employeeService } from "../../api/service/EmployeeService";
-// import { uploadDrivers } from "../../state_management/slices/driverSlice";
+import { uploadDrivers } from "../../state_management/slices/driveSlice";
 import { TaiXeTable } from "../../components/Table/DriverTable";
-import AddDriverModal from "./CreateEmployee";
-import UpdateDriverModal from "./UpdateEmployee";
-import DeleteEmployeeModal from "./DeleteEployeeModal";
+import { DeleteEmployeeModal } from "./DeleteEployeeModal";
+import AddEmployeeModal from "./CreateEmployee";
+import UpdateEmployeeModal from "./UpdateEmployee";
+import UpdateDriverModal from "./UpdateDriver";
 
-export default function DriverManagementScreen() {
+export default function DriverScreen() {
   const dispatch = useDispatch();
   const drivers = useSelector((state: RootState) => state.driverSlice);
 
@@ -37,23 +38,38 @@ export default function DriverManagementScreen() {
   const [openUpdateModal, setOpenUpdateModal] = useState(false);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
 
+  // const fetchDrivers = async () => {
+  //   try {
+  //     setLoading(true);
+  //     const response = await employeeService.getAllUsers();
+  //     if (response?.data && Array.isArray(response.data)) {
+  //       dispatch(uploadDrivers(response.data));
+  //     } else {
+  //       dispatch(uploadDrivers([]));
+  //     }
+  //   } catch (err) {
+  //     setError("Không thể tải dữ liệu tài xế");
+  //     dispatch(uploadDrivers([]));
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+
   const fetchDrivers = async () => {
     try {
       setLoading(true);
-      const response = await driverService.getAllDrivers();
-      if (response?.data && Array.isArray(response.data)) {
-        dispatch(uploadDrivers(response.data));
-      } else {
-        dispatch(uploadDrivers([]));
-      }
+      console.log("Fetching drivers..."); // Debug log
+      const response = await employeeService.getAllDrivers();
+      console.log("Drivers data:", response); // Debug log
+      dispatch(uploadDrivers(response));
     } catch (err) {
+      console.error("Error in fetchDrivers:", err); // Detailed error log
       setError("Không thể tải dữ liệu tài xế");
       dispatch(uploadDrivers([]));
     } finally {
       setLoading(false);
     }
   };
-
   useEffect(() => {
     fetchDrivers();
   }, [refreshKey]);
@@ -64,6 +80,17 @@ export default function DriverManagementScreen() {
       d.Email.toLowerCase().includes(search.toLowerCase()) ||
       d.UserName.toLowerCase().includes(search.toLowerCase())
   );
+
+  const taiXeList: TaiXe[] = filteredDrivers.map((emp) => ({
+    TaiXeId: emp.TaiXeId,
+    HoTen: emp.HoTen,
+    UserName: emp.UserName,
+    Password: emp.Password,
+    Email: emp.Email,
+    HieuSuat: emp.HieuSuat,
+    CongViec: emp.CongViec || 0,
+    role: "TaiXe" as const,
+  }));
 
   const handleAddSuccess = () => {
     setOpenCreateModal(false);
@@ -76,7 +103,7 @@ export default function DriverManagementScreen() {
   };
 
   const handleDelete = (id: string) => {
-    setSelectedDriver({ ...selectedDriver!, TaiXeID: id });
+    setSelectedDriver({ ...selectedDriver!, TaiXeId: id });
     setOpenDeleteModal(true);
   };
 
@@ -108,7 +135,7 @@ export default function DriverManagementScreen() {
       </Group>
 
       <TaiXeTable
-        data={filteredDrivers}
+        data={taiXeList}
         loading={loading}
         error={error}
         onEdit={handleUpdate}
@@ -117,10 +144,10 @@ export default function DriverManagementScreen() {
 
       <Pagination total={1} value={page} onChange={setPage} mt="md" />
 
-      <AddDriverModal
+      <AddEmployeeModal
         open={openCreateModal}
         onClose={() => setOpenCreateModal(false)}
-        onDriverCreated={handleAddSuccess}
+        onEmployeeCreated={handleAddSuccess}
       />
 
       <UpdateDriverModal
@@ -137,7 +164,7 @@ export default function DriverManagementScreen() {
         }}
       />
 
-      <DeleteDriverModal
+      <DeleteEmployeeModal
         open={openDeleteModal}
         onClose={() => setOpenDeleteModal(false)}
         onConfirm={handleDeleteSuccess}

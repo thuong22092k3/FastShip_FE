@@ -94,10 +94,10 @@ export default function CreateEmployeeModal({
 
       const extendedPayload =
         employeeType === "NhanVien"
-          ? { ...basePayload, NhanVienID: employeeId }
+          ? { ...basePayload, NhanVienId: employeeId }
           : {
               ...basePayload,
-              TaiXeID: employeeId,
+              TaiXeId: employeeId,
               CongViec: formData.CongViec,
             };
 

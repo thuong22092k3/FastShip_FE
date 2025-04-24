@@ -15,8 +15,8 @@ export const ENDPOINTS = {
     DELETE: (id: string) => `${BASE_URL}/api/order/deleteOrder?id=${id}`,
   },
   USERS: {
-    LIST: `${BASE_URL}/api/users`,
-    DETAIL: (id: string) => `${BASE_URL}/api/users/${id}`,
+    LIST: `${BASE_URL}/api/auth/users`,
+    DETAIL: (id: string) => `${BASE_URL}/api/auth/users/${id}`,
   },
   PARTNERS: {
     LIST: `${BASE_URL}/api/partners`,

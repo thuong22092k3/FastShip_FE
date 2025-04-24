@@ -39,15 +39,27 @@ export default function EmployeeManagementScreen() {
   const [openUpdateModal, setOpenUpdateModal] = useState(false);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
 
+  // const fetchEmployees = async () => {
+  //   try {
+  //     setLoading(true);
+  //     const response = await employeeService.getAllUsers();
+  //     if (response?.data && Array.isArray(response.data)) {
+  //       dispatch(uploadEmployees(response.data));
+  //     } else {
+  //       dispatch(uploadEmployees([]));
+  //     }
+  //   } catch (err) {
+  //     setError("Không thể tải dữ liệu nhân viên");
+  //     dispatch(uploadEmployees([]));
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
   const fetchEmployees = async () => {
     try {
       setLoading(true);
-      const response = await employeeService.getAllUsers();
-      if (response?.data && Array.isArray(response.data)) {
-        dispatch(uploadEmployees(response.data));
-      } else {
-        dispatch(uploadEmployees([]));
-      }
+      const response = await employeeService.getAllEmployees();
+      dispatch(uploadEmployees(response));
     } catch (err) {
       setError("Không thể tải dữ liệu nhân viên");
       dispatch(uploadEmployees([]));
@@ -55,7 +67,6 @@ export default function EmployeeManagementScreen() {
       setLoading(false);
     }
   };
-
   useEffect(() => {
     fetchEmployees();
   }, [refreshKey]);
@@ -78,7 +89,7 @@ export default function EmployeeManagementScreen() {
   };
 
   const handleDelete = (id: string) => {
-    setSelectedEmployee({ ...selectedEmployee!, NhanVienID: id });
+    setSelectedEmployee({ ...selectedEmployee!, NhanVienId: id });
     setOpenDeleteModal(true);
   };
 
@@ -88,7 +99,7 @@ export default function EmployeeManagementScreen() {
     setOpenDeleteModal(false);
   };
   const nhanVienList: NhanVien[] = filteredEmployees.map((emp) => ({
-    NhanVienID: emp.NhanVienId,
+    NhanVienId: emp.NhanVienId,
     HoTen: emp.HoTen,
     UserName: emp.UserName,
     Password: emp.Password,

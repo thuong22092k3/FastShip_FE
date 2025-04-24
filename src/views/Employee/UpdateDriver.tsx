@@ -9,52 +9,53 @@ import {
   Title,
 } from "@mantine/core";
 import { useState, useEffect } from "react";
-import { NhanVien } from "../../api/type/EmployeeType";
+import { TaiXe } from "../../api/type/EmployeeType";
 import { employeeService } from "../../api/service/EmployeeService";
 import { showNotification } from "@mantine/notifications";
 import TextInputCustom from "../../components/TextInput/TextInputComponent";
 
-interface UpdateEmployeeModalProps {
+interface UpdateDriverModalProps {
   open: boolean;
   onClose: () => void;
-  onEmployeeUpdated: () => void;
-  employeeData: NhanVien | null;
+  onDriverUpdated: () => void;
+  driverData: TaiXe | null;
 }
 
-export default function UpdateEmployeeModal({
+export default function UpdateDriverModal({
   open,
   onClose,
-  onEmployeeUpdated,
-  employeeData,
-}: UpdateEmployeeModalProps) {
+  onDriverUpdated,
+  driverData,
+}: UpdateDriverModalProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
 
-  const [formData, setFormData] = useState<Partial<NhanVien>>({
-    NhanVienId: "",
+  const [formData, setFormData] = useState<Partial<TaiXe>>({
+    TaiXeId: "",
     HoTen: "",
     Email: "",
     Password: "",
     UserName: "",
     HieuSuat: 0,
+    CongViec: 0,
   });
 
-  // Update formData when employeeData changes
   useEffect(() => {
-    if (employeeData) {
+    if (driverData) {
       setFormData({
-        NhanVienId: employeeData.NhanVienId,
-        HoTen: employeeData.HoTen,
-        Email: employeeData.Email,
-        UserName: employeeData.UserName,
-        Password: employeeData.Password,
-        HieuSuat: employeeData.HieuSuat,
+        TaiXeId: driverData.TaiXeId,
+        HoTen: driverData.HoTen,
+        Email: driverData.Email,
+        UserName: driverData.UserName,
+        Password: driverData.Password,
+        HieuSuat: driverData.HieuSuat,
+        CongViec: driverData.CongViec,
       });
     }
-  }, [employeeData]);
+  }, [driverData]);
 
   const handleInputChange = (name: string, value: string) => {
-    if (name === "Salary") {
+    if (name === "HieuSuat" || name === "CongViec") {
       if (value === "" || /^[0-9]*$/.test(value)) {
         setFormData((prev) => ({
           ...prev,
@@ -72,43 +73,46 @@ export default function UpdateEmployeeModal({
 
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
-    if (!formData.HoTen) newErrors.FullName = "Vui lòng nhập họ và tên";
-    if (!formData.Email) newErrors.Department = "Vui lòng nhập email";
+    if (!formData.HoTen) newErrors.HoTen = "Vui lòng nhập họ và tên";
+    if (!formData.Email) newErrors.Email = "Vui lòng nhập email";
     if (!formData.UserName) newErrors.UserName = "Vui lòng nhập Username";
     if (!formData.Password) newErrors.Password = "Vui lòng nhập password";
     if (!formData.HieuSuat || formData.HieuSuat <= 0)
       newErrors.HieuSuat = "Vui lòng nhập hiệu suất";
+    if (!formData.CongViec || formData.CongViec <= 0)
+      newErrors.CongViec = "Vui lòng nhập công việc";
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
   const handleSubmit = async () => {
-    if (!validateForm() || !formData.NhanVienId) return;
+    if (!validateForm() || !formData.TaiXeId) return;
 
     setIsSubmitting(true);
     try {
       await employeeService.updateUser({
-        HoTen: formData?.HoTen,
-        UserName: formData?.UserName || "",
-        Email: formData?.Email,
-        HieuSuat: Number(formData?.HieuSuat),
-        Password: formData?.Password,
+        HoTen: formData.HoTen || "",
+        UserName: formData.UserName || "",
+        Email: formData.Email || "",
+        HieuSuat: Number(formData.HieuSuat),
+        CongViec: Number(formData.CongViec),
+        Password: formData.Password || "",
       });
 
       showNotification({
         title: "Thành công",
-        message: "Đã cập nhật nhân viên thành công",
+        message: "Đã cập nhật tài xế thành công",
         color: "green",
       });
 
-      onEmployeeUpdated();
+      onDriverUpdated();
       onClose();
     } catch (error) {
-      console.error("Error updating employee:", error);
+      console.error("Error updating driver:", error);
       showNotification({
         title: "Lỗi",
-        message: "Không thể cập nhật nhân viên",
+        message: "Không thể cập nhật tài xế",
         color: "red",
       });
     } finally {
@@ -116,7 +120,7 @@ export default function UpdateEmployeeModal({
     }
   };
 
-  if (!open || !employeeData) return null;
+  if (!open || !driverData) return null;
 
   return (
     <div
@@ -163,17 +167,17 @@ export default function UpdateEmployeeModal({
           </button>
 
           <Title order={3} mb="xl">
-            Cập nhật thông tin nhân viên
+            Cập nhật thông tin tài xế
           </Title>
 
           <Grid gutter="xl">
             <Grid.Col span={6}>
               <TextInputCustom
-                label="ID Nhân viên"
+                label="ID Tài xế"
                 labelFontWeight="bold"
                 placeHolder=""
-                name="EmployeeId"
-                value={formData.NhanVienId || ""}
+                name="TaiXeID"
+                value={formData.TaiXeId || ""}
                 setValue={() => {}}
                 readOnly
               />
@@ -184,10 +188,10 @@ export default function UpdateEmployeeModal({
                 label="Họ và tên"
                 labelFontWeight="bold"
                 placeHolder="Nhập họ và tên"
-                name="FullName"
+                name="HoTen"
                 value={formData.HoTen || ""}
-                setValue={(value) => handleInputChange("FullName", value)}
-                error={errors.FullName}
+                setValue={(value) => handleInputChange("HoTen", value)}
+                error={errors.HoTen}
                 required
               />
             </Grid.Col>
@@ -240,6 +244,20 @@ export default function UpdateEmployeeModal({
                 value={formData.HieuSuat?.toString() || "0"}
                 setValue={(value) => handleInputChange("HieuSuat", value)}
                 error={errors.HieuSuat}
+                required
+                pattern="[0-9]*"
+              />
+            </Grid.Col>
+
+            <Grid.Col span={6}>
+              <TextInputCustom
+                label="Công việc"
+                labelFontWeight="bold"
+                placeHolder="Nhập số công việc"
+                name="CongViec"
+                value={formData.CongViec?.toString() || "0"}
+                setValue={(value) => handleInputChange("CongViec", value)}
+                error={errors.CongViec}
                 required
                 pattern="[0-9]*"
               />

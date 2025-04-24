@@ -16,13 +16,13 @@ type Props = {
   data: TaiXe[];
   loading?: boolean;
   error?: string;
-  onDelete: (taiXeId: string) => void;
+  onDelete: (TaiXeId: string) => void;
   onEdit: (taiXe: TaiXe) => void;
 };
 
 const columnWidths: { [key: string]: string } = {
   checkbox: "50px",
-  taiXeId: "120px",
+  TaiXeId: "120px",
   hoTen: "180px",
   userName: "150px",
   email: "200px",
@@ -81,23 +81,23 @@ export const TaiXeTable: React.FC<Props> = ({
   };
 
   const rows = data.map((taiXe) => {
-    const isSelected = selectedRows.includes(taiXe.TaiXeID);
+    const isSelected = selectedRows.includes(taiXe.TaiXeId);
     const jobStatus = getJobStatus(taiXe.CongViec);
 
     return (
       <Table.Tr
-        key={taiXe.TaiXeID}
+        key={taiXe.TaiXeId}
         style={{ borderBottom: "1px solid #e0e0e0" }}
       >
         <Table.Td style={cellStyle}>
           <Checkbox
             checked={isSelected}
             onChange={(event) =>
-              handleRowSelect(taiXe.TaiXeID, event.currentTarget.checked)
+              handleRowSelect(taiXe.TaiXeId, event.currentTarget.checked)
             }
           />
         </Table.Td>
-        <Table.Td style={cellStyle}>{taiXe.TaiXeID}</Table.Td>
+        <Table.Td style={cellStyle}>{taiXe.TaiXeId}</Table.Td>
         <Table.Td style={cellStyle}>{taiXe.HoTen}</Table.Td>
         <Table.Td style={cellStyle}>{taiXe.UserName}</Table.Td>
         <Table.Td style={cellStyle}>{taiXe.Email}</Table.Td>
@@ -121,7 +121,7 @@ export const TaiXeTable: React.FC<Props> = ({
             <ActionIcon
               variant="light"
               color="red"
-              onClick={() => onDelete(taiXe.TaiXeID)}
+              onClick={() => onDelete(taiXe.TaiXeId)}
             >
               <IconTrash size={18} />
             </ActionIcon>
@@ -154,7 +154,7 @@ export const TaiXeTable: React.FC<Props> = ({
                 onChange={() => handleRowSelect("", !allSelected)}
               />
             </Table.Th>
-            <Table.Th style={{ ...headerStyle, width: columnWidths.taiXeId }}>
+            <Table.Th style={{ ...headerStyle, width: columnWidths.TaiXeId }}>
               ID Tài xế
             </Table.Th>
             <Table.Th style={{ ...headerStyle, width: columnWidths.hoTen }}>
