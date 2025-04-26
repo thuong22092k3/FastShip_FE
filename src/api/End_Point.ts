@@ -3,7 +3,8 @@ export const BASE_URL = "https://fastship-be.onrender.com";
 export const ENDPOINTS = {
   AUTH: {
     LOGIN: `${BASE_URL}/api/auth/login`,
-    REGISTER: `${BASE_URL}/api/auth/register`,
+    REGISTER: `${BASE_URL}/api/auth/createUser`,
+    UPDATE: `${BASE_URL}/api/auth/updateUser`,
     LOGOUT: `${BASE_URL}/api/auth/logout`,
     PROFILE: `${BASE_URL}/api/auth/profile`,
   },

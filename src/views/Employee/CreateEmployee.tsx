@@ -74,6 +74,7 @@ export default function CreateEmployeeModal({
   };
 
   const handleSubmit = async () => {
+    console.log("Validating form data:", formData);
     if (!validateForm()) return;
 
     setIsSubmitting(true);
@@ -100,12 +101,11 @@ export default function CreateEmployeeModal({
               TaiXeId: employeeId,
               CongViec: formData.CongViec,
             };
-
       // Type assertion here
       const createdEmployee = await employeeService.createUser(
         extendedPayload as TaiXe
       );
-
+      console.log("API response employee:", createdEmployee);
       dispatch(ADD_EMPLOYEE(createdEmployee));
 
       showNotification({

@@ -71,11 +71,11 @@ export default function EmployeeManagementScreen() {
     fetchEmployees();
   }, [refreshKey]);
 
-  const filteredEmployees = employees.filter(
+  const filteredEmployees = employees?.filter(
     (e) =>
-      e.HoTen.toLowerCase().includes(search.toLowerCase()) ||
-      e.Email.toLowerCase().includes(search.toLowerCase()) ||
-      e.UserName.toLowerCase().includes(search.toLowerCase())
+      e.HoTen?.toLowerCase().includes(search?.toLowerCase()) ||
+      e.Email?.toLowerCase().includes(search?.toLowerCase()) ||
+      e.UserName?.toLowerCase().includes(search?.toLowerCase())
   );
 
   const handleAddSuccess = () => {

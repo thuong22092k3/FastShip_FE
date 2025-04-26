@@ -88,7 +88,14 @@ export default function UpdateDriverModal({
 
   const handleSubmit = async () => {
     if (!validateForm() || !formData.TaiXeId) return;
+    // console.log("Form data before validation:", formData);
+    // const isValid = validateForm();
+    // console.log("Is form valid?", isValid);
 
+    // if (!isValid || !formData.TaiXeId) {
+    //   console.log("Validation failed or missing TaiXeId");
+    //   return;
+    // }
     setIsSubmitting(true);
     try {
       await employeeService.updateUser({

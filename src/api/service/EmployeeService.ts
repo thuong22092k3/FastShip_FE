@@ -23,7 +23,7 @@ export const employeeService = {
   },
 
   updateUser: async (data: UpdateUserInput) => {
-    const res = await axios.put(`${ENDPOINTS.AUTH.PROFILE}`, data);
+    const res = await axios.put(`${ENDPOINTS.AUTH.UPDATE}`, data);
     return res.data;
   },
 
@@ -105,7 +105,7 @@ export const employeeService = {
   getAllDrivers: async (): Promise<TaiXe[]> => {
     try {
       const response = await axios.get(`${ENDPOINTS.USERS.LIST}?role=TaiXe`);
-      console.log("API Response:", response);
+      // console.log("API Response:", response);
       return response.data.users.map((user: any) => ({
         TaiXeId: user._id,
         HoTen: user.HoTen,
