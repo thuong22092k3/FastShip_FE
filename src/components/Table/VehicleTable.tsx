@@ -53,7 +53,7 @@ const columnWidths: { [key: string]: string } = {
   checkbox: "50px",
   phuongTienId: "120px",
   hangXe: "150px",
-  taiXeId: "120px",
+  TaiXeID: "120px",
   bienSo: "120px",
   loaiXe: "150px",
   sucChua: "100px",
@@ -174,7 +174,7 @@ export const VehicleTable: React.FC<Props> = ({
         </Table.Td>
         <Table.Td style={cellStyle}>{vehicle.PhuongTienId}</Table.Td>
         <Table.Td style={cellStyle}>{vehicle.HangXe}</Table.Td>
-        <Table.Td style={cellStyle}>{vehicle.TaiXeId}</Table.Td>
+        <Table.Td style={cellStyle}>{vehicle.TaiXeID}</Table.Td>
         <Table.Td style={cellStyle}>{vehicle.BienSo}</Table.Td>
         <Table.Td style={cellStyle}>{vehicle.LoaiXe}</Table.Td>
         <Table.Td style={cellStyle}>{vehicle.SucChua}</Table.Td>
@@ -293,7 +293,7 @@ export const VehicleTable: React.FC<Props> = ({
               Hãng xe
             </Table.Th>
             <Table.Th
-              style={{ ...headerStyle, minWidth: columnWidths.taiXeId }}
+              style={{ ...headerStyle, minWidth: columnWidths.TaiXeID }}
             >
               Tài xế ID
             </Table.Th>

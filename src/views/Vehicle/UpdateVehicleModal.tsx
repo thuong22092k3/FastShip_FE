@@ -33,7 +33,7 @@ export default function UpdateVehicleModal({
   const [formData, setFormData] = useState<Partial<Vehicle>>({
     PhuongTienId: "",
     HangXe: "",
-    TaiXeId: "",
+    TaiXeID: "",
     BienSo: "",
     LoaiXe: "",
     SucChua: 0,
@@ -47,7 +47,7 @@ export default function UpdateVehicleModal({
       setFormData({
         PhuongTienId: vehicleData.PhuongTienId,
         HangXe: vehicleData.HangXe,
-        TaiXeId: vehicleData.TaiXeId,
+        TaiXeID: vehicleData.TaiXeID,
         BienSo: vehicleData.BienSo,
         LoaiXe: vehicleData.LoaiXe,
         SucChua: vehicleData.SucChua,
@@ -93,7 +93,7 @@ export default function UpdateVehicleModal({
     try {
       await vehicleService.updateVehicle(formData.PhuongTienId, {
         HangXe: formData.HangXe,
-        TaiXeId: formData.TaiXeId,
+        TaiXeID: formData.TaiXeID,
         BienSo: formData.BienSo,
         LoaiXe: formData.LoaiXe,
         SucChua: Number(formData.SucChua),
@@ -243,7 +243,7 @@ export default function UpdateVehicleModal({
                 labelFontWeight="bold"
                 placeHolder="Nhập mã tài xế"
                 name="TaiXeId"
-                value={formData.TaiXeId || ""}
+                value={formData.TaiXeID || ""}
                 setValue={(value) => handleInputChange("TaiXeId", value)}
               />
             </Grid.Col>

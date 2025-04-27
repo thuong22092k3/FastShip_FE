@@ -5,7 +5,7 @@ import { Vehicle } from "../type/VehicleType";
 export const vehicleService = {
   createVehicle: async (data: {
     HangXe: string;
-    TaiXeId: string;
+    TaiXeID: string;
     BienSo: string;
     LoaiXe: string;
     SucChua: number;

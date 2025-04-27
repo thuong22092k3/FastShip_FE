@@ -63,7 +63,7 @@ export default function NewModal({
     setIsSubmitting(true);
     try {
       const payload = {
-        NhanVienId: formData.NhanVienId || "NV001",
+        NhanVienID: formData.NhanVienID || "NV001",
         NguoiGui: formData.NguoiGui || "",
         NguoiNhan: formData.NguoiNhan || "",
         SDT: formData.SDT || "",

@@ -23,8 +23,30 @@ export const employeeService = {
   },
 
   updateUser: async (data: UpdateUserInput) => {
-    const res = await axios.put(`${ENDPOINTS.AUTH.UPDATE}`, data);
-    return res.data;
+    try {
+      const res = await axios.put(`${ENDPOINTS.AUTH.UPDATE}`, data);
+      return res.data;
+    } catch (error) {
+      console.error("API update error:", error);
+      throw error;
+    }
+  },
+
+  deleteUser: async (UserName: string): Promise<void> => {
+    try {
+      if (!UserName) {
+        throw new Error("Vui lòng cung cấp tên đăng nhập!");
+      }
+
+      const response = await axios.delete(`${ENDPOINTS.AUTH.DELETE}`, {
+        params: { UserName },
+      });
+
+      return response.data;
+    } catch (error) {
+      console.error("Lỗi xóa tài khoản:", error);
+      throw error;
+    }
   },
 
   getUserDetail: async (id: string) => {
@@ -59,7 +81,7 @@ export const employeeService = {
             };
           case "NhanVien":
             return {
-              _id: user._id,
+              // _id: user._id,
               NhanVienID: user.NhanVienID,
               UserName: user.UserName,
               Password: user.Password,
@@ -107,7 +129,7 @@ export const employeeService = {
       const response = await axios.get(`${ENDPOINTS.USERS.LIST}?role=TaiXe`);
       // console.log("API Response:", response);
       return response.data.users.map((user: any) => ({
-        TaiXeId: user._id,
+        TaiXeID: user.TaiXeID,
         HoTen: user.HoTen,
         UserName: user.UserName,
         Password: user.Password,

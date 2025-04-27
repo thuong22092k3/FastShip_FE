@@ -88,18 +88,32 @@ export default function EmployeeManagementScreen() {
     setOpenUpdateModal(true);
   };
 
-  const handleDelete = (id: string) => {
-    setSelectedEmployee({ ...selectedEmployee!, NhanVienId: id });
+  const handleDelete = (UserName: string) => {
+    setSelectedEmployee({ ...selectedEmployee!, UserName: UserName });
     setOpenDeleteModal(true);
   };
 
-  const handleDeleteSuccess = () => {
-    showNotification({ message: "Xóa nhân viên thành công", color: "green" });
-    setRefreshKey((prev) => prev + 1);
-    setOpenDeleteModal(false);
+  const handleDeleteSuccess = async () => {
+    // showNotification({ message: "Xóa nhân viên thành công", color: "green" });
+    // setRefreshKey((prev) => prev + 1);
+    // setOpenDeleteModal(false);
+
+    if (!selectedEmployee) return;
+
+    try {
+      await employeeService.deleteUser(selectedEmployee.UserName);
+      showNotification({ message: "Xóa tài xế thành công", color: "green" });
+      setRefreshKey((prev) => prev + 1);
+    } catch (error) {
+      showNotification({ message: "Xóa tài xế thất bại", color: "red" });
+      console.error(error);
+    } finally {
+      setOpenDeleteModal(false);
+      setSelectedEmployee(null);
+    }
   };
   const nhanVienList: NhanVien[] = filteredEmployees.map((emp) => ({
-    NhanVienId: emp.NhanVienId,
+    NhanVienID: emp.NhanVienID,
     HoTen: emp.HoTen,
     UserName: emp.UserName,
     Password: emp.Password,

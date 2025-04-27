@@ -31,7 +31,7 @@ export default function UpdateDriverModal({
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   const [formData, setFormData] = useState<Partial<TaiXe>>({
-    TaiXeId: "",
+    TaiXeID: "",
     HoTen: "",
     Email: "",
     Password: "",
@@ -43,7 +43,7 @@ export default function UpdateDriverModal({
   useEffect(() => {
     if (driverData) {
       setFormData({
-        TaiXeId: driverData.TaiXeId,
+        TaiXeID: driverData.TaiXeID,
         HoTen: driverData.HoTen,
         Email: driverData.Email,
         UserName: driverData.UserName,
@@ -87,25 +87,34 @@ export default function UpdateDriverModal({
   };
 
   const handleSubmit = async () => {
-    if (!validateForm() || !formData.TaiXeId) return;
-    // console.log("Form data before validation:", formData);
-    // const isValid = validateForm();
-    // console.log("Is form valid?", isValid);
+    console.log("Bắt đầu quá trình cập nhật");
+    if (!formData.TaiXeID) {
+      console.log("Lỗi: Thiếu TaiXeId", formData);
+      return;
+    }
 
-    // if (!isValid || !formData.TaiXeId) {
-    //   console.log("Validation failed or missing TaiXeId");
-    //   return;
-    // }
+    const isValid = validateForm();
+    if (!isValid) {
+      console.log("Validation failed", errors);
+      return;
+    }
+
     setIsSubmitting(true);
+    console.log("Chuẩn bị gửi dữ liệu cập nhật:", formData);
     try {
-      await employeeService.updateUser({
+      const updateData = {
+        TaiXeId: formData.TaiXeID || "",
         HoTen: formData.HoTen || "",
         UserName: formData.UserName || "",
         Email: formData.Email || "",
         HieuSuat: Number(formData.HieuSuat),
         CongViec: Number(formData.CongViec),
         Password: formData.Password || "",
-      });
+      };
+      console.log("Dữ liệu sẽ gửi đến API:", updateData);
+
+      const response = await employeeService.updateUser(updateData);
+      console.log("Phản hồi từ API:", response);
 
       showNotification({
         title: "Thành công",
@@ -113,20 +122,21 @@ export default function UpdateDriverModal({
         color: "green",
       });
 
+      console.log("Gọi callback onDriverUpdated");
       onDriverUpdated();
       onClose();
     } catch (error) {
-      console.error("Error updating driver:", error);
+      console.error("Lỗi khi cập nhật:", error);
       showNotification({
         title: "Lỗi",
         message: "Không thể cập nhật tài xế",
         color: "red",
       });
     } finally {
+      console.log("Kết thúc quá trình cập nhật");
       setIsSubmitting(false);
     }
   };
-
   if (!open || !driverData) return null;
 
   return (
@@ -184,7 +194,7 @@ export default function UpdateDriverModal({
                 labelFontWeight="bold"
                 placeHolder=""
                 name="TaiXeID"
-                value={formData.TaiXeId || ""}
+                value={formData.TaiXeID || ""}
                 setValue={() => {}}
                 readOnly
               />

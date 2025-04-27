@@ -12,7 +12,7 @@ declare type TPartner = {
 declare type TVehicle = {
   PhuongTienId: string;
   HangXe: string;
-  TaiXeId: string;
+  TaiXeID: string;
   BienSo: string;
   LoaiXe: string;
   SucChua: number;
@@ -20,7 +20,7 @@ declare type TVehicle = {
   BaoDuong: string;
 };
 declare type TEmployee = {
-  NhanVienId: string;
+  NhanVienID: string;
   HoTen: string;
   UserName: string;
   Password: string;
@@ -30,7 +30,7 @@ declare type TEmployee = {
 declare type TOrder = {
   _id: string;
   DonHangId: string;
-  NhanVienId: string;
+  NhanVienID: string;
   NguoiGui: string;
   NguoiNhan: string;
   SDT: string;
@@ -43,7 +43,7 @@ declare type TOrder = {
   GhiChu: string;
 };
 declare type TDriver = {
-  TaiXeId: string;
+  TaiXeID: string;
   UserName: string;
   Password: string;
   HoTen: string;
@@ -68,7 +68,7 @@ declare type TCustomer = {
 declare type TDelivery = {
   GiaoHangId: string;
   DonHangId: string;
-  TaiXeId: string;
+  TaiXeID: string;
   PhuongTienId: string;
   PhuongThuc: string;
   TrangThai: string;

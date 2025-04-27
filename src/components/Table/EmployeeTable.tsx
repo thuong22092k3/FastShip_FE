@@ -16,13 +16,13 @@ type Props = {
   data: NhanVien[];
   loading?: boolean;
   error?: string;
-  onDelete: (NhanVienId: string) => void;
+  onDelete: (UserName: string) => void;
   onEdit: (nhanVien: NhanVien) => void;
 };
 
 const columnWidths: { [key: string]: string } = {
   checkbox: "50px",
-  NhanVienId: "120px",
+  NhanVienID: "120px",
   hoTen: "180px",
   userName: "150px",
   email: "200px",
@@ -67,22 +67,22 @@ export const NhanVienTable: React.FC<Props> = ({
   };
 
   const rows = data.map((nhanVien) => {
-    const isSelected = selectedRows.includes(nhanVien.NhanVienId);
+    const isSelected = selectedRows.includes(nhanVien.NhanVienID);
 
     return (
       <Table.Tr
-        key={nhanVien.NhanVienId}
+        key={nhanVien.NhanVienID}
         style={{ borderBottom: "1px solid #e0e0e0" }}
       >
         <Table.Td style={cellStyle}>
           <Checkbox
             checked={isSelected}
             onChange={(event) =>
-              handleRowSelect(nhanVien.NhanVienId, event.currentTarget.checked)
+              handleRowSelect(nhanVien.NhanVienID, event.currentTarget.checked)
             }
           />
         </Table.Td>
-        <Table.Td style={cellStyle}>{nhanVien.NhanVienId}</Table.Td>
+        <Table.Td style={cellStyle}>{nhanVien.NhanVienID}</Table.Td>
         <Table.Td style={cellStyle}>{nhanVien.HoTen}</Table.Td>
         <Table.Td style={cellStyle}>{nhanVien.UserName}</Table.Td>
         <Table.Td style={cellStyle}>{nhanVien.Email}</Table.Td>
@@ -103,7 +103,7 @@ export const NhanVienTable: React.FC<Props> = ({
             <ActionIcon
               variant="light"
               color="red"
-              onClick={() => onDelete(nhanVien.NhanVienId)}
+              onClick={() => onDelete(nhanVien.UserName)}
             >
               <IconTrash size={18} />
             </ActionIcon>
@@ -137,7 +137,7 @@ export const NhanVienTable: React.FC<Props> = ({
               />
             </Table.Th>
             <Table.Th
-              style={{ ...headerStyle, width: columnWidths.NhanVienId }}
+              style={{ ...headerStyle, width: columnWidths.NhanVienID }}
             >
               ID Nhân viên
             </Table.Th>

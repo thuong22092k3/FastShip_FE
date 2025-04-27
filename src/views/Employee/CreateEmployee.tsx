@@ -73,6 +73,65 @@ export default function CreateEmployeeModal({
     return Object.keys(newErrors).length === 0;
   };
 
+  // const handleSubmit = async () => {
+  //   console.log("Validating form data:", formData);
+  //   if (!validateForm()) return;
+
+  //   setIsSubmitting(true);
+  //   try {
+  //     const employeeId =
+  //       employeeType === "NhanVien"
+  //         ? `NV${Math.floor(100 + Math.random() * 900)}`
+  //         : `TX${Math.floor(100 + Math.random() * 900)}`;
+
+  //     const basePayload = {
+  //       UserName: formData.UserName,
+  //       Password: formData.Password,
+  //       HoTen: formData.HoTen,
+  //       Email: formData.Email,
+  //       HieuSuat: formData.HieuSuat,
+  //       role: employeeType,
+  //     };
+
+  //     const extendedPayload =
+  //       employeeType === "NhanVien"
+  //         ? { ...basePayload, NhanVienID: employeeId }
+  //         : {
+  //             ...basePayload,
+  //             TaiXeId: employeeId,
+  //             CongViec: formData.CongViec,
+  //           };
+  //     // Type assertion here
+  //     const createdEmployee = await employeeService.createUser(
+  //       extendedPayload as TaiXe
+  //     );
+  //     console.log("API response employee:", createdEmployee);
+  //     dispatch(ADD_EMPLOYEE(createdEmployee));
+
+  //     showNotification({
+  //       title: "Thành công",
+  //       message: `Đã thêm ${
+  //         employeeType === "NhanVien" ? "nhân viên" : "tài xế"
+  //       } mới thành công`,
+  //       color: "green",
+  //     });
+
+  //     onEmployeeCreated();
+  //     onClose();
+  //     resetForm();
+  //   } catch (error) {
+  //     console.error("Error creating employee:", error);
+  //     showNotification({
+  //       title: "Lỗi",
+  //       message: `Không thể thêm ${
+  //         employeeType === "NhanVien" ? "nhân viên" : "tài xế"
+  //       } mới`,
+  //       color: "red",
+  //     });
+  //   } finally {
+  //     setIsSubmitting(false);
+  //   }
+  // };
   const handleSubmit = async () => {
     console.log("Validating form data:", formData);
     if (!validateForm()) return;
@@ -93,14 +152,16 @@ export default function CreateEmployeeModal({
         role: employeeType,
       };
 
+      // Thêm đoạn mã này vào đây
       const extendedPayload =
         employeeType === "NhanVien"
-          ? { ...basePayload, NhanVienId: employeeId }
+          ? { ...basePayload, NhanVienID: employeeId } // Đảm bảo có NhanVienID
           : {
               ...basePayload,
-              TaiXeId: employeeId,
+              TaiXeID: employeeId,
               CongViec: formData.CongViec,
             };
+
       // Type assertion here
       const createdEmployee = await employeeService.createUser(
         extendedPayload as TaiXe

@@ -40,7 +40,7 @@ const getStatusColor = (status: string) => {
 const columnWidths: { [key: string]: string } = {
   checkbox: "50px",
   donHangId: "120px",
-  nhanVienId: "120px",
+  NhanVienID: "120px",
   nguoiGui: "150px",
   nguoiNhan: "150px",
   sdt: "120px",
@@ -179,7 +179,7 @@ export const OrderTable: React.FC<Props> = ({
           />
         </Table.Td>
         <Table.Td style={cellStyle}>{order.DonHangId}</Table.Td>
-        <Table.Td style={cellStyle}>{order.NhanVienId}</Table.Td>
+        <Table.Td style={cellStyle}>{order.NhanVienID}</Table.Td>
         <Table.Td style={cellStyle}>{order.NguoiGui}</Table.Td>
         <Table.Td style={cellStyle}>{order.NguoiNhan}</Table.Td>
         <Table.Td style={cellStyle}>{order.SDT}</Table.Td>
@@ -289,7 +289,7 @@ export const OrderTable: React.FC<Props> = ({
               Đơn hàng ID
             </Table.Th>
             <Table.Th
-              style={{ ...headerStyle, minWidth: columnWidths.nhanVienId }}
+              style={{ ...headerStyle, minWidth: columnWidths.NhanVienID }}
             >
               Nhân viên ID
             </Table.Th>

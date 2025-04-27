@@ -31,7 +31,7 @@ export default function UpdateEmployeeModal({
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   const [formData, setFormData] = useState<Partial<NhanVien>>({
-    NhanVienId: "",
+    NhanVienID: "",
     HoTen: "",
     Email: "",
     Password: "",
@@ -43,7 +43,7 @@ export default function UpdateEmployeeModal({
   useEffect(() => {
     if (employeeData) {
       setFormData({
-        NhanVienId: employeeData.NhanVienId,
+        NhanVienID: employeeData.NhanVienID,
         HoTen: employeeData.HoTen,
         Email: employeeData.Email,
         UserName: employeeData.UserName,
@@ -83,35 +83,86 @@ export default function UpdateEmployeeModal({
     return Object.keys(newErrors).length === 0;
   };
 
+  // const handleSubmit = async () => {
+  //   if (!validateForm() || !formData.NhanVienID) return;
+
+  //   setIsSubmitting(true);
+  //   try {
+  //     await employeeService.updateUser({
+  //       HoTen: formData?.HoTen,
+  //       UserName: formData?.UserName || "",
+  //       Email: formData?.Email,
+  //       HieuSuat: Number(formData?.HieuSuat),
+  //       Password: formData?.Password,
+  //     });
+
+  //     showNotification({
+  //       title: "Thành công",
+  //       message: "Đã cập nhật nhân viên thành công",
+  //       color: "green",
+  //     });
+
+  //     onEmployeeUpdated();
+  //     onClose();
+  //   } catch (error) {
+  //     console.error("Error updating employee:", error);
+  //     showNotification({
+  //       title: "Lỗi",
+  //       message: "Không thể cập nhật nhân viên",
+  //       color: "red",
+  //     });
+  //   } finally {
+  //     setIsSubmitting(false);
+  //   }
+  // };
+
   const handleSubmit = async () => {
-    if (!validateForm() || !formData.NhanVienId) return;
+    console.log("Bắt đầu quá trình cập nhật");
+    if (!formData.NhanVienID) {
+      console.log("Lỗi: Thiếu TaiXeId", formData);
+      return;
+    }
+
+    const isValid = validateForm();
+    if (!isValid) {
+      console.log("Validation failed", errors);
+      return;
+    }
 
     setIsSubmitting(true);
+    console.log("Chuẩn bị gửi dữ liệu cập nhật:", formData);
     try {
-      await employeeService.updateUser({
+      const updateData = {
+        TaiXeID: formData.NhanVienID || "",
         HoTen: formData?.HoTen,
         UserName: formData?.UserName || "",
         Email: formData?.Email,
         HieuSuat: Number(formData?.HieuSuat),
         Password: formData?.Password,
-      });
+      };
+      console.log("Dữ liệu sẽ gửi đến API:", updateData);
+
+      const response = await employeeService.updateUser(updateData);
+      console.log("Phản hồi từ API:", response);
 
       showNotification({
         title: "Thành công",
-        message: "Đã cập nhật nhân viên thành công",
+        message: "Đã cập nhật tài xế thành công",
         color: "green",
       });
 
+      console.log("Gọi callback onDriverUpdated");
       onEmployeeUpdated();
       onClose();
     } catch (error) {
-      console.error("Error updating employee:", error);
+      console.error("Lỗi khi cập nhật:", error);
       showNotification({
         title: "Lỗi",
-        message: "Không thể cập nhật nhân viên",
+        message: "Không thể cập nhật tài xế",
         color: "red",
       });
     } finally {
+      console.log("Kết thúc quá trình cập nhật");
       setIsSubmitting(false);
     }
   };
@@ -173,7 +224,7 @@ export default function UpdateEmployeeModal({
                 labelFontWeight="bold"
                 placeHolder=""
                 name="EmployeeId"
-                value={formData.NhanVienId || ""}
+                value={formData.NhanVienID || ""}
                 setValue={() => {}}
                 readOnly
               />

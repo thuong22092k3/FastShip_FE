@@ -82,7 +82,7 @@ export function OrderDetailModal({
               <Text size="sm" c="dimmed">
                 Nhân viên phụ trách
               </Text>
-              <Text>{order.NhanVienId}</Text>
+              <Text>{order.NhanVienID}</Text>
             </div>
 
             <div>

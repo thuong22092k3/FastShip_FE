@@ -70,7 +70,7 @@ export default function VehicleManagementScreen() {
   const filteredVehicles = vehicles.filter(
     (vehicle) =>
       (vehicle.BienSo?.toLowerCase() ?? "").includes(search.toLowerCase()) ||
-      (vehicle.TaiXeId?.toLowerCase() ?? "").includes(search.toLowerCase())
+      (vehicle.TaiXeID?.toLowerCase() ?? "").includes(search.toLowerCase())
   );
 
   const handleVehicleCreated = () => {

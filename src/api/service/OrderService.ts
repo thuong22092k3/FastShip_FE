@@ -8,7 +8,7 @@ export const orderService = {
   // const dispatch = useDispatch();
   // const orders = useSelector((state: RootState) => state.orderSlice);
   createOrder: async (data: {
-    NhanVienId?: string;
+    NhanVienID?: string;
     NguoiGui: string;
     NguoiNhan: string;
     SDT: string;

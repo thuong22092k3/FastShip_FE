@@ -20,12 +20,12 @@ const driverSlice = createSlice({
     );
     builder.addCase(DELETE_DRIVER, (state, action) => {
       return state.filter(
-        (driver) => driver.TaiXeId !== action.payload.taiXeId
+        (driver) => driver.TaiXeID !== action.payload.TaiXeID
       );
     });
     builder.addCase(UPDATE_DRIVER, (state, action) => {
       const index = state.findIndex(
-        (d) => d.TaiXeId === action.payload.TaiXeId
+        (d) => d.TaiXeID === action.payload.TaiXeID
       );
       if (index !== -1) state[index] = action.payload;
     });

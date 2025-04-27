@@ -14,13 +14,13 @@ export type Admin = UserBase & {
 };
 
 export type NhanVien = UserBase & {
-  NhanVienId: string;
+  NhanVienID: string;
   HieuSuat: number;
   role: "NhanVien";
 };
 
 export type TaiXe = UserBase & {
-  TaiXeId: string;
+  TaiXeID: string;
   HieuSuat: number;
   CongViec: number;
   role: "TaiXe";

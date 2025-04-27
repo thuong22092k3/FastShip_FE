@@ -7,13 +7,13 @@ export const DELETE_ORDER = createAction<string[]>("DELETE_ORDER");
 export const UPDATE_ORDER = createAction<TOrder>("UPDATE_ORDER");
 
 export const ADD_EMPLOYEE = createAction<TEmployee>("ADD_EMPLOYEE");
-export const DELETE_EMPLOYEE = createAction<{ nhanVienId: string }>(
+export const DELETE_EMPLOYEE = createAction<{ NhanVienID: string }>(
   "DELETE_EMPLOYEE"
 );
 export const UPDATE_EMPLOYEE = createAction<TEmployee>("UPDATE_EMPLOYEE");
 
 export const ADD_EMPLOYEE_ACCOUNT = createAction<{
-  nhanVienId: string;
+  NhanVienID: string;
   account: string;
 }>("ADD_EMPLOYEE_ACCOUNT");
 
@@ -30,7 +30,7 @@ export const DELETE_PARTNER = createAction<{ doiTacId: string }>(
 export const UPDATE_PARTNER = createAction<TPartner>("UPDATE_PARTNER");
 
 export const ADD_DRIVER = createAction<TDriver>("ADD_DRIVER");
-export const DELETE_DRIVER = createAction<{ taiXeId: string }>("DELETE_DRIVER");
+export const DELETE_DRIVER = createAction<{ TaiXeID: string }>("DELETE_DRIVER");
 export const UPDATE_DRIVER = createAction<TDriver>("UPDATE_DRIVER");
 
 export const ADD_CUSTOMER = createAction<TCustomer>("ADD_CUSTOMER");

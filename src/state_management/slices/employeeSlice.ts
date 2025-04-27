@@ -21,15 +21,15 @@ const employeeSlice = createSlice({
     });
     builder.addCase(
       DELETE_EMPLOYEE,
-      (state, action: PayloadAction<{ nhanVienId: string }>) => {
-        return state.filter((e) => e.NhanVienId !== action.payload.nhanVienId);
+      (state, action: PayloadAction<{ NhanVienID: string }>) => {
+        return state.filter((e) => e.NhanVienID !== action.payload.NhanVienID);
       }
     );
     builder.addCase(
       UPDATE_EMPLOYEE,
       (state, action: PayloadAction<TEmployee>) => {
         const index = state.findIndex(
-          (e) => e.NhanVienId === action.payload.NhanVienId
+          (e) => e.NhanVienID === action.payload.NhanVienID
         );
         if (index !== -1) {
           state[index] = action.payload;

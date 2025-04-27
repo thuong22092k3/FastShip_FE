@@ -82,7 +82,7 @@ export default function DriverScreen() {
   );
 
   const taiXeList: TaiXe[] = filteredDrivers.map((emp) => ({
-    TaiXeId: emp.TaiXeId,
+    TaiXeID: emp.TaiXeID,
     HoTen: emp.HoTen,
     UserName: emp.UserName,
     Password: emp.Password,
@@ -97,20 +97,39 @@ export default function DriverScreen() {
     setRefreshKey((prev) => prev + 1);
   };
 
-  const handleUpdate = (driver: TaiXe) => {
-    setSelectedDriver(driver);
-    setOpenUpdateModal(true);
+  const handleUpdate = async (driver: TaiXe) => {
+    try {
+      setSelectedDriver(driver);
+      setOpenUpdateModal(true);
+    } catch (error) {
+      console.error("Error preparing update:", error);
+      showNotification({
+        title: "Lỗi",
+        message: "Không thể chuẩn bị dữ liệu cập nhật",
+        color: "red",
+      });
+    }
   };
 
-  const handleDelete = (id: string) => {
-    setSelectedDriver({ ...selectedDriver!, TaiXeId: id });
+  const handleDelete = (UserName: string) => {
+    setSelectedDriver({ ...selectedDriver!, UserName: UserName });
     setOpenDeleteModal(true);
   };
 
-  const handleDeleteSuccess = () => {
-    showNotification({ message: "Xóa tài xế thành công", color: "green" });
-    setRefreshKey((prev) => prev + 1);
-    setOpenDeleteModal(false);
+  const handleDeleteSuccess = async () => {
+    if (!selectedDriver) return;
+
+    try {
+      await employeeService.deleteUser(selectedDriver.UserName);
+      showNotification({ message: "Xóa tài xế thành công", color: "green" });
+      setRefreshKey((prev) => prev + 1);
+    } catch (error) {
+      showNotification({ message: "Xóa tài xế thất bại", color: "red" });
+      console.error(error);
+    } finally {
+      setOpenDeleteModal(false);
+      setSelectedDriver(null);
+    }
   };
 
   return (
@@ -152,11 +171,15 @@ export default function DriverScreen() {
 
       <UpdateDriverModal
         open={openUpdateModal}
-        onClose={() => setOpenUpdateModal(false)}
+        onClose={() => {
+          console.log("Đóng modal cập nhật"); // Debug 13
+          setOpenUpdateModal(false);
+          setSelectedDriver(null);
+        }}
         driverData={selectedDriver}
         onDriverUpdated={() => {
+          console.log("Callback onDriverUpdated được gọi"); // Debug 14
           setRefreshKey((prev) => prev + 1);
-          setOpenUpdateModal(false);
           showNotification({
             message: "Cập nhật tài xế thành công",
             color: "green",

@@ -73,7 +73,7 @@ export default function AddVehicleModal({
       const payload: Vehicle = {
         PhuongTienId: `PT${Math.floor(100 + Math.random() * 900)}`,
         HangXe: formData.HangXe || "",
-        TaiXeId: formData.TaiXeId || "TX134",
+        TaiXeID: formData.TaiXeID || "TX134",
         BienSo: formData.BienSo || "",
         LoaiXe: formData.LoaiXe || "",
         SucChua: Number(formData.SucChua) || 0,
@@ -224,7 +224,7 @@ export default function AddVehicleModal({
                 labelFontWeight="bold"
                 placeHolder="Nhập mã tài xế"
                 name="TaiXeId"
-                value={formData.TaiXeId || "TX134"}
+                value={formData.TaiXeID || "TX134"}
                 setValue={(value) => handleInputChange("TaiXeId", value)}
               />
             </Grid.Col>

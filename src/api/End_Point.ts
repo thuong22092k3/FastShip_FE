@@ -7,6 +7,7 @@ export const ENDPOINTS = {
     UPDATE: `${BASE_URL}/api/auth/updateUser`,
     LOGOUT: `${BASE_URL}/api/auth/logout`,
     PROFILE: `${BASE_URL}/api/auth/profile`,
+    DELETE: `${BASE_URL}/api/auth/deleteUser`,
   },
   ORDERS: {
     CREATE: `${BASE_URL}/api/order/createOrder`,
