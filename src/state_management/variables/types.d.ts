@@ -1,12 +1,22 @@
 declare type TPartner = {
-  PartnerId: string;
-  PartnerName: string;
-  PartnerType: string;
-  ContactPerson: string;
+  // PartnerId: string;
+  // PartnerName: string;
+  // PartnerType: string;
+  // ContactPerson: string;
+  // SDT: string;
+  // Email: string;
+  // DiaChi: string;
+  // SoGiayPhep: string;
+  // KhuVucHoatDong: string;
+  DoiTacId: string;
+  TenDoiTac: string;
+  KieuDoiTac: string;
+  NguoiLienLac: string;
   SDT: string;
   Email: string;
   DiaChi: string;
   SoGiayPhep: string;
+  SucChua: number;
   KhuVucHoatDong: string;
 };
 declare type TVehicle = {

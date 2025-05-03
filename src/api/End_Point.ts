@@ -21,8 +21,8 @@ export const ENDPOINTS = {
     DETAIL: (id: string) => `${BASE_URL}/api/auth/users/${id}`,
   },
   PARTNERS: {
-    LIST: `${BASE_URL}/api/partners`,
-    CREATE: `${BASE_URL}/api/partners`,
+    LIST: `${BASE_URL}/api/partner/getAllPartner`,
+    DETAIL: `${BASE_URL}/api/partner`,
   },
 
   VEHICLES: {
