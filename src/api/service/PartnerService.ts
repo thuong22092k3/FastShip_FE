@@ -10,7 +10,7 @@ export const partnerService = {
       `${ENDPOINTS.PARTNERS.DETAIL}/createPartner`,
       partnerData
     );
-    return response.data;
+    return response.data.partner;
   },
 
   updatePartner: async (
@@ -18,10 +18,10 @@ export const partnerService = {
     updateData: Partial<DoiTac>
   ): Promise<DoiTac> => {
     const response = await axios.put(
-      `${ENDPOINTS.PARTNERS.LIST}/partner/updatePartner`,
+      `${ENDPOINTS.PARTNERS.DETAIL}/updatePartner`,
       { DoiTacId, ...updateData }
     );
-    return response.data;
+    return response.data.partner;
   },
 
   deletePartner: async (DoiTacId: string): Promise<{ success: boolean }> => {

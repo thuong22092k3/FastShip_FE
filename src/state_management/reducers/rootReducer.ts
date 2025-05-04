@@ -12,8 +12,10 @@ import routeSlice from "../slices/routeSlice";
 import deliverySlice from "../slices/deliverySlice";
 import maintenanceSlice from "../slices/maintainceSlice";
 import controlSlice, { TControl } from "../slices/controlSlice";
+import authSlice, { AuthState } from "../slices/authSlice";
 
 export type RootState = {
+  authSlice: AuthState;
   orderSlice: TOrder[];
   employeeSlice: TEmployee[];
   vehicleSlice: TVehicle[];
@@ -28,6 +30,7 @@ export type RootState = {
 };
 
 const rootReducer = combineReducers({
+  authSlice,
   controlSlice,
   orderSlice,
   employeeSlice,

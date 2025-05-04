@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import {
-  Modal,
   TextInput,
   Select,
   NumberInput,
@@ -43,14 +42,37 @@ const EditPartnerModal: React.FC<EditPartnerModalProps> = ({
   if (!open) return null;
 
   return (
-    <Modal
-      opened={open}
-      onClose={onClose}
-      title="Cập nhật đối tác"
-      size="lg"
-      centered
+    <div
+      style={{
+        position: "fixed",
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        backgroundColor: "rgba(0,0,0,0.5)",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        zIndex: 1000,
+      }}
+      onClick={onClose}
     >
-      <div style={{ padding: "20px" }}>
+      <div
+        style={{
+          backgroundColor: "white",
+          padding: "24px",
+          borderRadius: "8px",
+          width: "80%",
+          maxWidth: "800px",
+          maxHeight: "90vh",
+          overflowY: "auto",
+        }}
+        onClick={(e) => e.stopPropagation()}
+      >
+        <Text size="xl" fw={500} mb="md">
+          Cập nhật đối tác
+        </Text>
+
         <TextInput
           label="ID Đối tác"
           value={formData.DoiTacId}
@@ -167,7 +189,7 @@ const EditPartnerModal: React.FC<EditPartnerModalProps> = ({
           </Button>
         </Group>
       </div>
-    </Modal>
+    </div>
   );
 };
 

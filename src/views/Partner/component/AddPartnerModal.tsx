@@ -8,13 +8,12 @@ import {
   Text,
 } from "@mantine/core";
 import { DoiTac } from "../../../api/type/PartnerType";
-import { partnerService } from "../../../api/service/PartnerService";
 import { showNotification } from "@mantine/notifications";
 
 interface AddPartnerModalProps {
   open: boolean;
   onClose: () => void;
-  onSubmit: (partnerData: Omit<DoiTac, "DoiTacId">) => void;
+  onSubmit: (data: Omit<DoiTac, "DoiTacId">, resetForm: () => void) => void;
 }
 
 const AddPartnerModal: React.FC<AddPartnerModalProps> = ({
@@ -22,7 +21,7 @@ const AddPartnerModal: React.FC<AddPartnerModalProps> = ({
   onClose,
   onSubmit,
 }) => {
-  const [formData, setFormData] = useState<Omit<DoiTac, "DoiTacId">>({
+  const initialFormData = {
     TenDoiTac: "",
     KieuDoiTac: "NhaCungCap",
     NguoiLienLac: "",
@@ -32,16 +31,35 @@ const AddPartnerModal: React.FC<AddPartnerModalProps> = ({
     SoGiayPhep: "",
     SucChua: 0,
     KhuVucHoatDong: "",
-  });
+  };
+
+  const [formData, setFormData] =
+    useState<Omit<DoiTac, "DoiTacId">>(initialFormData);
   const [loading, setLoading] = useState(false);
+
+  // Hàm reset form về trạng thái ban đầu
+  const resetForm = () => {
+    setFormData(initialFormData);
+  };
 
   const handleSubmit = async () => {
     setLoading(true);
     try {
-      await onSubmit(formData);
+      // Truyền cả formData và hàm resetForm vào onSubmit
+      await onSubmit(formData, resetForm);
+    } catch (error) {
+      showNotification({
+        title: "Lỗi",
+        message: "Có lỗi xảy ra khi thêm đối tác",
+        color: "red",
+      });
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleChange = (field: keyof Omit<DoiTac, "DoiTacId">, value: any) => {
+    setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
   if (!open) return null;
@@ -80,9 +98,7 @@ const AddPartnerModal: React.FC<AddPartnerModalProps> = ({
           label="Tên đối tác"
           placeholder="Nhập tên đối tác"
           value={formData.TenDoiTac}
-          onChange={(e) =>
-            setFormData({ ...formData, TenDoiTac: e.target.value })
-          }
+          onChange={(e) => handleChange("TenDoiTac", e.target.value)}
           required
           mb="md"
         />
@@ -99,19 +115,23 @@ const AddPartnerModal: React.FC<AddPartnerModalProps> = ({
           ]}
           value={formData.KieuDoiTac}
           onChange={(value) =>
-            setFormData({ ...formData, KieuDoiTac: value || "NhaCungCap" })
+            handleChange("KieuDoiTac", value || "NhaCungCap")
           }
           required
           mb="md"
+          styles={{
+            dropdown: {
+              position: "fixed",
+              zIndex: 1001,
+            },
+          }}
         />
 
         <TextInput
           label="Người liên lạc"
           placeholder="Nhập tên người liên lạc"
           value={formData.NguoiLienLac}
-          onChange={(e) =>
-            setFormData({ ...formData, NguoiLienLac: e.target.value })
-          }
+          onChange={(e) => handleChange("NguoiLienLac", e.target.value)}
           required
           mb="md"
         />
@@ -121,16 +141,14 @@ const AddPartnerModal: React.FC<AddPartnerModalProps> = ({
             label="Số điện thoại"
             placeholder="Nhập số điện thoại"
             value={formData.SDT}
-            onChange={(e) => setFormData({ ...formData, SDT: e.target.value })}
+            onChange={(e) => handleChange("SDT", e.target.value)}
             required
           />
           <TextInput
             label="Email"
             placeholder="Nhập email"
             value={formData.Email}
-            onChange={(e) =>
-              setFormData({ ...formData, Email: e.target.value })
-            }
+            onChange={(e) => handleChange("Email", e.target.value)}
             required
           />
         </Group>
@@ -139,7 +157,7 @@ const AddPartnerModal: React.FC<AddPartnerModalProps> = ({
           label="Địa chỉ"
           placeholder="Nhập địa chỉ"
           value={formData.DiaChi}
-          onChange={(e) => setFormData({ ...formData, DiaChi: e.target.value })}
+          onChange={(e) => handleChange("DiaChi", e.target.value)}
           required
           mb="md"
         />
@@ -149,18 +167,14 @@ const AddPartnerModal: React.FC<AddPartnerModalProps> = ({
             label="Số giấy phép"
             placeholder="Nhập số giấy phép"
             value={formData.SoGiayPhep}
-            onChange={(e) =>
-              setFormData({ ...formData, SoGiayPhep: e.target.value })
-            }
+            onChange={(e) => handleChange("SoGiayPhep", e.target.value)}
             required
           />
           <NumberInput
             label="Sức chứa"
             placeholder="Nhập sức chứa"
             value={formData.SucChua}
-            onChange={(value) =>
-              setFormData({ ...formData, SucChua: Number(value) })
-            }
+            onChange={(value) => handleChange("SucChua", Number(value))}
             required
           />
         </Group>
@@ -169,9 +183,7 @@ const AddPartnerModal: React.FC<AddPartnerModalProps> = ({
           label="Khu vực hoạt động"
           placeholder="Nhập khu vực hoạt động"
           value={formData.KhuVucHoatDong}
-          onChange={(e) =>
-            setFormData({ ...formData, KhuVucHoatDong: e.target.value })
-          }
+          onChange={(e) => handleChange("KhuVucHoatDong", e.target.value)}
           required
           mb="md"
         />

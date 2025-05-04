@@ -27,7 +27,9 @@ import { uploadPartners } from "../../state_management/slices/partnerSlice";
 import {
   ADD_PARTNER,
   DELETE_PARTNER,
+  UPDATE_PARTNER,
 } from "../../state_management/actions/actions";
+import { Console } from "console";
 
 const PartnerManagementScreen = () => {
   // const [partners, setPartners] = useState<DoiTac[]>([]);
@@ -67,10 +69,13 @@ const PartnerManagementScreen = () => {
     fetchPartners();
   }, []);
 
-  const handleAddPartner = async (partnerData: Omit<DoiTac, "DoiTacId">) => {
+  const handleAddPartner = async (
+    partnerData: Omit<DoiTac, "DoiTacId">,
+    resetForm: () => void
+  ) => {
     try {
       const newPartner = await partnerService.createPartner(partnerData);
-
+      console.log("New partner:", newPartner);
       dispatch(ADD_PARTNER(newPartner));
       showNotification({
         title: "Thành công",
@@ -78,6 +83,7 @@ const PartnerManagementScreen = () => {
         color: "green",
       });
       setAddModalOpen(false);
+      resetForm();
     } catch (error) {
       showNotification({
         title: "Lỗi",
@@ -87,7 +93,6 @@ const PartnerManagementScreen = () => {
     }
   };
 
-  // Handle update partner
   const handleUpdatePartner = async (
     DoiTacId: string,
     updateData: Partial<DoiTac>
@@ -102,6 +107,7 @@ const PartnerManagementScreen = () => {
       //     partner.DoiTacId === DoiTacId ? updatedPartner : partner
       //   )
       // );
+      dispatch(UPDATE_PARTNER(updatedPartner));
       showNotification({
         title: "Thành công",
         message: "Đã cập nhật đối tác",
@@ -117,7 +123,6 @@ const PartnerManagementScreen = () => {
     }
   };
 
-  // Handle delete partner
   const handleDeletePartner = async (DoiTacId: string) => {
     setIsDeleting(true);
     try {
