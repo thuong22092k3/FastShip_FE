@@ -1,4 +1,5 @@
 import { Input } from "@mantine/core";
+import "@mantine/core/styles.css";
 import { KeyboardEvent } from "react";
 import { FONT_WEIGHT } from "../../constants/fonts";
 import { RADIUS_MAP } from "../../constants/styles";
@@ -66,7 +67,7 @@ const TextInputCustom = ({
           outline: "none",
           boxShadow: "none",
         },
-        "&:focus-within": {
+        "&:focusWithin": {
           border: "none",
           outline: "none",
           boxShadow: "none",
@@ -76,7 +77,7 @@ const TextInputCustom = ({
         border: `1px solid ${borderColor}`,
         borderRadius: RADIUS_MAP[borderRadius],
         width: "100%",
-        "&:focus-within": {
+        "&:focusWithin": {
           borderColor: COLORS.mediumBlue,
           boxShadow: `0 0 0 1px ${COLORS.mediumBlue}`,
         },

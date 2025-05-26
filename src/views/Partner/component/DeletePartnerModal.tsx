@@ -1,5 +1,6 @@
 import React from "react";
 import { Text, Button, Group, Box } from "@mantine/core";
+import "@mantine/core/styles.css";
 
 interface DeletePartnerModalProps {
   open: boolean;

@@ -1,4 +1,5 @@
 import { PasswordInput } from "@mantine/core";
+import "@mantine/core/styles.css";
 import { useState, KeyboardEvent } from "react";
 import { IconEye, IconEyeOff } from "@tabler/icons-react";
 import { FONT_WEIGHT } from "../../constants/fonts";
@@ -59,7 +60,7 @@ const PasswordInputCustom = ({
         padding: "8px 12px",
         border: `1px solid ${borderColor}`,
         borderRadius: RADIUS_MAP[borderRadius],
-        "&:focus-within": {
+        "&:focusWithin": {
           borderColor: COLORS.mediumBlue,
           boxShadow: `0 0 0 1px ${COLORS.mediumBlue}`,
         },

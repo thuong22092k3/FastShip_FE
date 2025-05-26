@@ -2,6 +2,7 @@ import { Checkbox } from "@mantine/core";
 import { COLORS } from "../../constants/colors";
 import { BORDER_RADIUS, RADIUS_MAP } from "../../constants/styles";
 import { FONT_WEIGHT } from "../../constants/fonts";
+import "@mantine/core/styles.css";
 
 interface CheckboxComponentProps {
   size?: number | string;

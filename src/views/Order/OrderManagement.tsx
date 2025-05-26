@@ -16,6 +16,7 @@ import {
   IconCircleCheck,
   IconFolderCheck,
 } from "@tabler/icons-react";
+import "@mantine/core/styles.css";
 import { useCallback, useEffect, useState } from "react";
 import { OrderTable } from "../../components/Table/OrderTable";
 import { Order } from "../../api/type/OrderType";

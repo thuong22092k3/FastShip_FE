@@ -8,6 +8,7 @@ import {
   Text,
   Title,
 } from "@mantine/core";
+import "@mantine/core/styles.css";
 import { useState } from "react";
 import { Vehicle } from "../../api/type/VehicleType";
 import { vehicleService } from "../../api/service/VehicleService";

@@ -15,6 +15,7 @@ import {
   IconChevronDown,
   IconUserCircle,
 } from "@tabler/icons-react";
+import "@mantine/core/styles.css";
 
 import { COLORS } from "../../constants/colors";
 const CustomHeader = () => {
@@ -62,7 +63,7 @@ const CustomHeader = () => {
                 outline: "none",
                 boxShadow: "none",
               },
-              "&:focus-within": {
+              "&:focusWithin": {
                 border: "none",
                 outline: "none",
                 boxShadow: "none",

@@ -1,4 +1,5 @@
 import { Modal, Text, Button, Group } from "@mantine/core";
+import "@mantine/core/styles.css";
 
 interface DeleteConfirmationModalProps {
   opened: boolean;

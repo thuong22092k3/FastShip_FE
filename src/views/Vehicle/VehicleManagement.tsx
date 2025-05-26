@@ -9,6 +9,7 @@ import {
   Title,
   Pagination,
 } from "@mantine/core";
+import "@mantine/core/styles.css";
 import {
   IconSearch,
   IconPlus,

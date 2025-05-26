@@ -1,6 +1,7 @@
 import { ReactNode } from "react";
 import { FONT_WEIGHT } from "../../constants/fonts";
 import { COLORS } from "../../constants/colors";
+import "@mantine/core/styles.css";
 
 interface TextButtonComponentProps {
   children: ReactNode;

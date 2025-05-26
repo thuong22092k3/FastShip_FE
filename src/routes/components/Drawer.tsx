@@ -179,6 +179,7 @@ import {
   IconChartBar,
   IconLogout,
 } from "@tabler/icons-react";
+import "@mantine/core/styles.css";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { NAV_LINK } from "./NAV_LINK";
@@ -227,15 +228,15 @@ export default function Drawer() {
       icon: <IconPackage size={18} />,
       link: NAV_LINK.VEHICLE_MANAGEMENT,
     },
-    ...(localStorage.getItem("ROLE") !== "Staff"
-      ? [
-          {
-            label: "Thống kê",
-            icon: <IconChartBar size={18} />,
-            link: NAV_LINK.STATISTICS,
-          },
-        ]
-      : []),
+    // ...(localStorage.getItem("ROLE") !== "Staff"
+    //   ? [
+    {
+      label: "Thống kê",
+      icon: <IconChartBar size={18} />,
+      link: NAV_LINK.STATISTICS,
+    },
+    //   ]
+    // : []),
     {
       label: "Đăng xuất",
       icon: <IconLogout size={18} />,

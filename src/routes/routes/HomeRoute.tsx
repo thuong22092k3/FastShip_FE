@@ -2,7 +2,7 @@ import { Route, Routes, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useMemo } from "react";
 import { AppShell, Box, ScrollArea } from "@mantine/core";
-
+import "@mantine/core/styles.css";
 import { RootState } from "../../state_management/reducers/rootReducer";
 import Drawer from "../components/Drawer";
 import CustomHeader from "../../components/Header/Header";
@@ -35,7 +35,7 @@ const ROUTES = [
     name: "Vehicle Management",
   },
   {
-    path: "statistic",
+    path: "statistics",
     element: <StatisticScreen />,
     name: "Statistics",
   },

@@ -11,6 +11,7 @@ import {
   Text,
   Title,
 } from "@mantine/core";
+import "@mantine/core/styles.css";
 import { useState } from "react";
 
 interface CreateOrderModalProps {

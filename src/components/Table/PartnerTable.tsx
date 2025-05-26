@@ -9,6 +9,7 @@ import {
   LoadingOverlay,
   Text,
 } from "@mantine/core";
+import "@mantine/core/styles.css";
 import { IconEdit, IconTrash } from "@tabler/icons-react";
 import { DoiTac } from "../../api/type/PartnerType";
 import CheckboxComponent from "../CheckBox/CheckBoxComponent";

@@ -7,3 +7,22 @@ body {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
+
+.recharts-wrapper {
+    width: 100% !important;
+    height: 100% !important;
+}
+
+.recharts-surface {
+    overflow: visible !important;
+    width: 100% !important;
+    height: 100% !important;
+}
+
+.recharts-curve {
+    stroke-width: 2px !important;
+}
+
+.recharts-line {
+    display: block !important;
+}

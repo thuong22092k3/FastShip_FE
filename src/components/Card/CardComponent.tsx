@@ -1,6 +1,6 @@
 import { Card, Text, Title } from "@mantine/core";
 import { IconBox } from "@tabler/icons-react";
-
+import "@mantine/core/styles.css";
 interface CardProps {
   title: string;
   value: string | number;

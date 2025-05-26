@@ -1,5 +1,6 @@
 // inputTypes.ts
 import { TextInputProps } from "@mantine/core";
+import "@mantine/core/styles.css";
 import { ReactNode } from "react";
 import { FONT_WEIGHT } from "../../constants/fonts";
 import { BORDER_RADIUS } from "../../constants/styles";

@@ -12,6 +12,7 @@ import {
   Center,
   Loader,
 } from "@mantine/core";
+import "@mantine/core/styles.css";
 import { Order } from "../../api/type/OrderType";
 import { orderService } from "../../api/service/OrderService";
 

@@ -10,6 +10,7 @@ import {
   Title,
   LoadingOverlay,
 } from "@mantine/core";
+import "@mantine/core/styles.css";
 import { useState } from "react";
 import { Order } from "../../api/type/OrderType";
 import { orderService } from "../../api/service/OrderService";

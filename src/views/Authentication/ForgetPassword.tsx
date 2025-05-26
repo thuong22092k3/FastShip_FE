@@ -10,7 +10,7 @@ import { FONT_WEIGHT } from "../../constants/fonts";
 import { Flex } from "@mantine/core";
 import { useNavigate } from "react-router-dom";
 import { NAV_LINK } from "../../routes/components/NAV_LINK";
-
+import "@mantine/core/styles.css";
 const ForgetPasswordscreen = () => {
   const [businessName, setBusinessName] = useState("");
   const [email, setEmail] = useState("");

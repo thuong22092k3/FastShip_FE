@@ -7,6 +7,7 @@ import {
   Button,
   Text,
 } from "@mantine/core";
+import "@mantine/core/styles.css";
 import { DoiTac } from "../../../api/type/PartnerType";
 import { showNotification } from "@mantine/notifications";
 

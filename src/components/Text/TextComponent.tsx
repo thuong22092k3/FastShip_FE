@@ -1,7 +1,7 @@
 import { ReactNode } from "react";
 import { FONT_WEIGHT } from "../../constants/fonts";
 import { COLORS } from "../../constants/colors";
-
+import "@mantine/core/styles.css";
 interface TextComponentProps {
   fontWeight?: keyof typeof FONT_WEIGHT;
   fontSize?: number | string;

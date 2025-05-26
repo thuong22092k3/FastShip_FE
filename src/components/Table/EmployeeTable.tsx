@@ -8,6 +8,7 @@ import {
   ActionIcon,
   Select,
 } from "@mantine/core";
+import "@mantine/core/styles.css";
 import { IconEdit, IconTrash, IconUser } from "@tabler/icons-react";
 import { showNotification } from "@mantine/notifications";
 import { NhanVien } from "../../api/type/EmployeeType";

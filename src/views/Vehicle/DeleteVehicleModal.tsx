@@ -1,4 +1,5 @@
 import { Button, Text, Group, LoadingOverlay } from "@mantine/core";
+import "@mantine/core/styles.css";
 import { DELETE_VEHICLE } from "../../state_management/actions/actions";
 
 interface DeleteVehicleModalProps {

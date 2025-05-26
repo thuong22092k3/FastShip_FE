@@ -11,6 +11,7 @@ import {
 import { IconEdit, IconTrash, IconUserCheck } from "@tabler/icons-react";
 import { showNotification } from "@mantine/notifications";
 import { TaiXe } from "../../api/type/EmployeeType";
+import "@mantine/core/styles.css";
 
 type Props = {
   data: TaiXe[];

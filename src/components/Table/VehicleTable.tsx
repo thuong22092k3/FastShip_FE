@@ -8,6 +8,7 @@ import {
   ActionIcon,
   Select,
 } from "@mantine/core";
+import "@mantine/core/styles.css";
 import { Vehicle } from "../../api/type/VehicleType";
 import CheckboxComponent from "../CheckBox/CheckBoxComponent";
 import { IconEdit, IconEye, IconTrash } from "@tabler/icons-react";

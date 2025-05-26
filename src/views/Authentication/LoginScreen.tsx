@@ -150,7 +150,7 @@ import {
   loginFailure,
 } from "../../state_management/slices/authSlice";
 import { AuthService } from "../../api/service/AuthService";
-
+import "@mantine/core/styles.css";
 const LoginScreen = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -159,37 +159,39 @@ const LoginScreen = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  // const handleLogin = async () => {
+  //   if (!username || !password) {
+  //     setError("Vui lòng nhập đầy đủ thông tin");
+  //     return;
+  //   }
+
+  //   setLoading(true);
+  //   setError("");
+  //   dispatch(loginStart());
+
+  //   try {
+  //     const response = await AuthService.login(username, password);
+
+  //     const authUser = {
+  //       id: response.AdminId,
+  //       username: response.UserName,
+  //       fullName: response.HoTen,
+  //     };
+  //     navigate(NAV_LINK.STATISTICS);
+  //   } catch (err: unknown) {
+  //     let errorMessage = "Đăng nhập thất bại";
+  //     if (err instanceof Error) {
+  //       errorMessage = err.message || errorMessage;
+  //     }
+  //     setError(errorMessage);
+  //     dispatch(loginFailure(errorMessage));
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
   const handleLogin = async () => {
-    if (!username || !password) {
-      setError("Vui lòng nhập đầy đủ thông tin");
-      return;
-    }
-
-    setLoading(true);
-    setError("");
-    dispatch(loginStart());
-
-    try {
-      const response = await AuthService.login(username, password);
-
-      const authUser = {
-        id: response.AdminId,
-        username: response.UserName,
-        fullName: response.HoTen,
-      };
-      navigate(NAV_LINK.STATISTICS);
-    } catch (err: unknown) {
-      let errorMessage = "Đăng nhập thất bại";
-      if (err instanceof Error) {
-        errorMessage = err.message || errorMessage;
-      }
-      setError(errorMessage);
-      dispatch(loginFailure(errorMessage));
-    } finally {
-      setLoading(false);
-    }
+    navigate(NAV_LINK.STATISTICS);
   };
-
   return (
     <div
       style={{

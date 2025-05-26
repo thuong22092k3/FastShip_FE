@@ -7,7 +7,7 @@ import TextButtonComponent from "../../components/TextButton/TextButtonComponent
 import { COLORS } from "../../constants/colors";
 import { BORDER_RADIUS, RADIUS_MAP } from "../../constants/styles";
 import { FONT_WEIGHT } from "../../constants/fonts";
-
+import "@mantine/core/styles.css";
 const SignUpScreen = () => {
   const [username, setusername] = useState("");
   const [email, setEmail] = useState("");

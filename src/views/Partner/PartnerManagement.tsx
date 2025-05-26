@@ -13,6 +13,7 @@ import {
   Select,
   Badge,
 } from "@mantine/core";
+import "@mantine/core/styles.css";
 import { IconEdit, IconTrash, IconPlus } from "@tabler/icons-react";
 import { showNotification } from "@mantine/notifications";
 import { partnerService } from "../../api/service/PartnerService";
