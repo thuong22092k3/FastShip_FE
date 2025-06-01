@@ -123,7 +123,7 @@ export default function EmployeeManagementScreen() {
   }));
 
   return (
-    <Container>
+    <Container size="xl" p="md">
       <Flex justify="space-between" align="center" mb="md">
         <Title order={3}>Quản lý nhân viên</Title>
         <Button

@@ -8,10 +8,17 @@ import {
   ActionIcon,
   Select,
 } from "@mantine/core";
-import { IconEdit, IconTrash, IconUserCheck } from "@tabler/icons-react";
+import {
+  IconCaretDownFilled,
+  IconCaretUpFilled,
+  IconEdit,
+  IconTrash,
+  IconUserCheck,
+} from "@tabler/icons-react";
 import { showNotification } from "@mantine/notifications";
 import { TaiXe } from "../../api/type/EmployeeType";
 import "@mantine/core/styles.css";
+import CheckboxComponent from "../CheckBox/CheckBoxComponent";
 
 type Props = {
   data: TaiXe[];
@@ -59,11 +66,22 @@ export const TaiXeTable: React.FC<Props> = ({
   onEdit,
 }) => {
   const [selectedRows, setSelectedRows] = useState<string[]>([]);
+  const [isChecked, setIsChecked] = useState(false);
+  const [sortBy, setSortBy] = useState<keyof TaiXe | null>(null);
+  const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc");
 
   const handleRowSelect = (id: string, checked: boolean) => {
     setSelectedRows((prev) =>
       checked ? [...prev, id] : prev.filter((rowId) => rowId !== id)
     );
+  };
+  const handleSort = (column: keyof TaiXe) => {
+    if (sortBy === column) {
+      setSortDirection(sortDirection === "asc" ? "desc" : "asc");
+    } else {
+      setSortBy(column);
+      setSortDirection("asc");
+    }
   };
 
   const allSelected = data.length > 0 && selectedRows.length === data.length;
@@ -81,7 +99,24 @@ export const TaiXeTable: React.FC<Props> = ({
     fontWeight: 600,
   };
 
-  const rows = data.map((taiXe) => {
+  const sortedData = [...data].sort((a, b) => {
+    if (!sortBy) return 0;
+
+    const aValue = a[sortBy];
+    const bValue = b[sortBy];
+
+    if (aValue === undefined || bValue === undefined) return 0;
+
+    if (typeof aValue === "number" && typeof bValue === "number") {
+      return sortDirection === "asc" ? aValue - bValue : bValue - aValue;
+    }
+
+    return sortDirection === "asc"
+      ? String(aValue).localeCompare(String(bValue))
+      : String(bValue).localeCompare(String(aValue));
+  });
+
+  const rows = sortedData.map((taiXe) => {
     const isSelected = selectedRows.includes(taiXe.TaiXeID);
     const jobStatus = getJobStatus(taiXe.CongViec);
 
@@ -155,7 +190,7 @@ export const TaiXeTable: React.FC<Props> = ({
           borderCollapse: "collapse",
         }}
       >
-        <Table.Thead>
+        {/* <Table.Thead>
           <Table.Tr>
             <Table.Th style={{ ...headerStyle, width: columnWidths.checkbox }}>
               <Checkbox
@@ -186,8 +221,45 @@ export const TaiXeTable: React.FC<Props> = ({
               Hành động
             </Table.Th>
           </Table.Tr>
-        </Table.Thead>
-
+        </Table.Thead> */}
+        <Table.Th style={{ ...headerStyle, minWidth: columnWidths.checkbox }}>
+          <CheckboxComponent
+            isChecked={isChecked}
+            setIsChecked={setIsChecked}
+          />
+        </Table.Th>
+        {[
+          { key: "TaiXeID", label: "ID Tài xế" },
+          { key: "HoTen", label: "Họ tên" },
+          { key: "UserName", label: "Tài khoản" },
+          { key: "Email", label: "Email" },
+          { key: "HieuSuat", label: "Hiệu suất" },
+          { key: "CongViec", label: " Tình trạng" },
+        ].map(({ key, label }) => (
+          <Table.Th
+            key={key}
+            style={{
+              ...headerStyle,
+              minWidth: columnWidths[key],
+              cursor: "pointer",
+            }}
+            onClick={() => handleSort(key as keyof TaiXe)}
+          >
+            {label}
+            {sortBy === key ? (
+              sortDirection === "asc" ? (
+                <IconCaretUpFilled size={14} />
+              ) : (
+                <IconCaretDownFilled size={14} />
+              )
+            ) : (
+              <IconCaretUpFilled size={14} color="gray" />
+            )}
+          </Table.Th>
+        ))}
+        <Table.Th style={{ ...headerStyle, minWidth: columnWidths.hanhDong }}>
+          Hành động
+        </Table.Th>
         <Table.Tbody>{rows}</Table.Tbody>
       </Table>
     </ScrollArea>

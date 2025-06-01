@@ -10,7 +10,14 @@ import {
   Text,
 } from "@mantine/core";
 import "@mantine/core/styles.css";
-import { IconEdit, IconTrash } from "@tabler/icons-react";
+import {
+  IconEdit,
+  IconTrash,
+  IconChevronUp,
+  IconChevronDown,
+  IconCaretDownFilled,
+  IconCaretUpFilled,
+} from "@tabler/icons-react";
 import { DoiTac } from "../../api/type/PartnerType";
 import CheckboxComponent from "../CheckBox/CheckBoxComponent";
 import { showNotification } from "@mantine/notifications";
@@ -62,6 +69,8 @@ export const PartnerTable: React.FC<Props> = ({
 }) => {
   const [selectedRows, setSelectedRows] = useState<string[]>([]);
   const [isChecked, setIsChecked] = useState(false);
+  const [sortBy, setSortBy] = useState<keyof DoiTac | null>(null);
+  const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc");
 
   const handleSelectAll = (checked: boolean) => {
     if (checked) {
@@ -77,6 +86,15 @@ export const PartnerTable: React.FC<Props> = ({
     );
   };
 
+  const handleSort = (key: keyof DoiTac) => {
+    if (sortBy === key) {
+      setSortDirection((prev) => (prev === "asc" ? "desc" : "asc"));
+    } else {
+      setSortBy(key);
+      setSortDirection("asc");
+    }
+  };
+
   const allSelected = data.length > 0 && selectedRows.length === data.length;
   const someSelected = selectedRows.length > 0 && !allSelected;
 
@@ -90,8 +108,27 @@ export const PartnerTable: React.FC<Props> = ({
     padding: "8px",
     backgroundColor: "#f8f8f8",
   };
+  const sortedData = [...data].sort((a, b) => {
+    if (!sortBy) return 0;
 
-  const rows = data.map((partner) => {
+    const aValue = a[sortBy];
+    const bValue = b[sortBy];
+
+    if (aValue === bValue) return 0;
+
+    if (typeof aValue === "string" && typeof bValue === "string") {
+      return sortDirection === "asc"
+        ? aValue.localeCompare(bValue)
+        : bValue.localeCompare(aValue);
+    }
+
+    if (typeof aValue === "number" && typeof bValue === "number") {
+      return sortDirection === "asc" ? aValue - bValue : bValue - aValue;
+    }
+
+    return 0;
+  });
+  const rows = sortedData.map((partner) => {
     const isSelected = selectedRows.includes(partner.DoiTacId);
     return (
       <Table.Tr
@@ -171,7 +208,7 @@ export const PartnerTable: React.FC<Props> = ({
           borderCollapse: "collapse",
         }}
       >
-        <Table.Thead>
+        {/* <Table.Thead>
           <Table.Tr style={{ borderBottom: "1px solid #ccc" }}>
             <Table.Th
               style={{ ...headerStyle, minWidth: columnWidths.checkbox }}
@@ -187,9 +224,20 @@ export const PartnerTable: React.FC<Props> = ({
               ID Đối tác
             </Table.Th>
             <Table.Th
-              style={{ ...headerStyle, minWidth: columnWidths.TenDoiTac }}
+              style={{
+                ...headerStyle,
+                minWidth: columnWidths.TenDoiTac,
+                cursor: "pointer",
+              }}
+              onClick={() => handleSort("TenDoiTac")}
             >
-              Tên đối tác
+              Tên đối tác{" "}
+              {sortBy === "TenDoiTac" &&
+                (sortDirection === "asc" ? (
+                  <IconCaretUpFilled size={14} />
+                ) : (
+                  <IconCaretDownFilled size={14} />
+                ))}
             </Table.Th>
             <Table.Th
               style={{ ...headerStyle, minWidth: columnWidths.KieuDoiTac }}
@@ -234,7 +282,50 @@ export const PartnerTable: React.FC<Props> = ({
               Thao tác
             </Table.Th>
           </Table.Tr>
-        </Table.Thead>
+        </Table.Thead> */}
+        <Table.Th style={{ ...headerStyle, minWidth: columnWidths.checkbox }}>
+          <CheckboxComponent
+            isChecked={isChecked}
+            setIsChecked={setIsChecked}
+          />
+        </Table.Th>
+        {[
+          { key: "DoiTacId", label: "ID Đối tác" },
+          { key: "TenDoiTac", label: "Tên đối tác" },
+          { key: "KieuDoiTac", label: "Loại đối tác" },
+          { key: "NguoiLienLac", label: "Người liên lạc" },
+          { key: "SDT", label: "SĐT" },
+          { key: "Email", label: "Email" },
+          { key: "DiaChi", label: "Địa chỉ" },
+          { key: "SoGiayPhep", label: "Số giấy phép" },
+          { key: "SucChua", label: "Sức chứa" },
+          { key: "KhuVucHoatDong", label: "Khu vực hoạt động" },
+        ].map(({ key, label }) => (
+          <Table.Th
+            key={key}
+            style={{
+              ...headerStyle,
+              minWidth: columnWidths[key],
+              cursor: "pointer",
+            }}
+            onClick={() => handleSort(key as keyof DoiTac)}
+          >
+            {label}
+            {sortBy === key ? (
+              sortDirection === "asc" ? (
+                <IconCaretUpFilled size={14} />
+              ) : (
+                <IconCaretDownFilled size={14} />
+              )
+            ) : (
+              <IconCaretUpFilled size={14} color="gray" />
+            )}
+          </Table.Th>
+        ))}
+        
+        <Table.Th style={{ ...headerStyle, minWidth: columnWidths.actions }}>
+          Thao tác
+        </Table.Th>
         <Table.Tbody>
           {error ? (
             <Table.Tr>

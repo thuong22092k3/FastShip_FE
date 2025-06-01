@@ -11,7 +11,13 @@ import {
 import "@mantine/core/styles.css";
 import { Vehicle } from "../../api/type/VehicleType";
 import CheckboxComponent from "../CheckBox/CheckBoxComponent";
-import { IconEdit, IconEye, IconTrash } from "@tabler/icons-react";
+import {
+  IconCaretDownFilled,
+  IconCaretUpFilled,
+  IconEdit,
+  IconEye,
+  IconTrash,
+} from "@tabler/icons-react";
 import { vehicleService } from "../../api/service/VehicleService";
 import { showNotification } from "@mantine/notifications";
 
@@ -73,6 +79,8 @@ export const VehicleTable: React.FC<Props> = ({
 }) => {
   const [selectedRows, setSelectedRows] = useState<string[]>([]);
   const [isChecked, setIsChecked] = useState(false);
+  const [sortBy, setSortBy] = useState<keyof Vehicle | null>(null);
+  const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc");
 
   const statusOptions = [
     { value: "Đang hoạt động", label: "Đang hoạt động" },
@@ -98,6 +106,15 @@ export const VehicleTable: React.FC<Props> = ({
     setSelectedRows((prev) =>
       checked ? [...prev, id] : prev.filter((rowId) => rowId !== id)
     );
+  };
+
+  const handleSort = (column: keyof Vehicle) => {
+    if (sortBy === column) {
+      setSortDirection(sortDirection === "asc" ? "desc" : "asc");
+    } else {
+      setSortBy(column);
+      setSortDirection("asc");
+    }
   };
 
   const allSelected = data.length > 0 && selectedRows.length === data.length;
@@ -157,8 +174,24 @@ export const VehicleTable: React.FC<Props> = ({
       });
     }
   };
+  const sortedData = [...data].sort((a, b) => {
+    if (!sortBy) return 0;
 
-  const rows = data.map((vehicle) => {
+    const aValue = a[sortBy];
+    const bValue = b[sortBy];
+
+    if (aValue === undefined || bValue === undefined) return 0;
+
+    if (typeof aValue === "number" && typeof bValue === "number") {
+      return sortDirection === "asc" ? aValue - bValue : bValue - aValue;
+    }
+
+    return sortDirection === "asc"
+      ? String(aValue).localeCompare(String(bValue))
+      : String(bValue).localeCompare(String(aValue));
+  });
+
+  const rows = sortedData.map((vehicle) => {
     const isSelected = selectedRows.includes(vehicle.PhuongTienId);
     return (
       <Table.Tr
@@ -284,7 +317,7 @@ export const VehicleTable: React.FC<Props> = ({
           borderCollapse: "collapse",
         }}
       >
-        <Table.Thead>
+        {/* <Table.Thead>
           <Table.Tr style={{ borderBottom: "1px solid #ccc" }}>
             <Table.Th
               style={{ ...headerStyle, minWidth: columnWidths.checkbox }}
@@ -334,8 +367,47 @@ export const VehicleTable: React.FC<Props> = ({
               Hành động
             </Table.Th>
           </Table.Tr>
-        </Table.Thead>
-
+        </Table.Thead> */}
+        <Table.Th style={{ ...headerStyle, minWidth: columnWidths.checkbox }}>
+          <CheckboxComponent
+            isChecked={isChecked}
+            setIsChecked={setIsChecked}
+          />
+        </Table.Th>
+        {[
+          { key: "PhuongTienId", label: "ID Phương tiện" },
+          { key: "HangXe", label: "Hãng xe" },
+          { key: "TaiXeID", label: "Tài xế ID" },
+          { key: "BienSo", label: "Biển số" },
+          { key: "LoaiXe", label: "Loại xe" },
+          { key: "SucChua", label: "Sức chứa" },
+          { key: "trangThai", label: "Trạng thái" },
+          { key: "baoDuong", label: "Bảo dưỡng" },
+        ].map(({ key, label }) => (
+          <Table.Th
+            key={key}
+            style={{
+              ...headerStyle,
+              minWidth: columnWidths[key],
+              cursor: "pointer",
+            }}
+            onClick={() => handleSort(key as keyof Vehicle)}
+          >
+            {label}
+            {sortBy === key ? (
+              sortDirection === "asc" ? (
+                <IconCaretUpFilled size={14} />
+              ) : (
+                <IconCaretDownFilled size={14} />
+              )
+            ) : (
+              <IconCaretUpFilled size={14} color="gray" />
+            )}
+          </Table.Th>
+        ))}
+        <Table.Th style={{ ...headerStyle, minWidth: columnWidths.hanhDong }}>
+          Hành động
+        </Table.Th>
         <Table.Tbody>{rows}</Table.Tbody>
       </Table>
     </ScrollArea>

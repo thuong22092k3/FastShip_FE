@@ -11,7 +11,13 @@ import {
 import "@mantine/core/styles.css";
 import { Order } from "../../api/type/OrderType";
 import CheckboxComponent from "../CheckBox/CheckBoxComponent";
-import { IconEdit, IconEye, IconTrash } from "@tabler/icons-react";
+import {
+  IconCaretDownFilled,
+  IconCaretUpFilled,
+  IconEdit,
+  IconEye,
+  IconTrash,
+} from "@tabler/icons-react";
 import { orderService } from "../../api/service/OrderService";
 import { showNotification } from "@mantine/notifications";
 import { useDispatch, useSelector } from "react-redux";
@@ -63,8 +69,8 @@ export const OrderTable: React.FC<Props> = ({
   onDelete,
 }) => {
   const [selectedRows, setSelectedRows] = useState<string[]>([]);
-  const [detailModalOpened, setDetailModalOpened] = useState(false);
-  const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
+  const [sortBy, setSortBy] = useState<keyof Order | null>(null);
+  const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc");
   const dispatch = useDispatch();
   const orders = useSelector((state: RootState) => state.orderSlice);
   const handleSelectAll = (checked: boolean) => {
@@ -79,6 +85,15 @@ export const OrderTable: React.FC<Props> = ({
     setSelectedRows((prev) =>
       checked ? [...prev, id] : prev.filter((rowId) => rowId !== id)
     );
+  };
+
+  const handleSort = (column: keyof Order) => {
+    if (sortBy === column) {
+      setSortDirection(sortDirection === "asc" ? "desc" : "asc");
+    } else {
+      setSortBy(column);
+      setSortDirection("asc");
+    }
   };
 
   const allSelected = data.length > 0 && selectedRows.length === data.length;
@@ -164,7 +179,24 @@ export const OrderTable: React.FC<Props> = ({
     }
   };
 
-  const rows = data.map((order) => {
+  const sortedData = [...data].sort((a, b) => {
+    if (!sortBy) return 0;
+
+    const aValue = a[sortBy];
+    const bValue = b[sortBy];
+
+    if (aValue === undefined || bValue === undefined) return 0;
+
+    if (typeof aValue === "number" && typeof bValue === "number") {
+      return sortDirection === "asc" ? aValue - bValue : bValue - aValue;
+    }
+
+    return sortDirection === "asc"
+      ? String(aValue).localeCompare(String(bValue))
+      : String(bValue).localeCompare(String(aValue));
+  });
+
+  const rows = sortedData.map((order) => {
     const isSelected = selectedRows.includes(order.DonHangId);
     return (
       <Table.Tr
@@ -282,7 +314,7 @@ export const OrderTable: React.FC<Props> = ({
           borderCollapse: "collapse",
         }}
       >
-        <Table.Thead>
+        {/* <Table.Thead>
           <Table.Tr style={{ borderBottom: "1px solid #ccc" }}>
             <Table.Th
               style={{ ...headerStyle, minWidth: columnWidths.checkbox }}
@@ -354,8 +386,51 @@ export const OrderTable: React.FC<Props> = ({
               Hành động
             </Table.Th>
           </Table.Tr>
-        </Table.Thead>
-
+        </Table.Thead> */}
+        <Table.Th style={{ ...headerStyle, minWidth: columnWidths.checkbox }}>
+          <CheckboxComponent
+            isChecked={isChecked}
+            setIsChecked={setIsChecked}
+          />
+        </Table.Th>
+        {[
+          { key: "DonHangId", label: "ID Đơn hàng" },
+          { key: "NhanVienID", label: "ID Nhân viên" },
+          { key: "NguoiGui", label: "Người gửi" },
+          { key: "NguoiNhan", label: "Người nhận" },
+          { key: "SDT", label: "Số điện thoại" },
+          { key: "DiaChiLayHang", label: "Địa chỉ lấy hàng" },
+          { key: "DiaChiGiaoHang", label: "Địa chỉ giao hàng" },
+          { key: "CuocPhi", label: "Cước phí" },
+          { key: "TrangThai", label: "Trạng thái" },
+          { key: "CreatedAt", label: "Ngày tạo" },
+          { key: "UpdatedAt", label: "Ngày cập nhật" },
+          { key: "GhiChu", label: "Ghi chú" },
+        ].map(({ key, label }) => (
+          <Table.Th
+            key={key}
+            style={{
+              ...headerStyle,
+              minWidth: columnWidths[key],
+              cursor: "pointer",
+            }}
+            onClick={() => handleSort(key as keyof Order)}
+          >
+            {label}
+            {sortBy === key ? (
+              sortDirection === "asc" ? (
+                <IconCaretUpFilled size={14} />
+              ) : (
+                <IconCaretDownFilled size={14} />
+              )
+            ) : (
+              <IconCaretUpFilled size={14} color="gray" />
+            )}
+          </Table.Th>
+        ))}
+        <Table.Th style={{ ...headerStyle, minWidth: columnWidths.hanhDong }}>
+          Hành động
+        </Table.Th>
         <Table.Tbody>{rows}</Table.Tbody>
       </Table>
     </ScrollArea>

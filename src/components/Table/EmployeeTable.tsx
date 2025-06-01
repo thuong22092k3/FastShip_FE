@@ -9,9 +9,16 @@ import {
   Select,
 } from "@mantine/core";
 import "@mantine/core/styles.css";
-import { IconEdit, IconTrash, IconUser } from "@tabler/icons-react";
+import {
+  IconCaretDownFilled,
+  IconCaretUpFilled,
+  IconEdit,
+  IconTrash,
+  IconUser,
+} from "@tabler/icons-react";
 import { showNotification } from "@mantine/notifications";
 import { NhanVien } from "../../api/type/EmployeeType";
+import CheckboxComponent from "../CheckBox/CheckBoxComponent";
 
 type Props = {
   data: NhanVien[];
@@ -45,11 +52,22 @@ export const NhanVienTable: React.FC<Props> = ({
   onEdit,
 }) => {
   const [selectedRows, setSelectedRows] = useState<string[]>([]);
+  const [isChecked, setIsChecked] = useState(false);
+  const [sortBy, setSortBy] = useState<keyof NhanVien | null>(null);
+  const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc");
 
   const handleRowSelect = (id: string, checked: boolean) => {
     setSelectedRows((prev) =>
       checked ? [...prev, id] : prev.filter((rowId) => rowId !== id)
     );
+  };
+  const handleSort = (column: keyof NhanVien) => {
+    if (sortBy === column) {
+      setSortDirection(sortDirection === "asc" ? "desc" : "asc");
+    } else {
+      setSortBy(column);
+      setSortDirection("asc");
+    }
   };
 
   const allSelected = data.length > 0 && selectedRows.length === data.length;
@@ -66,8 +84,24 @@ export const NhanVienTable: React.FC<Props> = ({
     backgroundColor: "#f5f5f5",
     fontWeight: 600,
   };
+  const sortedData = [...data].sort((a, b) => {
+    if (!sortBy) return 0;
 
-  const rows = data.map((nhanVien) => {
+    const aValue = a[sortBy];
+    const bValue = b[sortBy];
+
+    if (aValue === undefined || bValue === undefined) return 0;
+
+    if (typeof aValue === "number" && typeof bValue === "number") {
+      return sortDirection === "asc" ? aValue - bValue : bValue - aValue;
+    }
+
+    return sortDirection === "asc"
+      ? String(aValue).localeCompare(String(bValue))
+      : String(bValue).localeCompare(String(aValue));
+  });
+
+  const rows = sortedData.map((nhanVien) => {
     const isSelected = selectedRows.includes(nhanVien.NhanVienID);
 
     return (
@@ -118,7 +152,16 @@ export const NhanVienTable: React.FC<Props> = ({
   });
 
   return (
-    <ScrollArea style={{ width: "100%", overflowX: "auto" }}>
+    <ScrollArea
+      type="scroll"
+      scrollbars="x"
+      offsetScrollbars
+      style={{
+        width: "100%",
+        maxWidth: "80vw",
+        position: "relative",
+      }}
+    >
       <Table
         striped
         highlightOnHover
@@ -128,7 +171,7 @@ export const NhanVienTable: React.FC<Props> = ({
           borderCollapse: "collapse",
         }}
       >
-        <Table.Thead>
+        {/* <Table.Thead>
           <Table.Tr>
             <Table.Th style={{ ...headerStyle, width: columnWidths.checkbox }}>
               <Checkbox
@@ -158,7 +201,44 @@ export const NhanVienTable: React.FC<Props> = ({
               Hành động
             </Table.Th>
           </Table.Tr>
-        </Table.Thead>
+        </Table.Thead> */}
+        <Table.Th style={{ ...headerStyle, minWidth: columnWidths.checkbox }}>
+          <CheckboxComponent
+            isChecked={isChecked}
+            setIsChecked={setIsChecked}
+          />
+        </Table.Th>
+        {[
+          { key: "NhanVienID", label: "ID Nhân viên" },
+          { key: "HoTen", label: "Họ tên" },
+          { key: "UserName", label: "Tài khoản" },
+          { key: "Email", label: "Email" },
+          { key: "HieuSuat", label: "Hiệu suất" },
+        ].map(({ key, label }) => (
+          <Table.Th
+            key={key}
+            style={{
+              ...headerStyle,
+              minWidth: columnWidths[key],
+              cursor: "pointer",
+            }}
+            onClick={() => handleSort(key as keyof NhanVien)}
+          >
+            {label}
+            {sortBy === key ? (
+              sortDirection === "asc" ? (
+                <IconCaretUpFilled size={14} />
+              ) : (
+                <IconCaretDownFilled size={14} />
+              )
+            ) : (
+              <IconCaretUpFilled size={14} color="gray" />
+            )}
+          </Table.Th>
+        ))}
+        <Table.Th style={{ ...headerStyle, minWidth: columnWidths.hanhDong }}>
+          Hành động
+        </Table.Th>
 
         <Table.Tbody>{rows}</Table.Tbody>
       </Table>
