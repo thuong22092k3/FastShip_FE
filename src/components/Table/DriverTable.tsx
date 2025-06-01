@@ -136,13 +136,22 @@ export const TaiXeTable: React.FC<Props> = ({
   });
 
   return (
-    <ScrollArea style={{ width: "100%", overflowX: "auto" }}>
+    <ScrollArea
+      type="scroll"
+      scrollbars="x"
+      offsetScrollbars
+      style={{
+        width: "100%",
+        maxWidth: "80vw",
+        position: "relative",
+      }}
+    >
       <Table
         striped
         highlightOnHover
         withTableBorder
         style={{
-          border: "1px solid #e0e0e0",
+          border: "1px solid #ccc",
           borderCollapse: "collapse",
         }}
       >

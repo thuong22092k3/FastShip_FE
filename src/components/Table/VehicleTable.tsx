@@ -265,7 +265,16 @@ export const VehicleTable: React.FC<Props> = ({
   });
 
   return (
-    <ScrollArea style={{ width: "100%", overflowX: "auto" }}>
+    <ScrollArea
+      type="scroll"
+      scrollbars="x"
+      offsetScrollbars
+      style={{
+        width: "100%",
+        maxWidth: "85vw",
+        position: "relative",
+      }}
+    >
       <Table
         striped
         highlightOnHover

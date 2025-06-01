@@ -136,7 +136,7 @@ export default function OrderManagementScreen() {
   // Trong DeleteConfirmationModal
 
   return (
-    <Container>
+    <Box style={{ padding: 0, margin: 0 }}>
       <Title order={2}>Quản lý đơn hàng</Title>
       <Box
         style={{
@@ -220,6 +220,6 @@ export default function OrderManagementScreen() {
         onConfirm={handleConfirmDelete}
         isLoading={isDeleting}
       />
-    </Container>
+    </Box>
   );
 }
