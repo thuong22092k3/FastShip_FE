@@ -162,99 +162,97 @@ export default function VehicleManagementScreen() {
     setUpdateModalOpen(true);
   };
   return (
-    <Container size="xl" p="md" fluid>
-      <Box p="md">
-        <Title order={2}>Quản lý phương tiện</Title>
+    <Box style={{ padding: 0, margin: 0 }}>
+      <Title order={2}>Quản lý phương tiện</Title>
 
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-around",
-            flexWrap: "wrap",
-          }}
-        >
-          <CardComponent
-            title="Tổng phương tiện"
-            value={vehicles.length}
-            icon={<IconTruckDelivery size={24} />}
-          />
-          <CardComponent
-            title="Phương tiện đang hoạt động"
-            value={filteredVehicles.length}
-            icon={<IconSettings size={24} />}
-          />
-          <CardComponent
-            title="Phương tiện đã kiểm định"
-            value={filteredVehicles.length}
-            icon={<IconTruck size={24} />}
-          />
-        </div>
-
-        <Flex justify="space-between" align="center" mt="md" mb="xl">
-          <TextInput
-            placeholder="Tìm kiếm phương tiện"
-            value={search}
-            onChange={(e) => setSearch(e.currentTarget.value)}
-            leftSection={<IconSearch size={16} />}
-            style={{ width: 300 }}
-          />
-          <Button
-            leftSection={<IconPlus size={18} />}
-            onClick={() => setOpenCreateModal(true)}
-          >
-            Thêm phương tiện mới
-          </Button>
-        </Flex>
-
-        {loading ? (
-          <Box py="xl">Đang tải dữ liệu...</Box>
-        ) : error ? (
-          <Box py="xl">{error}</Box>
-        ) : vehicles.length === 0 ? (
-          <Box py="xl">Không tìm thấy phương tiện nào</Box>
-        ) : filteredVehicles.length === 0 ? (
-          <Box py="xl">Không tìm thấy phương tiện phù hợp với tìm kiếm</Box>
-        ) : (
-          <>
-            <VehicleTable
-              data={filteredVehicles}
-              onViewDetail={handleViewDetail}
-              onDelete={handleDeleteClick}
-              onEdit={handleEditClick}
-            />
-            <Pagination
-              total={Math.ceil(filteredVehicles.length / 10)}
-              value={page}
-              onChange={setPage}
-              mt="xl"
-            />
-          </>
-        )}
-
-        <AddVehicleModal
-          open={openCreateModal}
-          onClose={() => setOpenCreateModal(false)}
-          onVehicleCreated={handleVehicleCreated}
+      <Box
+        style={{
+          display: "flex",
+          justifyContent: "space-around",
+          flexWrap: "wrap",
+        }}
+      >
+        <CardComponent
+          title="Tổng phương tiện"
+          value={vehicles.length}
+          icon={<IconTruckDelivery size={24} />}
         />
-        {/* <VehicleDetailModal
+        <CardComponent
+          title="Phương tiện đang hoạt động"
+          value={filteredVehicles.length}
+          icon={<IconSettings size={24} />}
+        />
+        <CardComponent
+          title="Phương tiện đã kiểm định"
+          value={filteredVehicles.length}
+          icon={<IconTruck size={24} />}
+        />
+      </Box>
+
+      <Flex justify="space-between" align="center" mt="md" mb="xl">
+        <TextInput
+          placeholder="Tìm kiếm phương tiện"
+          value={search}
+          onChange={(e) => setSearch(e.currentTarget.value)}
+          leftSection={<IconSearch size={16} />}
+          style={{ width: 300 }}
+        />
+        <Button
+          leftSection={<IconPlus size={18} />}
+          onClick={() => setOpenCreateModal(true)}
+        >
+          Thêm phương tiện mới
+        </Button>
+      </Flex>
+
+      {loading ? (
+        <Box py="xl">Đang tải dữ liệu...</Box>
+      ) : error ? (
+        <Box py="xl">{error}</Box>
+      ) : vehicles.length === 0 ? (
+        <Box py="xl">Không tìm thấy phương tiện nào</Box>
+      ) : filteredVehicles.length === 0 ? (
+        <Box py="xl">Không tìm thấy phương tiện phù hợp với tìm kiếm</Box>
+      ) : (
+        <>
+          <VehicleTable
+            data={filteredVehicles}
+            onViewDetail={handleViewDetail}
+            onDelete={handleDeleteClick}
+            onEdit={handleEditClick}
+          />
+          <Pagination
+            total={Math.ceil(filteredVehicles.length / 10)}
+            value={page}
+            onChange={setPage}
+            mt="xl"
+          />
+        </>
+      )}
+
+      <AddVehicleModal
+        open={openCreateModal}
+        onClose={() => setOpenCreateModal(false)}
+        onVehicleCreated={handleVehicleCreated}
+      />
+      {/* <VehicleDetailModal
           opened={detailModalOpened}
           onClose={() => setDetailModalOpened(false)}
           vehicle={selectedVehicle}
           loading={detailLoading}
         /> */}
-        <UpdateVehicleModal
-          open={updateModalOpen}
-          onClose={() => setUpdateModalOpen(false)}
-          onVehicleUpdated={() => setRefreshKey((prev) => prev + 1)}
-          vehicleData={vehicleToUpdate}
-        />
-        <DeleteVehicleModal
-          open={deleteModalOpen}
-          onClose={() => setDeleteModalOpen(false)}
-          onConfirm={handleConfirmDelete}
-          isLoading={isDeleting}
-        />
-      </Box>
-    </Container>
+      <UpdateVehicleModal
+        open={updateModalOpen}
+        onClose={() => setUpdateModalOpen(false)}
+        onVehicleUpdated={() => setRefreshKey((prev) => prev + 1)}
+        vehicleData={vehicleToUpdate}
+      />
+      <DeleteVehicleModal
+        open={deleteModalOpen}
+        onClose={() => setDeleteModalOpen(false)}
+        onConfirm={handleConfirmDelete}
+        isLoading={isDeleting}
+      />
+    </Box>
   );
 }

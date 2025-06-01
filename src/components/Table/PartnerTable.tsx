@@ -151,105 +151,99 @@ export const PartnerTable: React.FC<Props> = ({
   });
 
   return (
-    <ScrollArea style={{ width: "550px", overflowX: "auto" }}>
-      <div style={{ position: "relative" }}>
-        <LoadingOverlay visible={loading} />
-        <Table
-          striped
-          highlightOnHover
-          withTableBorder
-          style={{
-            border: "1px solid #ccc",
-            borderCollapse: "collapse",
-          }}
-        >
-          <Table.Thead>
-            <Table.Tr style={{ borderBottom: "1px solid #ccc" }}>
-              <Table.Th
-                style={{ ...headerStyle, minWidth: columnWidths.checkbox }}
-              >
-                <CheckboxComponent
-                  isChecked={isChecked}
-                  setIsChecked={setIsChecked}
-                />
-              </Table.Th>
-              <Table.Th
-                style={{ ...headerStyle, minWidth: columnWidths.DoiTacId }}
-              >
-                ID Đối tác
-              </Table.Th>
-              <Table.Th
-                style={{ ...headerStyle, minWidth: columnWidths.TenDoiTac }}
-              >
-                Tên đối tác
-              </Table.Th>
-              <Table.Th
-                style={{ ...headerStyle, minWidth: columnWidths.KieuDoiTac }}
-              >
-                Loại đối tác
-              </Table.Th>
-              <Table.Th
-                style={{ ...headerStyle, minWidth: columnWidths.NguoiLienLac }}
-              >
-                Người liên lạc
-              </Table.Th>
-              <Table.Th style={{ ...headerStyle, minWidth: columnWidths.SDT }}>
-                SĐT
-              </Table.Th>
-              <Table.Th
-                style={{ ...headerStyle, minWidth: columnWidths.Email }}
-              >
-                Email
-              </Table.Th>
-              <Table.Th
-                style={{ ...headerStyle, minWidth: columnWidths.DiaChi }}
-              >
-                Địa chỉ
-              </Table.Th>
-              <Table.Th
-                style={{ ...headerStyle, minWidth: columnWidths.SoGiayPhep }}
-              >
-                Số giấy phép
-              </Table.Th>
-              <Table.Th
-                style={{ ...headerStyle, minWidth: columnWidths.SucChua }}
-              >
-                Sức chứa
-              </Table.Th>
-              <Table.Th
-                style={{
-                  ...headerStyle,
-                  minWidth: columnWidths.KhuVucHoatDong,
-                }}
-              >
-                Khu vực hoạt động
-              </Table.Th>
-              <Table.Th
-                style={{ ...headerStyle, minWidth: columnWidths.actions }}
-              >
-                Thao tác
-              </Table.Th>
+    <ScrollArea style={{ width: "100%", overflowX: "auto" }}>
+      <LoadingOverlay visible={loading} />
+      <Table
+        striped
+        highlightOnHover
+        withTableBorder
+        style={{
+          border: "1px solid #ccc",
+          borderCollapse: "collapse",
+        }}
+      >
+        <Table.Thead>
+          <Table.Tr style={{ borderBottom: "1px solid #ccc" }}>
+            <Table.Th
+              style={{ ...headerStyle, minWidth: columnWidths.checkbox }}
+            >
+              <CheckboxComponent
+                isChecked={isChecked}
+                setIsChecked={setIsChecked}
+              />
+            </Table.Th>
+            <Table.Th
+              style={{ ...headerStyle, minWidth: columnWidths.DoiTacId }}
+            >
+              ID Đối tác
+            </Table.Th>
+            <Table.Th
+              style={{ ...headerStyle, minWidth: columnWidths.TenDoiTac }}
+            >
+              Tên đối tác
+            </Table.Th>
+            <Table.Th
+              style={{ ...headerStyle, minWidth: columnWidths.KieuDoiTac }}
+            >
+              Loại đối tác
+            </Table.Th>
+            <Table.Th
+              style={{ ...headerStyle, minWidth: columnWidths.NguoiLienLac }}
+            >
+              Người liên lạc
+            </Table.Th>
+            <Table.Th style={{ ...headerStyle, minWidth: columnWidths.SDT }}>
+              SĐT
+            </Table.Th>
+            <Table.Th style={{ ...headerStyle, minWidth: columnWidths.Email }}>
+              Email
+            </Table.Th>
+            <Table.Th style={{ ...headerStyle, minWidth: columnWidths.DiaChi }}>
+              Địa chỉ
+            </Table.Th>
+            <Table.Th
+              style={{ ...headerStyle, minWidth: columnWidths.SoGiayPhep }}
+            >
+              Số giấy phép
+            </Table.Th>
+            <Table.Th
+              style={{ ...headerStyle, minWidth: columnWidths.SucChua }}
+            >
+              Sức chứa
+            </Table.Th>
+            <Table.Th
+              style={{
+                ...headerStyle,
+                minWidth: columnWidths.KhuVucHoatDong,
+              }}
+            >
+              Khu vực hoạt động
+            </Table.Th>
+            <Table.Th
+              style={{ ...headerStyle, minWidth: columnWidths.actions }}
+            >
+              Thao tác
+            </Table.Th>
+          </Table.Tr>
+        </Table.Thead>
+        <Table.Tbody>
+          {error ? (
+            <Table.Tr>
+              <Table.Td colSpan={Object.keys(columnWidths).length}>
+                <Text color="red">{error}</Text>
+              </Table.Td>
             </Table.Tr>
-          </Table.Thead>
-          <Table.Tbody>
-            {error ? (
-              <Table.Tr>
-                <Table.Td colSpan={Object.keys(columnWidths).length}>
-                  <Text color="red">{error}</Text>
-                </Table.Td>
-              </Table.Tr>
-            ) : data?.length === 0 ? (
-              <Table.Tr>
-                <Table.Td colSpan={Object.keys(columnWidths).length}>
-                  <Text>Không có dữ liệu đối tác</Text>
-                </Table.Td>
-              </Table.Tr>
-            ) : (
-              rows
-            )}
-          </Table.Tbody>
-        </Table>
-      </div>
+          ) : data?.length === 0 ? (
+            <Table.Tr>
+              <Table.Td colSpan={Object.keys(columnWidths).length}>
+                <Text>Không có dữ liệu đối tác</Text>
+              </Table.Td>
+            </Table.Tr>
+          ) : (
+            rows
+          )}
+        </Table.Tbody>
+      </Table>
     </ScrollArea>
   );
 };

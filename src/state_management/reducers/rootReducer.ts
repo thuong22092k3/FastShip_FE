@@ -13,6 +13,7 @@ import deliverySlice from "../slices/deliverySlice";
 import maintenanceSlice from "../slices/maintainceSlice";
 import controlSlice, { TControl } from "../slices/controlSlice";
 import authSlice, { AuthState } from "../slices/authSlice";
+import locationSlice from "../slices/locationSlice";
 
 export type RootState = {
   authSlice: AuthState;
@@ -27,6 +28,7 @@ export type RootState = {
   deliverySlice: TDelivery[];
   maintenanceSlice: TMaintenance[];
   controlSlice: TControl;
+  locationSlice: TLocation[];
 };
 
 const rootReducer = combineReducers({
@@ -42,6 +44,7 @@ const rootReducer = combineReducers({
   routeSlice,
   deliverySlice,
   maintenanceSlice,
+  locationSlice,
 });
 
 export default rootReducer;

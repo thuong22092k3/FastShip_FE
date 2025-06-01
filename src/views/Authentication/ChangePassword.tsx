@@ -20,105 +20,105 @@ const ChangePasswordScreen = () => {
   const [isChecked, setIsChecked] = useState(false);
   const navigate = useNavigate();
   return (
+    // <div
+    //   style={{
+    //     minHeight: "100vh",
+    //     backgroundColor: "#f0f0f0",
+    //     display: "flex",
+    //     justifyContent: "center",
+    //     alignItems: "center",
+    //     padding: 20,
+    //   }}
+    // >
     <div
       style={{
-        minHeight: "100vh",
-        backgroundColor: "#f0f0f0",
+        backgroundColor: "#fff",
+        paddingTop: 40,
+        paddingBottom: 40,
+        paddingLeft: 100,
+        paddingRight: 100,
+        borderRadius: 8,
+        minWidth: 686,
+        maxWidth: "100%",
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        padding: 20,
+        flexDirection: "column",
       }}
     >
-      <div
+      <div style={{ textAlign: "center" }}>
+        <img
+          src={require("../../assets/images/Logorm.png")}
+          alt="image"
+          style={{ height: 130, objectFit: "contain" }}
+        />
+      </div>
+
+      <TextComponent
         style={{
-          backgroundColor: "#fff",
-          paddingTop: 40,
-          paddingBottom: 40,
-          paddingLeft: 100,
-          paddingRight: 100,
-          borderRadius: 8,
-          width: 400,
-          maxWidth: "100%",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          flexDirection: "column",
+          textAlign: "center",
+          marginBottom: 8,
+          fontSize: 36,
+          fontWeight: 500,
         }}
       >
-        <div style={{ textAlign: "center" }}>
-          <img
-            src={require("../../assets/images/Logorm.png")}
-            alt="image"
-            style={{ height: 130, objectFit: "contain" }}
-          />
-        </div>
+        Create a new password
+      </TextComponent>
+      <TextComponent
+        style={{
+          textAlign: "center",
+          marginBottom: 24,
+          color: "#000",
+          fontWeight: 400,
+        }}
+      >
+        Welcome back!
+      </TextComponent>
 
-        <TextComponent
-          style={{
-            textAlign: "center",
-            marginBottom: 8,
-            fontSize: 36,
-            fontWeight: 500,
-          }}
-        >
-          Create a new password
-        </TextComponent>
-        <TextComponent
-          style={{
-            textAlign: "center",
-            marginBottom: 24,
-            color: "#000",
-            fontWeight: 400,
-          }}
-        >
-          Welcome back!
-        </TextComponent>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          width: "100%",
+          gap: 10,
+        }}
+      >
+        <TextInputComponent
+          label="New password"
+          placeholder="Enter new password"
+          borderRadius="sm"
+          value={businessName}
+          onChange={(e) => setBusinessName(e.target.value)}
+          labelFontSize={14}
+          labelColor={COLORS.gray}
+          width="100%"
+        />
 
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            width: "100%",
-            gap: 10,
+        <TextInputComponent
+          label="Confirm password"
+          labelFontSize={14}
+          labelColor={COLORS.gray}
+          placeholder="Enter confirm password"
+          borderRadius="sm"
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          width="100%"
+        />
+      </div>
+      <div style={{ marginTop: 50, width: "100%" }}>
+        <ButtonComponent
+          label="Confirm"
+          fullWidth
+          backgroundColor={COLORS.mediumBlue}
+          labelColor="#fff"
+          onClick={() => {
+            navigate(NAV_LINK.STATISTICS);
           }}
-        >
-          <TextInputComponent
-            label="New password"
-            placeholder="Enter new password"
-            borderRadius="sm"
-            value={businessName}
-            onChange={(e) => setBusinessName(e.target.value)}
-            labelFontSize={14}
-            labelColor={COLORS.gray}
-            width="100%"
-          />
-
-          <TextInputComponent
-            label="Confirm password"
-            labelFontSize={14}
-            labelColor={COLORS.gray}
-            placeholder="Enter confirm password"
-            borderRadius="sm"
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            width="100%"
-          />
-        </div>
-        <div style={{ marginTop: 50, width: "100%" }}>
-          <ButtonComponent
-            label="Confirm"
-            fullWidth
-            backgroundColor={COLORS.mediumBlue}
-            labelColor="#fff"
-            onClick={() => {
-              navigate(NAV_LINK.STATISTICS);
-            }}
-          />
-        </div>
+        />
       </div>
     </div>
+    // </div>
   );
 };
 

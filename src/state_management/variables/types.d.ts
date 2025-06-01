@@ -97,3 +97,10 @@ declare type TRoute = {
   ThoiGianUocTinh: number;
   TuyenDuongToiUu: string;
 };
+
+declare type TLocation = {
+  DiaDiemId: string;
+  name: string;
+  latitude: number;
+  longitude: number;
+};

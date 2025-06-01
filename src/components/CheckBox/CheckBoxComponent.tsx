@@ -16,12 +16,12 @@ interface CheckboxComponentProps {
 }
 
 const CheckboxComponent = ({
-  size = "16px",
+  size = "18px",
   color = COLORS.mediumBlue,
   isChecked,
   setIsChecked,
   label,
-  borderRadius = "md",
+  borderRadius = "xs",
   labelFontSize = 14,
   labelFontWeight = "normal",
 }: CheckboxComponentProps) => {
@@ -37,7 +37,6 @@ const CheckboxComponent = ({
           borderRadius: RADIUS_MAP[borderRadius],
           borderColor: color,
           backgroundColor: isChecked ? color : "transparent",
-          // Ẩn dấu tick
           "&:checked": {
             backgroundImage: "none",
             backgroundColor: color,
@@ -48,10 +47,6 @@ const CheckboxComponent = ({
           fontWeight: FONT_WEIGHT.medium,
           color: COLORS.black,
           marginLeft: 8,
-        },
-        icon: {
-          // Ẩn icon tick
-          display: "none",
         },
       }}
     />

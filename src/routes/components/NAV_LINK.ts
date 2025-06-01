@@ -32,6 +32,8 @@ export const NAV_LINK = {
   // UPDATE_PARTNER: "/partners/update",
   // DELETE_PARTNER: "/partners/delete",
 
+  POST_OFFICE_MANAGEMENT: "/home/post",
+
   STATISTICS: "/home/statistics",
   // VIEW_REPORTS: "/statistics/reports",
 };

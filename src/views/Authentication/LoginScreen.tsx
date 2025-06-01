@@ -193,101 +193,102 @@ const LoginScreen = () => {
     navigate(NAV_LINK.STATISTICS);
   };
   return (
+    // <div
+    //   style={{
+    //     minHeight: "100vh",
+    //     backgroundColor: "#f0f0f0",
+    //     display: "flex",
+    //     justifyContent: "center",
+    //     alignItems: "center",
+    //     padding: 20,
+    //   }}
+    // >
     <div
       style={{
-        minHeight: "100vh",
-        backgroundColor: "#f0f0f0",
+        backgroundColor: "#fff",
+        padding: "40px 100px",
+        borderRadius: 8,
+        minWidth: 686,
+        maxWidth: "100%",
         display: "flex",
-        justifyContent: "center",
+        flexDirection: "column",
         alignItems: "center",
-        padding: 20,
       }}
     >
-      <div
-        style={{
-          backgroundColor: "#fff",
-          padding: "40px 100px",
-          borderRadius: 8,
-          width: 400,
-          maxWidth: "100%",
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-        }}
-      >
-        <div style={{ textAlign: "center" }}>
-          <img
-            src={require("../../assets/images/Logorm.png")}
-            alt="logo"
-            style={{ height: 130, objectFit: "contain" }}
-          />
-        </div>
-
-        <TextComponent
-          style={{
-            textAlign: "center",
-            marginBottom: 8,
-            fontSize: 36,
-            fontWeight: 500,
-          }}
-        >
-          Admin Login
-        </TextComponent>
-
-        <TextComponent
-          style={{
-            textAlign: "center",
-            marginBottom: 24,
-            color: "#000",
-            fontWeight: 400,
-          }}
-        >
-          Welcome back!
-        </TextComponent>
-
-        <TextInputComponent
-          label="Username"
-          placeholder="Enter admin username"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          width="100%"
-          mb="md"
-        />
-
-        <TextInputComponent
-          label="Password"
-          placeholder="Enter password"
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          width="100%"
-          mb="md"
-        />
-
-        {error && (
-          <TextComponent style={{ color: "red", marginBottom: 16 }}>
-            {error}
-          </TextComponent>
-        )}
-
-        <Flex justify="flex-end" w="100%" mb="xl">
-          <TextButtonComponent
-            onClick={() => navigate(NAV_LINK.FORGOTPASSWORD)}
-          >
-            Forgot password?
-          </TextButtonComponent>
-        </Flex>
-
-        <ButtonComponent
-          label={loading ? "Logging in..." : "Login"}
-          fullWidth
-          backgroundColor={COLORS.mediumBlue}
-          labelColor="#fff"
-          onClick={handleLogin}
-          disabled={loading}
+      <div style={{ textAlign: "center" }}>
+        <img
+          src={require("../../assets/images/Logorm.png")}
+          alt="logo"
+          style={{ height: 130, objectFit: "contain" }}
         />
       </div>
+
+      <TextComponent
+        style={{
+          textAlign: "center",
+          marginBottom: 8,
+          fontSize: 36,
+          fontWeight: 500,
+        }}
+      >
+        Admin Login
+      </TextComponent>
+
+      <TextComponent
+        style={{
+          textAlign: "center",
+          color: "#000",
+          fontWeight: 400,
+          fontSize: 20,
+        }}
+      >
+        Welcome back!
+      </TextComponent>
+
+      <TextInputComponent
+        label="Username"
+        placeholder="Enter admin username"
+        value={username}
+        onChange={(e) => setUsername(e.target.value)}
+        width="100%"
+        labelColor={COLORS.black}
+        labelFontSize={16}
+      />
+
+      <TextInputComponent
+        label="Password"
+        placeholder="Enter password"
+        type="password"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+        width="100%"
+        mb="md"
+        labelColor={COLORS.black}
+        labelFontSize={16}
+      />
+
+      {error && (
+        <TextComponent style={{ color: "red", marginBottom: 16 }}>
+          {error}
+        </TextComponent>
+      )}
+
+      <Flex justify="flex-end" w="100%" mb="xl">
+        <TextButtonComponent onClick={() => navigate(NAV_LINK.FORGOTPASSWORD)}>
+          Forgot password?
+        </TextButtonComponent>
+      </Flex>
+
+      <ButtonComponent
+        label={loading ? "Logging in..." : "Login"}
+        fullWidth
+        backgroundColor={COLORS.mediumBlue}
+        labelColor="#fff"
+        onClick={handleLogin}
+        disabled={loading}
+      />
     </div>
+    // </div>
   );
 };
 

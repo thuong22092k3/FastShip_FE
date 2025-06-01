@@ -2,7 +2,6 @@ import { Route, Routes, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useMemo } from "react";
 import { AppShell, Box, ScrollArea } from "@mantine/core";
-import "@mantine/core/styles.css";
 import { RootState } from "../../state_management/reducers/rootReducer";
 import Drawer from "../components/Drawer";
 import CustomHeader from "../../components/Header/Header";
@@ -12,6 +11,8 @@ import OrderManagementScreen from "../../views/Order/OrderManagement";
 import PartnerManagementScreen from "../../views/Partner/PartnerManagement";
 import StatisticScreen from "../../views/Statistics/StatisticsScreen";
 import VehicleManagementScreen from "../../views/Vehicle/VehicleManagement";
+import LocationManagement from "../../views/Location/LocationManagement";
+import "@mantine/core/styles.css";
 
 const ROUTES = [
   {
@@ -35,6 +36,11 @@ const ROUTES = [
     name: "Vehicle Management",
   },
   {
+    path: "post",
+    element: <LocationManagement />,
+    name: "Post office",
+  },
+  {
     path: "statistics",
     element: <StatisticScreen />,
     name: "Statistics",
@@ -51,10 +57,17 @@ export default function HomeRoutes() {
   );
 
   return (
-    <div style={{ display: "flex", height: "100vh" }}>
+    <Box
+      style={{
+        display: "flex",
+        height: "100vh",
+        width: "100%",
+        justifyContent: "flex-start",
+      }}
+    >
       <Drawer />
 
-      <div
+      <Box
         style={{
           flex: 1,
           display: "flex",
@@ -70,8 +83,14 @@ export default function HomeRoutes() {
           scrollbarSize={8}
           style={{ flex: 1 }}
         >
-          <Box p={24}>
-            {" "}
+          <Box
+            px={16}
+            py={24}
+            mx="auto"
+            style={{
+              overflowX: "hidden",
+            }}
+          >
             <Routes>
               {ROUTES.map((route, i) => (
                 <Route path={route.path} element={route.element} key={i} />
@@ -79,7 +98,7 @@ export default function HomeRoutes() {
             </Routes>
           </Box>
         </ScrollArea.Autosize>
-      </div>
-    </div>
+      </Box>
+    </Box>
   );
 }

@@ -20,86 +20,86 @@ const Verifyscreen = () => {
   const [isChecked, setIsChecked] = useState(false);
   const navigate = useNavigate();
   return (
+    // <div
+    //   style={{
+    //     minHeight: "100vh",
+    //     backgroundColor: "#f0f0f0",
+    //     display: "flex",
+    //     justifyContent: "center",
+    //     alignItems: "center",
+    //     padding: 20,
+    //   }}
+    // >
     <div
       style={{
-        minHeight: "100vh",
-        backgroundColor: "#f0f0f0",
+        backgroundColor: "#fff",
+        paddingTop: 40,
+        paddingBottom: 40,
+        paddingLeft: 100,
+        paddingRight: 100,
+        borderRadius: 8,
+        minWidth: 686,
+        maxWidth: "100%",
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        padding: 20,
+        flexDirection: "column",
       }}
     >
-      <div
+      <div style={{ textAlign: "center" }}>
+        <img
+          src={require("../../assets/images/Logorm.png")}
+          alt="image"
+          style={{ height: 130, objectFit: "contain" }}
+        />
+      </div>
+
+      <TextComponent
         style={{
-          backgroundColor: "#fff",
-          paddingTop: 40,
-          paddingBottom: 40,
-          paddingLeft: 100,
-          paddingRight: 100,
-          borderRadius: 8,
-          width: 400,
-          maxWidth: "100%",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          flexDirection: "column",
+          textAlign: "center",
+          marginBottom: 8,
+          fontSize: 36,
+          fontWeight: 500,
+          lineHeight: 1.6,
         }}
       >
-        <div style={{ textAlign: "center" }}>
-          <img
-            src={require("../../assets/images/Logorm.png")}
-            alt="image"
-            style={{ height: 130, objectFit: "contain" }}
-          />
-        </div>
+        Verification
+      </TextComponent>
 
-        <TextComponent
-          style={{
-            textAlign: "center",
-            marginBottom: 8,
-            fontSize: 36,
-            fontWeight: 500,
-            lineHeight: 1.6,
+      <TextInputComponent
+        label="Enter OTP"
+        placeholder="OTP"
+        borderRadius="sm"
+        value={businessName}
+        onChange={(e) => setBusinessName(e.target.value)}
+        width="50%"
+        labelFontSize={14}
+        labelColor={COLORS.gray}
+        labelTextAlign="center"
+      />
+
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "end",
+          alignItems: "end",
+          width: "100%",
+          color: COLORS.black,
+        }}
+      ></div>
+      <div style={{ marginTop: 50, width: "100%" }}>
+        <ButtonComponent
+          label="Continue"
+          fullWidth
+          backgroundColor={COLORS.mediumBlue}
+          labelColor="#fff"
+          onClick={() => {
+            navigate(NAV_LINK.CHANGEPASSWORD);
           }}
-        >
-          Verification
-        </TextComponent>
-
-        <TextInputComponent
-          label="Enter OTP"
-          placeholder="OTP"
-          borderRadius="sm"
-          value={businessName}
-          onChange={(e) => setBusinessName(e.target.value)}
-          width="50%"
-          labelFontSize={14}
-          labelColor={COLORS.gray}
-          labelTextAlign="center"
         />
-
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "end",
-            alignItems: "end",
-            width: "100%",
-            color: COLORS.black,
-          }}
-        ></div>
-        <div style={{ marginTop: 50, width: "100%" }}>
-          <ButtonComponent
-            label="Continue"
-            fullWidth
-            backgroundColor={COLORS.mediumBlue}
-            labelColor="#fff"
-            onClick={() => {
-              navigate(NAV_LINK.CHANGEPASSWORD);
-            }}
-          />
-        </div>
       </div>
     </div>
+    // </div>
   );
 };
 

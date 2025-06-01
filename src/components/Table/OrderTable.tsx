@@ -263,13 +263,12 @@ export const OrderTable: React.FC<Props> = ({
   });
 
   return (
-    <ScrollArea style={{ width: "1250px", overflowX: "auto" }}>
+    <ScrollArea style={{ width: "100%", overflowX: "auto" }}>
       <Table
         striped
         highlightOnHover
         withTableBorder
         style={{
-          // minWidth: "1300px",
           border: "1px solid #ccc",
           borderCollapse: "collapse",
         }}

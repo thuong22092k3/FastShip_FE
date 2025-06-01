@@ -136,92 +136,90 @@ export default function OrderManagementScreen() {
   // Trong DeleteConfirmationModal
 
   return (
-    <Container size="xl" p="md" fluid>
-      <Box p="md">
-        <Title order={2}>Quản lý đơn hàng</Title>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-around",
-            flexWrap: "wrap",
-          }}
-        >
-          <CardComponent
-            title="Tổng đơn hàng"
-            value={orders.length}
-            icon={<IconArchive size={24} />}
-          />
-          <CardComponent
-            title="Các đơn hàng đang hoạt động"
-            value={filteredOrders.length}
-            icon={<IconFolderCheck size={24} />}
-          />
-          <CardComponent
-            title="Các đơn hàng đã hoàn thành"
-            value={filteredOrders.length}
-            icon={<IconCircleCheck size={24} />}
-          />
-        </div>
-        <Flex justify="space-between" align="center" mt="md" mb="xl">
-          <TextInput
-            placeholder="Tìm kiếm đơn hàng"
-            value={search}
-            onChange={(e) => setSearch(e.currentTarget.value)}
-            leftSection={<IconSearch size={16} />}
-            style={{ width: 300 }}
-          />
-          <Button
-            leftSection={<IconPlus size={18} />}
-            onClick={() => setOpenCreateModal(true)}
-          >
-            Tạo đơn hàng mới
-          </Button>
-          {/* <Button onClick={() => setDeleteModalOpen(true)}>
-            Test Open Delete Modal
-          </Button> */}
-        </Flex>
-
-        {loading ? (
-          <Box py="xl">Đang tải dữ liệu...</Box>
-        ) : error ? (
-          <Box py="xl">{error}</Box>
-        ) : filteredOrders.length === 0 ? (
-          <Box py="xl">Không tìm thấy đơn hàng nào</Box>
-        ) : (
-          <>
-            <OrderTable
-              data={filteredOrders}
-              onViewDetail={handleViewDetail}
-              onDelete={handleDeleteClick}
-            />
-
-            <Pagination
-              total={Math.ceil(filteredOrders.length / 10)}
-              value={page}
-              onChange={setPage}
-              mt="xl"
-            />
-          </>
-        )}
-
-        <NewModal
-          open={openCreateModal}
-          onClose={() => setOpenCreateModal(false)}
-          onOrderCreated={handleOrderCreated}
+    <Container>
+      <Title order={2}>Quản lý đơn hàng</Title>
+      <Box
+        style={{
+          display: "flex",
+          justifyContent: "space-around",
+          flexWrap: "wrap",
+        }}
+      >
+        <CardComponent
+          title="Tổng đơn hàng"
+          value={orders.length}
+          icon={<IconArchive size={24} />}
         />
-        <OrderDetailModal
-          opened={detailModalOpened}
-          onClose={() => setDetailModalOpened(false)}
-          order={selectedOrder}
-          loading={detailLoading}
+        <CardComponent
+          title="Các đơn hàng đang hoạt động"
+          value={filteredOrders.length}
+          icon={<IconFolderCheck size={24} />}
         />
-        <SimpleDeleteModal
-          open={deleteModalOpen}
-          onClose={() => setDeleteModalOpen(false)}
-          onConfirm={handleConfirmDelete}
-          isLoading={isDeleting}
+        <CardComponent
+          title="Các đơn hàng đã hoàn thành"
+          value={filteredOrders.length}
+          icon={<IconCircleCheck size={24} />}
         />
       </Box>
+      <Flex justify="space-between" align="center" mt="md" mb="xl">
+        <TextInput
+          placeholder="Tìm kiếm đơn hàng"
+          value={search}
+          onChange={(e) => setSearch(e.currentTarget.value)}
+          leftSection={<IconSearch size={16} />}
+          style={{ width: 300 }}
+        />
+        <Button
+          leftSection={<IconPlus size={18} />}
+          onClick={() => setOpenCreateModal(true)}
+        >
+          Tạo đơn hàng mới
+        </Button>
+        {/* <Button onClick={() => setDeleteModalOpen(true)}>
+            Test Open Delete Modal
+          </Button> */}
+      </Flex>
+
+      {loading ? (
+        <Box py="xl">Đang tải dữ liệu...</Box>
+      ) : error ? (
+        <Box py="xl">{error}</Box>
+      ) : filteredOrders.length === 0 ? (
+        <Box py="xl">Không tìm thấy đơn hàng nào</Box>
+      ) : (
+        <>
+          <OrderTable
+            data={filteredOrders}
+            onViewDetail={handleViewDetail}
+            onDelete={handleDeleteClick}
+          />
+
+          <Pagination
+            total={Math.ceil(filteredOrders.length / 10)}
+            value={page}
+            onChange={setPage}
+            mt="xl"
+          />
+        </>
+      )}
+
+      <NewModal
+        open={openCreateModal}
+        onClose={() => setOpenCreateModal(false)}
+        onOrderCreated={handleOrderCreated}
+      />
+      <OrderDetailModal
+        opened={detailModalOpened}
+        onClose={() => setDetailModalOpened(false)}
+        order={selectedOrder}
+        loading={detailLoading}
+      />
+      <SimpleDeleteModal
+        open={deleteModalOpen}
+        onClose={() => setDeleteModalOpen(false)}
+        onConfirm={handleConfirmDelete}
+        isLoading={isDeleting}
+      />
     </Container>
   );
 }

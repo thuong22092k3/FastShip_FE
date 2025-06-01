@@ -61,3 +61,9 @@ export const DELETE_MAINTENANCE = createAction<{ baoTriId: string }>(
 );
 export const UPDATE_MAINTENANCE =
   createAction<TMaintenance>("UPDATE_MAINTENANCE");
+
+export const ADD_LOCATION = createAction<TLocation>("ADD_LOCATION");
+export const DELETE_LOCATION = createAction<{ DiaDiemId: string }>(
+  "DELETE_LOCATION"
+);
+export const UPDATE_LOCATION = createAction<TLocation>("UPDATE_LOCATION");

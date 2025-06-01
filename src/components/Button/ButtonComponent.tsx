@@ -66,6 +66,7 @@ const ButtonComponent = ({
             : "center",
         gap: "0.5rem",
         width: fullWidth ? "100%" : width,
+        minHeight: 48,
         ...style,
       }}
       {...props}

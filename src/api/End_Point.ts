@@ -15,6 +15,10 @@ export const ENDPOINTS = {
     DETAIL: (id: string) => `${BASE_URL}/api/order/getOrderDetail/?id=${id}`,
     UPDATE: (id: string) => `${BASE_URL}/api/order/updateOrder?id=${id}`,
     DELETE: (id: string) => `${BASE_URL}/api/order/deleteOrder?id=${id}`,
+    LOCATIONS: {
+      LIST: `${BASE_URL}/api/locations`,
+      OPTIMIZE: `${BASE_URL}/api/optimize/route`,
+    },
   },
   USERS: {
     LIST: `${BASE_URL}/api/auth/users`,
@@ -35,5 +39,15 @@ export const ENDPOINTS = {
       `${BASE_URL}/api/vehicle/deleteVehicle?PhuongTienId=${PhuongTienId}`,
     UPDATE: `${BASE_URL}/api/vehicle/updateVehicle`,
   },
-  // Thêm các nhóm khác nếu cần
+
+  LOCATIONS: {
+    CREATE: `${BASE_URL}/api/location/create`,
+    LIST: `${BASE_URL}/api/location/all`,
+    SEARCH: `${BASE_URL}/api/location/search`,
+    DETAIL: (DiaDiemId: string) => `${BASE_URL}/api/location/get/:${DiaDiemId}`,
+    DELETE: (DiaDiemId: string) =>
+      `${BASE_URL}/api/location/delete/${DiaDiemId}`,
+    UPDATE: (DiaDiemId: string) =>
+      `${BASE_URL}/api/location/update/${DiaDiemId}`,
+  },
 };

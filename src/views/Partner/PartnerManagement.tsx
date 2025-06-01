@@ -12,6 +12,7 @@ import {
   LoadingOverlay,
   Select,
   Badge,
+  Box,
 } from "@mantine/core";
 import "@mantine/core/styles.css";
 import { IconEdit, IconTrash, IconPlus } from "@tabler/icons-react";
@@ -163,7 +164,7 @@ const PartnerManagementScreen = () => {
   };
   console.log("Addmodal:", addModalOpen);
   return (
-    <Container size="xl" py="xl">
+    <Box style={{ padding: 0, margin: 0 }}>
       <Group justify="space-between" mb="xl">
         <Title order={2}>Quản lý Đối tác</Title>
         <Button
@@ -225,7 +226,7 @@ const PartnerManagementScreen = () => {
           isLoading={isDeleting}
         />
       )}
-    </Container>
+    </Box>
   );
 };
 

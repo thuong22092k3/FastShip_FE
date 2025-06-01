@@ -18,13 +18,12 @@ const CardComponent = ({
     <Card
       shadow="sm"
       radius="lg"
-      p="xl"
+      // p="xl"
       style={{
         width: "240px",
         border: "1px solid #eaeaea",
         backgroundColor: "#ffffff",
         borderRadius: "16px",
-        padding: "15px",
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",

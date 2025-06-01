@@ -116,4 +116,20 @@ export const orderService = {
       throw new Error(`Failed to fetch order details`);
     }
   },
+
+  optimizeRoute: async (order: Order) => {
+    try {
+      const response = await fetch(ENDPOINTS.ORDERS.LOCATIONS.OPTIMIZE, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ order }),
+      });
+      return await response.json();
+    } catch (error) {
+      console.error("Error optimizing route:", error);
+      throw error;
+    }
+  },
 };
