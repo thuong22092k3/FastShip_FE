@@ -11,7 +11,9 @@ export const ENDPOINTS = {
   },
   ORDERS: {
     CREATE: `${BASE_URL}/api/order/createOrder`,
-    LIST: `${BASE_URL}/api/order/getOrder`,
+    // LIST: `${BASE_URL}/api/order/getOrder`,
+    LIST: (page: number = 1, limit: number = 10) =>
+      `${BASE_URL}/api/order/getOrder?page=${page}&limit=${limit}`,
     DETAIL: (id: string) => `${BASE_URL}/api/order/getOrderDetail/?id=${id}`,
     UPDATE: (id: string) => `${BASE_URL}/api/order/updateOrder?id=${id}`,
     DELETE: (id: string) => `${BASE_URL}/api/order/deleteOrder?id=${id}`,
@@ -19,6 +21,7 @@ export const ENDPOINTS = {
       LIST: `${BASE_URL}/api/locations`,
       OPTIMIZE: `${BASE_URL}/api/optimize/route`,
     },
+    SEARCH: `${BASE_URL}/api/order/search`,
   },
   USERS: {
     LIST: `${BASE_URL}/api/auth/users`,

@@ -3,6 +3,7 @@ import { ENDPOINTS } from "../End_Point";
 import { Order } from "../type/OrderType";
 import { store } from "../../state_management/store/store";
 import { UPDATE_ORDER } from "../../state_management/actions/actions";
+import { PagedResponse } from "../type/BaseReponse";
 
 export const orderService = {
   // const dispatch = useDispatch();
@@ -74,9 +75,16 @@ export const orderService = {
   //     : await axios.get(ENDPOINTS.ORDERS.LIST);
   //   return response.data;
   // },
-  getOrder: async (): Promise<{ orders: Order[] }> => {
-    const response = await axios.get(ENDPOINTS.ORDERS.LIST);
-    return response.data || { orders: [] };
+  // getOrder: async (): Promise<{ orders: Order[] }> => {
+  //   const response = await axios.get(ENDPOINTS.ORDERS.LIST);
+  //   return response.data || { orders: [] };
+  // },
+  getOrder: async (
+    page: number = 1,
+    limit: number = 10
+  ): Promise<PagedResponse<Order>> => {
+    const response = await axios.get(ENDPOINTS.ORDERS.LIST(page, limit));
+    return response.data;
   },
 
   // getDetailOrder: async (donHangId: string): Promise<Order> => {
@@ -131,5 +139,20 @@ export const orderService = {
       console.error("Error optimizing route:", error);
       throw error;
     }
+  },
+
+  searchOrders: async (
+    keyword: string,
+    page: number = 1,
+    limit: number = 10
+  ): Promise<PagedResponse<Order>> => {
+    const response = await axios.get(ENDPOINTS.ORDERS.SEARCH, {
+      params: {
+        keyword,
+        page,
+        limit,
+      },
+    });
+    return response.data;
   },
 };

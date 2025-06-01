@@ -8,6 +8,7 @@ import {
   TextInput,
   Title,
   Pagination,
+  ActionIcon,
 } from "@mantine/core";
 import {
   IconSearch,
@@ -37,17 +38,48 @@ export default function OrderManagementScreen() {
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(true);
   // const [orders, setOrders] = useState<Order[]>([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
+  const [totalOrders, setTotalOrders] = useState(0);
   const [error, setError] = useState("");
   const [refreshKey, setRefreshKey] = useState(0);
   const [openCreateModal, setOpenCreateModal] = useState(false);
   const dispatch = useDispatch();
   const orders = useSelector((state: RootState) => state.orderSlice);
-  const fetchOrders = async () => {
+  // const fetchOrders = async () => {
+  //   try {
+  //     setLoading(true);
+  //     const response = await orderService.getOrder();
+  //     if (response && Array.isArray(response.orders)) {
+  //       dispatch(uploadOrders(response.orders));
+  //     } else {
+  //       dispatch(uploadOrders([]));
+  //     }
+  //   } catch (err) {
+  //     setError("Không thể tải dữ liệu đơn hàng");
+  //     dispatch(uploadOrders([]));
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   fetchOrders();
+  // }, [refreshKey]);
+  const fetchOrders = async (page: number = 1, limit: number = 10) => {
     try {
       setLoading(true);
-      const response = await orderService.getOrder();
-      if (response && Array.isArray(response.orders)) {
-        dispatch(uploadOrders(response.orders));
+      let response;
+
+      if (search) {
+        response = await orderService.searchOrders(search, page, limit);
+      } else {
+        response = await orderService.getOrder(page, limit);
+      }
+
+      if (response && Array.isArray(response.data)) {
+        dispatch(uploadOrders(response.data));
+        setTotalOrders(response.total || 0);
       } else {
         dispatch(uploadOrders([]));
       }
@@ -58,17 +90,13 @@ export default function OrderManagementScreen() {
       setLoading(false);
     }
   };
-
+  const handleSearch = useCallback(() => {
+    setCurrentPage(1);
+    setRefreshKey((prev) => prev + 1);
+  }, []);
   useEffect(() => {
-    fetchOrders();
-  }, [refreshKey]);
-
-  const filteredOrders = orders.filter(
-    (order) =>
-      (order.NguoiNhan?.toLowerCase() ?? "").includes(search.toLowerCase()) ||
-      (order.SDT ?? "").includes(search)
-  );
-
+    fetchOrders(currentPage, itemsPerPage);
+  }, [refreshKey, currentPage, itemsPerPage, search]);
   const handleOrderCreated = () => {
     setRefreshKey((prev) => prev + 1);
     setOpenCreateModal(false);
@@ -76,6 +104,10 @@ export default function OrderManagementScreen() {
   const [detailModalOpened, setDetailModalOpened] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
   const [detailLoading, setDetailLoading] = useState(false);
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [orderToDelete, setOrderToDelete] = useState<string | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
+
   const handleViewDetail = async (order: Order) => {
     try {
       setDetailLoading(true);
@@ -88,9 +120,6 @@ export default function OrderManagementScreen() {
       setDetailLoading(false);
     }
   };
-  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
-  const [orderToDelete, setOrderToDelete] = useState<string | null>(null);
-  const [isDeleting, setIsDeleting] = useState(false);
 
   const handleDeleteClick = (donHangId: string) => {
     setOrderToDelete(donHangId);
@@ -124,16 +153,19 @@ export default function OrderManagementScreen() {
       setIsDeleting(false);
     }
   };
-  console.log("Delete modal state:", deleteModalOpen);
-  console.log("Order to delete:", orderToDelete);
 
+  // console.log("filteredOrders:", filteredOrders);
+
+  // const paginatedOrders = filteredOrders.slice(
+  //   (currentPage - 1) * itemsPerPage,
+  //   currentPage * itemsPerPage
+  // );
   // const [orderToDelete, setOrderToDelete] = useState<string | null>(null);
 
   // const handleDeleteClick = (donHangId: string) => {
   //   setOrderToDelete(donHangId);
   //   setDeleteModalOpen(true);
   // };
-  // Trong DeleteConfirmationModal
 
   return (
     <Box style={{ padding: 0, margin: 0 }}>
@@ -152,12 +184,12 @@ export default function OrderManagementScreen() {
         />
         <CardComponent
           title="Các đơn hàng đang hoạt động"
-          value={filteredOrders.length}
+          value={orders.length}
           icon={<IconFolderCheck size={24} />}
         />
         <CardComponent
           title="Các đơn hàng đã hoàn thành"
-          value={filteredOrders.length}
+          value={orders.length}
           icon={<IconCircleCheck size={24} />}
         />
       </Box>
@@ -166,7 +198,13 @@ export default function OrderManagementScreen() {
           placeholder="Tìm kiếm đơn hàng"
           value={search}
           onChange={(e) => setSearch(e.currentTarget.value)}
+          onKeyDown={(e) => e.key === "Enter" && handleSearch()}
           leftSection={<IconSearch size={16} />}
+          rightSection={
+            <ActionIcon onClick={handleSearch}>
+              <IconSearch size={16} />
+            </ActionIcon>
+          }
           style={{ width: 300 }}
         />
         <Button
@@ -180,28 +218,19 @@ export default function OrderManagementScreen() {
           </Button> */}
       </Flex>
 
-      {loading ? (
-        <Box py="xl">Đang tải dữ liệu...</Box>
-      ) : error ? (
-        <Box py="xl">{error}</Box>
-      ) : filteredOrders.length === 0 ? (
-        <Box py="xl">Không tìm thấy đơn hàng nào</Box>
-      ) : (
-        <>
-          <OrderTable
-            data={filteredOrders}
-            onViewDetail={handleViewDetail}
-            onDelete={handleDeleteClick}
-          />
-
-          <Pagination
-            total={Math.ceil(filteredOrders.length / 10)}
-            value={page}
-            onChange={setPage}
-            mt="xl"
-          />
-        </>
-      )}
+      <OrderTable
+        data={orders}
+        onViewDetail={handleViewDetail}
+        onDelete={handleDeleteClick}
+        page={currentPage}
+        onPageChange={setCurrentPage}
+        total={totalOrders}
+        limit={itemsPerPage}
+        onLimitChange={(newLimit) => {
+          setItemsPerPage(newLimit);
+          setCurrentPage(1);
+        }}
+      />
 
       <NewModal
         open={openCreateModal}

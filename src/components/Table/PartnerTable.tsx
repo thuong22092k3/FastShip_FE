@@ -198,7 +198,7 @@ export const PartnerTable: React.FC<Props> = ({
         position: "relative",
       }}
     >
-      <LoadingOverlay visible={loading} />
+      {/* <LoadingOverlay visible={loading} /> */}
       <Table
         striped
         highlightOnHover
@@ -208,81 +208,6 @@ export const PartnerTable: React.FC<Props> = ({
           borderCollapse: "collapse",
         }}
       >
-        {/* <Table.Thead>
-          <Table.Tr style={{ borderBottom: "1px solid #ccc" }}>
-            <Table.Th
-              style={{ ...headerStyle, minWidth: columnWidths.checkbox }}
-            >
-              <CheckboxComponent
-                isChecked={isChecked}
-                setIsChecked={setIsChecked}
-              />
-            </Table.Th>
-            <Table.Th
-              style={{ ...headerStyle, minWidth: columnWidths.DoiTacId }}
-            >
-              ID Đối tác
-            </Table.Th>
-            <Table.Th
-              style={{
-                ...headerStyle,
-                minWidth: columnWidths.TenDoiTac,
-                cursor: "pointer",
-              }}
-              onClick={() => handleSort("TenDoiTac")}
-            >
-              Tên đối tác{" "}
-              {sortBy === "TenDoiTac" &&
-                (sortDirection === "asc" ? (
-                  <IconCaretUpFilled size={14} />
-                ) : (
-                  <IconCaretDownFilled size={14} />
-                ))}
-            </Table.Th>
-            <Table.Th
-              style={{ ...headerStyle, minWidth: columnWidths.KieuDoiTac }}
-            >
-              Loại đối tác
-            </Table.Th>
-            <Table.Th
-              style={{ ...headerStyle, minWidth: columnWidths.NguoiLienLac }}
-            >
-              Người liên lạc
-            </Table.Th>
-            <Table.Th style={{ ...headerStyle, minWidth: columnWidths.SDT }}>
-              SĐT
-            </Table.Th>
-            <Table.Th style={{ ...headerStyle, minWidth: columnWidths.Email }}>
-              Email
-            </Table.Th>
-            <Table.Th style={{ ...headerStyle, minWidth: columnWidths.DiaChi }}>
-              Địa chỉ
-            </Table.Th>
-            <Table.Th
-              style={{ ...headerStyle, minWidth: columnWidths.SoGiayPhep }}
-            >
-              Số giấy phép
-            </Table.Th>
-            <Table.Th
-              style={{ ...headerStyle, minWidth: columnWidths.SucChua }}
-            >
-              Sức chứa
-            </Table.Th>
-            <Table.Th
-              style={{
-                ...headerStyle,
-                minWidth: columnWidths.KhuVucHoatDong,
-              }}
-            >
-              Khu vực hoạt động
-            </Table.Th>
-            <Table.Th
-              style={{ ...headerStyle, minWidth: columnWidths.actions }}
-            >
-              Thao tác
-            </Table.Th>
-          </Table.Tr>
-        </Table.Thead> */}
         <Table.Th style={{ ...headerStyle, minWidth: columnWidths.checkbox }}>
           <CheckboxComponent
             isChecked={isChecked}
@@ -322,7 +247,7 @@ export const PartnerTable: React.FC<Props> = ({
             )}
           </Table.Th>
         ))}
-        
+
         <Table.Th style={{ ...headerStyle, minWidth: columnWidths.actions }}>
           Thao tác
         </Table.Th>
