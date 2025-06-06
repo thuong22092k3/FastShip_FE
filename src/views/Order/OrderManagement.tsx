@@ -1,37 +1,25 @@
+import { ActionIcon, Box, Button, Flex, TextInput, Title } from "@mantine/core";
+import "@mantine/core/styles.css";
+import { showNotification } from "@mantine/notifications";
 import {
-  Box,
-  Button,
-  Card,
-  Container,
-  Flex,
-  Group,
-  TextInput,
-  Title,
-  Pagination,
-  ActionIcon,
-} from "@mantine/core";
-import {
-  IconSearch,
-  IconPlus,
   IconArchive,
   IconCircleCheck,
   IconFolderCheck,
+  IconPlus,
+  IconSearch,
 } from "@tabler/icons-react";
-import "@mantine/core/styles.css";
 import { useCallback, useEffect, useState } from "react";
-import { OrderTable } from "../../components/Table/OrderTable";
+import { useDispatch, useSelector } from "react-redux";
+import { orderService } from "../../api/service/OrderService";
 import { Order } from "../../api/type/OrderType";
 import CardComponent from "../../components/Card/CardComponent";
-import NewModal from "./NewModal";
-import { orderService } from "../../api/service/OrderService";
-import { OrderDetailModal } from "./OrderDtail";
-import { DeleteConfirmationModal } from "./DeleteConfirmationModal";
-import { showNotification } from "@mantine/notifications";
-import { SimpleDeleteModal } from "./SimpleModalDelete";
-import { useDispatch, useSelector } from "react-redux";
+import { OrderTable } from "../../components/Table/OrderTable";
+import { DELETE_ORDER } from "../../state_management/actions/actions";
 import { RootState } from "../../state_management/reducers/rootReducer";
 import { uploadOrders } from "../../state_management/slices/orderSlice";
-import { DELETE_ORDER } from "../../state_management/actions/actions";
+import NewModal from "./components/NewModal";
+import { OrderDetailModal } from "./components/OrderDtail";
+import { SimpleDeleteModal } from "./components/SimpleModalDelete";
 
 export default function OrderManagementScreen() {
   const [search, setSearch] = useState("");
