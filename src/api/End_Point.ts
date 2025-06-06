@@ -8,6 +8,7 @@ export const ENDPOINTS = {
     LOGOUT: `${BASE_URL}/api/auth/logout`,
     PROFILE: `${BASE_URL}/api/auth/profile`,
     DELETE: `${BASE_URL}/api/auth/deleteUser`,
+    SEARCH: `${BASE_URL}/api/auth/search`,
   },
   ORDERS: {
     CREATE: `${BASE_URL}/api/order/createOrder`,
@@ -30,6 +31,7 @@ export const ENDPOINTS = {
   PARTNERS: {
     LIST: `${BASE_URL}/api/partner/getAllPartner`,
     DETAIL: `${BASE_URL}/api/partner`,
+    SEARCH: `${BASE_URL}/api/partner/search`,
   },
 
   VEHICLES: {
@@ -41,6 +43,7 @@ export const ENDPOINTS = {
     DELETE: (PhuongTienId: string) =>
       `${BASE_URL}/api/vehicle/deleteVehicle?PhuongTienId=${PhuongTienId}`,
     UPDATE: `${BASE_URL}/api/vehicle/updateVehicle`,
+    SEARCH: `${BASE_URL}/api/vehicle/seachVehicle`,
   },
 
   LOCATIONS: {

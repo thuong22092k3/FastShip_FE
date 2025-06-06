@@ -1,4 +1,5 @@
 import {
+  ActionIcon,
   Box,
   Button,
   Container,
@@ -38,6 +39,9 @@ export default function DriverScreen() {
   const [openUpdateModal, setOpenUpdateModal] = useState(false);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
 
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
+  const [totalDrivers, setTotalDrivers] = useState(0);
   // const fetchDrivers = async () => {
   //   try {
   //     setLoading(true);
@@ -55,25 +59,56 @@ export default function DriverScreen() {
   //   }
   // };
 
-  const fetchDrivers = async () => {
+  // const fetchDrivers = async () => {
+  //   try {
+  //     setLoading(true);
+  //     console.log("Fetching drivers..."); // Debug log
+  //     const response = await employeeService.getAllDrivers();
+  //     console.log("Drivers data:", response); // Debug log
+  //     dispatch(uploadDrivers(response));
+  //   } catch (err) {
+  //     console.error("Error in fetchDrivers:", err); // Detailed error log
+  //     setError("Không thể tải dữ liệu tài xế");
+  //     dispatch(uploadDrivers([]));
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+  const fetchDrivers = async (page: number = 1, limit: number = 10) => {
     try {
       setLoading(true);
-      console.log("Fetching drivers..."); // Debug log
-      const response = await employeeService.getAllDrivers();
-      console.log("Drivers data:", response); // Debug log
-      dispatch(uploadDrivers(response));
+      let response;
+
+      if (search) {
+        response = await employeeService.searchUsers(search, page, limit);
+      } else {
+        response = await employeeService.getAllDrivers(page, limit);
+      }
+      console.log("response total", response.total);
+      if (response && Array.isArray(response)) {
+        dispatch(uploadDrivers(response));
+        setTotalDrivers(response.total || 0);
+      } else {
+        dispatch(uploadDrivers([]));
+      }
     } catch (err) {
-      console.error("Error in fetchDrivers:", err); // Detailed error log
-      setError("Không thể tải dữ liệu tài xế");
+      setError("Không thể tải dữ liệu đơn hàng");
       dispatch(uploadDrivers([]));
     } finally {
       setLoading(false);
     }
   };
+  const handleSearch = useCallback(() => {
+    setCurrentPage(1);
+    setRefreshKey((prev) => prev + 1);
+  }, []);
   useEffect(() => {
-    fetchDrivers();
-  }, [refreshKey]);
-
+    fetchDrivers(currentPage, itemsPerPage);
+  }, [refreshKey, currentPage, itemsPerPage, search]);
+  const handleOrderCreated = () => {
+    setRefreshKey((prev) => prev + 1);
+    setOpenCreateModal(false);
+  };
   const filteredDrivers = drivers.filter(
     (d) =>
       d.HoTen.toLowerCase().includes(search.toLowerCase()) ||
@@ -81,7 +116,7 @@ export default function DriverScreen() {
       d.UserName.toLowerCase().includes(search.toLowerCase())
   );
 
-  const taiXeList: TaiXe[] = filteredDrivers.map((emp) => ({
+  const taiXeList: TaiXe[] = drivers.map((emp) => ({
     TaiXeID: emp.TaiXeID,
     HoTen: emp.HoTen,
     UserName: emp.UserName,
@@ -131,7 +166,8 @@ export default function DriverScreen() {
       setSelectedDriver(null);
     }
   };
-
+  console.log("drivers", drivers);
+  console.log("taiXeList", taiXeList);
   return (
     <Container size="xl" p="md">
       <Flex justify="space-between" align="center" mb="md">
@@ -146,22 +182,40 @@ export default function DriverScreen() {
 
       <Group mb="md">
         <TextInput
-          placeholder="Tìm theo tên, email hoặc tài khoản"
-          leftSection={<IconSearch size={16} />}
+          placeholder="Tìm kiếm đơn hàng"
           value={search}
           onChange={(e) => setSearch(e.currentTarget.value)}
+          onKeyDown={(e) => e.key === "Enter" && handleSearch()}
+          leftSection={<IconSearch size={16} />}
+          rightSection={
+            <ActionIcon onClick={handleSearch}>
+              <IconSearch size={16} />
+            </ActionIcon>
+          }
+          style={{ width: 300 }}
         />
       </Group>
 
       <TaiXeTable
+        // data={taiXeList}
+        // loading={loading}
+        // error={error}
+        // onEdit={handleUpdate}
+        // onDelete={(id) => handleDelete(id)}
         data={taiXeList}
-        loading={loading}
-        error={error}
         onEdit={handleUpdate}
         onDelete={(id) => handleDelete(id)}
+        page={currentPage}
+        onPageChange={setCurrentPage}
+        total={totalDrivers}
+        limit={itemsPerPage}
+        onLimitChange={(newLimit) => {
+          setItemsPerPage(newLimit);
+          setCurrentPage(1);
+        }}
       />
 
-      <Pagination total={1} value={page} onChange={setPage} mt="md" />
+      {/* <Pagination total={1} value={page} onChange={setPage} mt="md" /> */}
 
       <AddEmployeeModal
         open={openCreateModal}

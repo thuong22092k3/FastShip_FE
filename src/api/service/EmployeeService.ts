@@ -1,6 +1,7 @@
 import axios from "axios";
 import { ENDPOINTS } from "../End_Point";
 import { Admin, NhanVien, TaiXe, User, UserRole } from "../type/EmployeeType";
+import { PagedResponse } from "../type/BaseReponse";
 
 export type CreateUserInput =
   | (Omit<Admin, "AdminID"> & { role: "Admin" })
@@ -124,9 +125,14 @@ export const employeeService = {
   //   return employeeService.getUsersByRole<TaiXe>("TaiXe");
   // },
   // In your EmployeeService.ts
-  getAllDrivers: async (): Promise<TaiXe[]> => {
+  getAllDrivers: async (
+    page: number = 1,
+    limit: number = 10
+  ): Promise<PagedResponse<TaiXe[]>> => {
     try {
-      const response = await axios.get(`${ENDPOINTS.USERS.LIST}?role=TaiXe`);
+      const response = await axios.get(
+        `${ENDPOINTS.USERS.LIST}?role=TaiXe&page=${page}&limit=${limit}`
+      );
       // console.log("API Response:", response);
       return response.data.users.map((user: any) => ({
         TaiXeID: user.TaiXeID,
@@ -178,5 +184,19 @@ export const employeeService = {
       console.error("Error fetching drivers:", error);
       throw error;
     }
+  },
+  searchUsers: async (
+    keyword: string,
+    page: number = 1,
+    limit: number = 10
+  ): Promise<PagedResponse<User>> => {
+    const response = await axios.get(ENDPOINTS.AUTH.SEARCH, {
+      params: {
+        keyword,
+        page,
+        limit,
+      },
+    });
+    return response.data;
   },
 };

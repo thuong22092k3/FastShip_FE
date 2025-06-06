@@ -1,5 +1,5 @@
 export enum PageSize {
-  TEN = 10,
+  TEN = 1,
   TWENTY = 20,
   FIFTY = 50,
   HUNDRED = 100,

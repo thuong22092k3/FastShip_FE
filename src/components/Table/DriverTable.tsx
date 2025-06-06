@@ -7,6 +7,10 @@ import {
   Group,
   ActionIcon,
   Select,
+  Pagination,
+  Menu,
+  Text,
+  Button,
 } from "@mantine/core";
 import {
   IconCaretDownFilled,
@@ -14,11 +18,13 @@ import {
   IconEdit,
   IconTrash,
   IconUserCheck,
+  IconColumns,
 } from "@tabler/icons-react";
 import { showNotification } from "@mantine/notifications";
 import { TaiXe } from "../../api/type/EmployeeType";
 import "@mantine/core/styles.css";
 import CheckboxComponent from "../CheckBox/CheckBoxComponent";
+import { PageSize, PAGE_SIZE_OPTIONS } from "../../utils/constants/enum";
 
 type Props = {
   data: TaiXe[];
@@ -26,6 +32,11 @@ type Props = {
   error?: string;
   onDelete: (UserName: string) => void;
   onEdit: (taiXe: TaiXe) => void;
+  page?: number;
+  onPageChange?: (page: number) => void;
+  onLimitChange?: (limit: number) => void;
+  total?: number;
+  limit?: number;
 };
 
 const columnWidths: { [key: string]: string } = {
@@ -38,6 +49,16 @@ const columnWidths: { [key: string]: string } = {
   congViec: "150px",
   hanhDong: "120px",
 };
+
+// Define all possible columns
+const allColumns = [
+  { key: "TaiXeID", label: "ID Tài xế", visible: true },
+  { key: "HoTen", label: "Họ tên", visible: true },
+  { key: "UserName", label: "Tài khoản", visible: true },
+  { key: "Email", label: "Email", visible: true },
+  { key: "HieuSuat", label: "Hiệu suất", visible: true },
+  { key: "CongViec", label: "Tình trạng", visible: true },
+];
 
 const getPerformanceColor = (hieuSuat: number) => {
   if (hieuSuat >= 80) return "green";
@@ -64,17 +85,24 @@ export const TaiXeTable: React.FC<Props> = ({
   error,
   onDelete,
   onEdit,
+  page = 1,
+  onPageChange,
+  total = 0,
+  limit = 10,
+  onLimitChange,
 }) => {
   const [selectedRows, setSelectedRows] = useState<string[]>([]);
   const [isChecked, setIsChecked] = useState(false);
   const [sortBy, setSortBy] = useState<keyof TaiXe | null>(null);
   const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc");
+  const [columns, setColumns] = useState(allColumns);
 
   const handleRowSelect = (id: string, checked: boolean) => {
     setSelectedRows((prev) =>
       checked ? [...prev, id] : prev.filter((rowId) => rowId !== id)
     );
   };
+
   const handleSort = (column: keyof TaiXe) => {
     if (sortBy === column) {
       setSortDirection(sortDirection === "asc" ? "desc" : "asc");
@@ -82,6 +110,26 @@ export const TaiXeTable: React.FC<Props> = ({
       setSortBy(column);
       setSortDirection("asc");
     }
+  };
+
+  const toggleColumnVisibility = (key: string) => {
+    setColumns((prev) =>
+      prev.map((col) =>
+        col.key === key ? { ...col, visible: !col.visible } : col
+      )
+    );
+  };
+
+  const resetColumns = () => {
+    setColumns(allColumns.map((col) => ({ ...col, visible: true })));
+  };
+
+  const handleCheckboxChange = (
+    key: string,
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    event.stopPropagation();
+    toggleColumnVisibility(key);
   };
 
   const allSelected = data.length > 0 && selectedRows.length === data.length;
@@ -115,7 +163,6 @@ export const TaiXeTable: React.FC<Props> = ({
       ? String(aValue).localeCompare(String(bValue))
       : String(bValue).localeCompare(String(aValue));
   });
-
   const rows = sortedData.map((taiXe) => {
     const isSelected = selectedRows.includes(taiXe.TaiXeID);
     const jobStatus = getJobStatus(taiXe.CongViec);
@@ -133,18 +180,30 @@ export const TaiXeTable: React.FC<Props> = ({
             }
           />
         </Table.Td>
-        <Table.Td style={cellStyle}>{taiXe.TaiXeID}</Table.Td>
-        <Table.Td style={cellStyle}>{taiXe.HoTen}</Table.Td>
-        <Table.Td style={cellStyle}>{taiXe.UserName}</Table.Td>
-        <Table.Td style={cellStyle}>{taiXe.Email}</Table.Td>
-        <Table.Td style={cellStyle}>
-          <Badge color={getPerformanceColor(taiXe.HieuSuat)}>
-            {taiXe.HieuSuat}%
-          </Badge>
-        </Table.Td>
-        <Table.Td style={cellStyle}>
-          <Badge color={jobStatus.color}>{jobStatus.label}</Badge>
-        </Table.Td>
+        {columns.find((c) => c.key === "TaiXeID")?.visible && (
+          <Table.Td style={cellStyle}>{taiXe.TaiXeID}</Table.Td>
+        )}
+        {columns.find((c) => c.key === "HoTen")?.visible && (
+          <Table.Td style={cellStyle}>{taiXe.HoTen}</Table.Td>
+        )}
+        {columns.find((c) => c.key === "UserName")?.visible && (
+          <Table.Td style={cellStyle}>{taiXe.UserName}</Table.Td>
+        )}
+        {columns.find((c) => c.key === "Email")?.visible && (
+          <Table.Td style={cellStyle}>{taiXe.Email}</Table.Td>
+        )}
+        {columns.find((c) => c.key === "HieuSuat")?.visible && (
+          <Table.Td style={cellStyle}>
+            <Badge color={getPerformanceColor(taiXe.HieuSuat)}>
+              {taiXe.HieuSuat}%
+            </Badge>
+          </Table.Td>
+        )}
+        {columns.find((c) => c.key === "CongViec")?.visible && (
+          <Table.Td style={cellStyle}>
+            <Badge color={jobStatus.color}>{jobStatus.label}</Badge>
+          </Table.Td>
+        )}
         <Table.Td style={cellStyle}>
           <Group gap="xs">
             <ActionIcon
@@ -171,97 +230,136 @@ export const TaiXeTable: React.FC<Props> = ({
   });
 
   return (
-    <ScrollArea
-      type="scroll"
-      scrollbars="x"
-      offsetScrollbars
-      style={{
-        width: "100%",
-        maxWidth: "80vw",
-        position: "relative",
-      }}
-    >
-      <Table
-        striped
-        highlightOnHover
-        withTableBorder
+    <>
+      <Group justify="space-between" mb="md">
+        <Group>
+          <Menu
+            position="bottom-start"
+            shadow="md"
+            width={200}
+            closeOnItemClick={false}
+          >
+            <Menu.Target>
+              <Button
+                leftSection={<IconColumns size={16} />}
+                variant="outline"
+                size="xs"
+              >
+                Columns
+              </Button>
+            </Menu.Target>
+
+            <Menu.Dropdown>
+              <Menu.Label>
+                <Group justify="space-between">
+                  <Text size="sm">Select columns</Text>
+                  <Button
+                    variant="subtle"
+                    size="xs"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      resetColumns();
+                    }}
+                  >
+                    Reset
+                  </Button>
+                </Group>
+              </Menu.Label>
+              {columns.map((column) => (
+                <Menu.Item key={column.key} onClick={(e) => e.preventDefault()}>
+                  <Checkbox
+                    label={column.label}
+                    checked={column.visible}
+                    onChange={(e) => handleCheckboxChange(column.key, e)}
+                    onClick={(e) => e.stopPropagation()}
+                  />
+                </Menu.Item>
+              ))}
+            </Menu.Dropdown>
+          </Menu>
+        </Group>
+        <Select
+          value={limit?.toString()}
+          onChange={(value) => onLimitChange?.(Number(value))}
+          data={PAGE_SIZE_OPTIONS}
+          style={{ width: 200 }}
+          defaultValue={PageSize.TEN.toString()}
+        />
+      </Group>
+
+      <ScrollArea
+        type="scroll"
+        scrollbars="x"
+        offsetScrollbars
         style={{
-          border: "1px solid #ccc",
-          borderCollapse: "collapse",
+          width: "100%",
+          maxWidth: "80vw",
+          position: "relative",
         }}
       >
-        {/* <Table.Thead>
-          <Table.Tr>
-            <Table.Th style={{ ...headerStyle, width: columnWidths.checkbox }}>
-              <Checkbox
-                checked={allSelected}
-                indeterminate={someSelected}
-                onChange={() => handleRowSelect("", !allSelected)}
-              />
-            </Table.Th>
-            <Table.Th style={{ ...headerStyle, width: columnWidths.TaiXeID }}>
-              ID Tài xế
-            </Table.Th>
-            <Table.Th style={{ ...headerStyle, width: columnWidths.hoTen }}>
-              Họ tên
-            </Table.Th>
-            <Table.Th style={{ ...headerStyle, width: columnWidths.userName }}>
-              Tài khoản
-            </Table.Th>
-            <Table.Th style={{ ...headerStyle, width: columnWidths.email }}>
-              Email
-            </Table.Th>
-            <Table.Th style={{ ...headerStyle, width: columnWidths.hieuSuat }}>
-              Hiệu suất
-            </Table.Th>
-            <Table.Th style={{ ...headerStyle, width: columnWidths.congViec }}>
-              Tình trạng
-            </Table.Th>
-            <Table.Th style={{ ...headerStyle, width: columnWidths.hanhDong }}>
-              Hành động
-            </Table.Th>
-          </Table.Tr>
-        </Table.Thead> */}
-        <Table.Th style={{ ...headerStyle, minWidth: columnWidths.checkbox }}>
-          <CheckboxComponent
-            isChecked={isChecked}
-            setIsChecked={setIsChecked}
-          />
-        </Table.Th>
-        {[
-          { key: "TaiXeID", label: "ID Tài xế" },
-          { key: "HoTen", label: "Họ tên" },
-          { key: "UserName", label: "Tài khoản" },
-          { key: "Email", label: "Email" },
-          { key: "HieuSuat", label: "Hiệu suất" },
-          { key: "CongViec", label: " Tình trạng" },
-        ].map(({ key, label }) => (
-          <Table.Th
-            key={key}
-            style={{
-              ...headerStyle,
-              minWidth: columnWidths[key],
-              cursor: "pointer",
-            }}
-            onClick={() => handleSort(key as keyof TaiXe)}
-          >
-            {label}
-            {sortBy === key ? (
-              sortDirection === "asc" ? (
-                <IconCaretUpFilled size={14} />
-              ) : (
-                <IconCaretDownFilled size={14} />
-              )
-            ) : (
-              <IconCaretUpFilled size={14} color="gray" />
-            )}
+        <Table
+          striped
+          highlightOnHover
+          withTableBorder
+          style={{
+            border: "1px solid #ccc",
+            borderCollapse: "collapse",
+          }}
+        >
+          <Table.Th style={{ ...headerStyle, minWidth: columnWidths.checkbox }}>
+            <CheckboxComponent
+              isChecked={isChecked}
+              setIsChecked={setIsChecked}
+            />
           </Table.Th>
-        ))}
-        <Table.Th style={{ ...headerStyle, minWidth: columnWidths.hanhDong }}>
-          Hành động
-        </Table.Th>
-        <Table.Tbody>{rows}</Table.Tbody>
-      </Table>
-    </ScrollArea>
+          {columns
+            .filter((column) => column.visible)
+            .map(({ key, label }) => (
+              <Table.Th
+                key={key}
+                style={{
+                  ...headerStyle,
+                  minWidth: columnWidths[key],
+                  cursor: "pointer",
+                }}
+                onClick={() => handleSort(key as keyof TaiXe)}
+              >
+                {label}
+                {sortBy === key ? (
+                  sortDirection === "asc" ? (
+                    <IconCaretUpFilled size={14} />
+                  ) : (
+                    <IconCaretDownFilled size={14} />
+                  )
+                ) : (
+                  <IconCaretUpFilled size={14} color="gray" />
+                )}
+              </Table.Th>
+            ))}
+          <Table.Th style={{ ...headerStyle, minWidth: columnWidths.hanhDong }}>
+            Hành động
+          </Table.Th>
+          <Table.Tbody>{rows}</Table.Tbody>
+        </Table>
+        <Pagination
+          total={Math.ceil(total / limit)}
+          value={page}
+          onChange={onPageChange}
+          withEdges
+          withControls
+          mt="md"
+        />
+      </ScrollArea>
+      {/* {total > 0 && (
+        <Pagination
+          total={Math.ceil(total / limit)}
+          value={page}
+          onChange={onPageChange}
+          withEdges
+          withControls
+          mt="md"
+        />
+      )} */}
+    </>
   );
 };

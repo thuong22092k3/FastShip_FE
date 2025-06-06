@@ -76,7 +76,6 @@ const columnWidths: { [key: string]: string } = {
   hanhDong: "100px",
 };
 
-// Define all possible columns
 const allColumns = [
   { key: "DonHangId", label: "ID Đơn hàng", visible: true },
   { key: "NhanVienID", label: "ID Nhân viên", visible: true },
@@ -107,12 +106,10 @@ export const OrderTable: React.FC<Props> = ({
   const [selectedRows, setSelectedRows] = useState<string[]>([]);
   const [sortBy, setSortBy] = useState<keyof Order | null>(null);
   const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc");
-  const [opened, setOpened] = useState(false);
   const [columns, setColumns] = useState(allColumns);
   const dispatch = useDispatch();
   const orders = useSelector((state: RootState) => state.orderSlice);
   const pageSizeOptions = PAGE_SIZE_OPTIONS;
-  const [itemsPerPage, setItemsPerPage] = useState(PageSize.TEN);
 
   const handleSelectAll = (checked: boolean) => {
     if (checked) {
