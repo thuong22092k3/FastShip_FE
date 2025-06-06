@@ -1,7 +1,5 @@
-import { Button, Text, Group, LoadingOverlay } from "@mantine/core";
+import { Button, Group, Text } from "@mantine/core";
 import "@mantine/core/styles.css";
-import { useState, useEffect } from "react";
-import { DELETE_ORDER } from "../../state_management/actions/actions";
 
 interface SimpleDeleteModalProps {
   open: boolean;

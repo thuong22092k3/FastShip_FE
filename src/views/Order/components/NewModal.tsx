@@ -3,19 +3,17 @@ import {
   Button,
   Grid,
   Group,
+  LoadingOverlay,
   Paper,
   Stepper,
-  TextInput,
   Text,
+  TextInput,
   Title,
-  LoadingOverlay,
 } from "@mantine/core";
 import "@mantine/core/styles.css";
 import { useState } from "react";
-import { Order } from "../../api/type/OrderType";
-import { orderService } from "../../api/service/OrderService";
 import { useDispatch } from "react-redux";
-import { ADD_ORDER } from "../../state_management/actions/actions";
+import { Order } from "../../../api/type/OrderType";
 interface NewModalProps {
   open: boolean;
   onClose: () => void;

@@ -1,20 +1,16 @@
 import {
-  Modal,
-  TextInput,
-  Select,
-  Textarea,
-  Button,
-  Group,
   Badge,
+  Button,
+  Center,
+  Group,
+  Loader,
+  Modal,
   Stack,
   Text,
   Title,
-  Center,
-  Loader,
 } from "@mantine/core";
 import "@mantine/core/styles.css";
-import { Order } from "../../api/type/OrderType";
-import { orderService } from "../../api/service/OrderService";
+import { Order } from "../../../api/type/OrderType";
 
 interface OrderDetailModalProps {
   opened: boolean;
