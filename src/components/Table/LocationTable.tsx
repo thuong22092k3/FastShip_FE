@@ -1,15 +1,6 @@
+import { ActionIcon, Box, Group, ScrollArea, Table } from "@mantine/core";
+import { IconEdit, IconEye, IconTrash } from "@tabler/icons-react";
 import React, { useState } from "react";
-import {
-  Table,
-  ScrollArea,
-  ActionIcon,
-  Text,
-  Group,
-  Checkbox,
-  Box,
-} from "@mantine/core";
-import { IconEye, IconEdit, IconTrash } from "@tabler/icons-react";
-import { showNotification } from "@mantine/notifications";
 import { Location } from "../../api/type/LocationType"; // Giả sử bạn có kiểu này
 import CheckboxComponent from "../CheckBox/CheckBoxComponent";
 

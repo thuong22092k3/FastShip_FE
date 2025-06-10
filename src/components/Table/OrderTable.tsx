@@ -1,36 +1,33 @@
-import React, { useState } from "react";
 import {
-  Table,
-  ScrollArea,
+  ActionIcon,
   Badge,
+  Button,
   Checkbox,
   Group,
-  ActionIcon,
-  Select,
-  Pagination,
-  Modal,
-  Button,
-  Stack,
   Menu,
+  Pagination,
+  ScrollArea,
+  Select,
+  Table,
 } from "@mantine/core";
 import "@mantine/core/styles.css";
-import { Order } from "../../api/type/OrderType";
-import CheckboxComponent from "../CheckBox/CheckBoxComponent";
+import { showNotification } from "@mantine/notifications";
 import {
   IconCaretDownFilled,
   IconCaretUpFilled,
+  IconColumns,
   IconEdit,
   IconEye,
   IconTrash,
-  IconFilter,
-  IconColumns,
 } from "@tabler/icons-react";
-import { orderService } from "../../api/service/OrderService";
-import { showNotification } from "@mantine/notifications";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../state_management/reducers/rootReducer";
+import { orderService } from "../../api/service/OrderService";
+import { Order } from "../../api/type/OrderType";
 import { UPDATE_ORDER } from "../../state_management/actions/actions";
-import { PageSize, PAGE_SIZE_OPTIONS } from "../../utils/constants/enum";
+import { RootState } from "../../state_management/reducers/rootReducer";
+import { PAGE_SIZE_OPTIONS, PageSize } from "../../utils/constants/enum";
+import CheckboxComponent from "../CheckBox/CheckBoxComponent";
 import TextComponent from "../Text/TextComponent";
 
 type Props = {
@@ -47,7 +44,7 @@ type Props = {
 };
 
 const getStatusColor = (status: string) => {
-  switch (status.toLowerCase()) {
+  switch (status?.toLowerCase()) {
     case "đang giao":
       return "blue";
     case "đã giao":
@@ -260,7 +257,7 @@ export const OrderTable: React.FC<Props> = ({
         )}
         {columns.find((c) => c.key === "CuocPhi")?.visible && (
           <Table.Td style={cellStyle}>
-            {order.CuocPhi.toLocaleString()}₫
+            {order?.CuocPhi?.toLocaleString()}₫
           </Table.Td>
         )}
         {columns.find((c) => c.key === "TrangThai")?.visible && (
@@ -298,12 +295,12 @@ export const OrderTable: React.FC<Props> = ({
         )}
         {columns.find((c) => c.key === "CreatedAt")?.visible && (
           <Table.Td style={cellStyle}>
-            {new Date(order.CreatedAt).toLocaleString()}
+            {new Date(order.CreatedAt)?.toLocaleString()}
           </Table.Td>
         )}
         {columns.find((c) => c.key === "UpdatedAt")?.visible && (
           <Table.Td style={cellStyle}>
-            {new Date(order.UpdatedAt).toLocaleString()}
+            {new Date(order.UpdatedAt)?.toLocaleString()}
           </Table.Td>
         )}
         {columns.find((c) => c.key === "GhiChu")?.visible && (

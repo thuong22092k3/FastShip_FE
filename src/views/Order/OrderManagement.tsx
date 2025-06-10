@@ -17,7 +17,7 @@ import { OrderTable } from "../../components/Table/OrderTable";
 import { DELETE_ORDER } from "../../state_management/actions/actions";
 import { RootState } from "../../state_management/reducers/rootReducer";
 import { uploadOrders } from "../../state_management/slices/orderSlice";
-import NewModal from "./components/NewModal";
+import NewModal from "./components/NewModal/NewModal";
 import { OrderDetailModal } from "./components/OrderDtail";
 import { SimpleDeleteModal } from "./components/SimpleModalDelete";
 
@@ -34,6 +34,8 @@ export default function OrderManagementScreen() {
   const [openCreateModal, setOpenCreateModal] = useState(false);
   const dispatch = useDispatch();
   const orders = useSelector((state: RootState) => state.orderSlice);
+  const [selectedOrders, setSelectedOrders] = useState<Order[]>([]);
+
   // const fetchOrders = async () => {
   //   try {
   //     setLoading(true);
@@ -142,19 +144,15 @@ export default function OrderManagementScreen() {
     }
   };
 
-  // console.log("filteredOrders:", filteredOrders);
+  const handleSelectOrder = (order: Order, isSelected: boolean) => {
+    setSelectedOrders((prev) =>
+      isSelected
+        ? [...prev, order]
+        : prev.filter((o) => o.DonHangId !== order.DonHangId)
+    );
+  };
 
-  // const paginatedOrders = filteredOrders.slice(
-  //   (currentPage - 1) * itemsPerPage,
-  //   currentPage * itemsPerPage
-  // );
-  // const [orderToDelete, setOrderToDelete] = useState<string | null>(null);
-
-  // const handleDeleteClick = (donHangId: string) => {
-  //   setOrderToDelete(donHangId);
-  //   setDeleteModalOpen(true);
-  // };
-
+  console.log("selectedOrder", selectedOrder);
   return (
     <Box style={{ padding: 0, margin: 0 }}>
       <Title order={2}>Quản lý đơn hàng</Title>

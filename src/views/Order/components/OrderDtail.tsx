@@ -10,7 +10,10 @@ import {
   Title,
 } from "@mantine/core";
 import "@mantine/core/styles.css";
+import { IconRoute } from "@tabler/icons-react";
+import { useState } from "react";
 import { Order } from "../../../api/type/OrderType";
+import { RouteModal } from "./RouteOptimizationModal";
 
 interface OrderDetailModalProps {
   opened: boolean;
@@ -32,19 +35,25 @@ export function OrderDetailModal({
   order,
   loading = false,
 }: OrderDetailModalProps) {
+  const [routeModalOpen, setRouteModalOpen] = useState(false);
+
   const getStatusColor = (status: string) => {
-    switch (status.toLowerCase()) {
-      case "đang giao":
-        return "blue";
+    if (!status) return "gray";
+    switch (status?.toLowerCase()) {
       case "đã giao":
         return "green";
-      case "hủy":
+      case "đang giao":
+        return "blue";
+      case "chờ xử lý":
+        return "orange";
+      case "đã hủy":
         return "red";
       default:
         return "gray";
     }
   };
-
+  console.log("Mã đơn:", order?.DonHangId);
+  console.log("Trạng thái:", order?.TrangThai);
   return (
     <Modal
       opened={opened}
@@ -63,7 +72,9 @@ export function OrderDetailModal({
               <Text size="sm" c="dimmed">
                 Mã đơn hàng
               </Text>
-              <Title order={4}>{order.DonHangId}</Title>
+              <Title order={4} style={{ color: "black" }}>
+                {order.DonHangId}
+              </Title>
             </div>
 
             <div>
@@ -79,28 +90,28 @@ export function OrderDetailModal({
               <Text size="sm" c="dimmed">
                 Nhân viên phụ trách
               </Text>
-              <Text>{order.NhanVienID}</Text>
+              <Text style={{ color: "black" }}>{order.NhanVienID}</Text>
             </div>
 
             <div>
               <Text size="sm" c="dimmed">
                 Người gửi
               </Text>
-              <Text>{order.NguoiGui}</Text>
+              <Text style={{ color: "black" }}>{order.NguoiGui}</Text>
             </div>
 
             <div>
               <Text size="sm" c="dimmed">
                 Người nhận
               </Text>
-              <Text>{order.NguoiNhan}</Text>
+              <Text style={{ color: "black" }}>{order.NguoiNhan}</Text>
             </div>
 
             <div>
               <Text size="sm" c="dimmed">
                 Số điện thoại
               </Text>
-              <Text>{order.SDT}</Text>
+              <Text style={{ color: "black" }}>{order.SDT}</Text>
             </div>
 
             <div>
@@ -121,21 +132,21 @@ export function OrderDetailModal({
               <Text size="sm" c="dimmed">
                 Cước phí
               </Text>
-              <Text>{order.CuocPhi.toLocaleString()}₫</Text>
+              <Text>{order?.CuocPhi?.toLocaleString()}₫</Text>
             </div>
 
             <div>
               <Text size="sm" c="dimmed">
                 Ngày tạo
               </Text>
-              <Text>{new Date(order.CreatedAt).toLocaleString()}</Text>
+              <Text>{new Date(order.CreatedAt)?.toLocaleString()}</Text>
             </div>
 
             <div>
               <Text size="sm" c="dimmed">
                 Ngày cập nhật
               </Text>
-              <Text>{new Date(order.UpdatedAt).toLocaleString()}</Text>
+              <Text>{new Date(order.UpdatedAt)?.toLocaleString()}</Text>
             </div>
 
             <div>
@@ -146,11 +157,22 @@ export function OrderDetailModal({
             </div>
 
             <Group justify="flex-end" mt="xl">
+              <Button
+                onClick={() => setRouteModalOpen(true)}
+                leftSection={<IconRoute size={18} />}
+              >
+                Xem tuyến đường
+              </Button>
               <Button onClick={onClose}>Đóng</Button>
             </Group>
           </Stack>
         )
       )}
+      <RouteModal
+        opened={routeModalOpen}
+        onClose={() => setRouteModalOpen(false)}
+        order={order}
+      />
     </Modal>
   );
 }

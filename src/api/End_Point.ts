@@ -15,7 +15,9 @@ export const ENDPOINTS = {
     // LIST: `${BASE_URL}/api/order/getOrder`,
     LIST: (page: number = 1, limit: number = 10) =>
       `${BASE_URL}/api/order/getOrder?page=${page}&limit=${limit}`,
-    DETAIL: (id: string) => `${BASE_URL}/api/order/getOrderDetail/?id=${id}`,
+    // DETAIL: (id: string) => `${BASE_URL}/api/order/getOrderDetail/?id=${id}`,
+    DETAIL: (donHangId: string) =>
+      `${BASE_URL}/api/order/getOrderDetail?donHangId=${donHangId}`,
     UPDATE: (id: string) => `${BASE_URL}/api/order/updateOrder?id=${id}`,
     DELETE: (id: string) => `${BASE_URL}/api/order/deleteOrder?id=${id}`,
     LOCATIONS: {
@@ -23,6 +25,8 @@ export const ENDPOINTS = {
       OPTIMIZE: `${BASE_URL}/api/optimize/route`,
     },
     SEARCH: `${BASE_URL}/api/order/search`,
+    DELIVERY_ROUTE: (donHangId: string) =>
+      `${BASE_URL}/api/optimize/delivery_route?donHangId=${donHangId}`,
   },
   USERS: {
     LIST: `${BASE_URL}/api/auth/users`,

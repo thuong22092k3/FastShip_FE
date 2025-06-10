@@ -1,29 +1,19 @@
-import {
-  Box,
-  Button,
-  Card,
-  Container,
-  Flex,
-  Group,
-  TextInput,
-  Title,
-  Pagination,
-} from "@mantine/core";
+import { Box, Button, Flex, Pagination, TextInput, Title } from "@mantine/core";
 import "@mantine/core/styles.css";
-import { IconSearch, IconPlus, IconMapPin } from "@tabler/icons-react";
-import { useCallback, useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../state_management/reducers/rootReducer";
-import { LocationService } from "../../api/service/LocationService";
-import { uploadLocations } from "../../state_management/slices/locationSlice";
-import { DELETE_LOCATION } from "../../state_management/actions/actions";
-import CardComponent from "../../components/Card/CardComponent";
 import { showNotification } from "@mantine/notifications";
+import { IconMapPin, IconPlus, IconSearch } from "@tabler/icons-react";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { LocationService } from "../../api/service/LocationService";
 import { Location } from "../../api/type/LocationType";
+import CardComponent from "../../components/Card/CardComponent";
+import LocationTable from "../../components/Table/LocationTable";
+import { DELETE_LOCATION } from "../../state_management/actions/actions";
+import { RootState } from "../../state_management/reducers/rootReducer";
+import { uploadLocations } from "../../state_management/slices/locationSlice";
 import AddLocationModal from "./components/AddModal";
 import { DeleteLocationModal } from "./components/DeleteModal";
 import UpdateLocationModal from "./components/UpdateModal";
-import LocationTable from "../../components/Table/LocationTable";
 
 export default function LocationManagement() {
   const [search, setSearch] = useState("");
@@ -73,7 +63,7 @@ export default function LocationManagement() {
 
   const handleConfirmDelete = async () => {
     if (!locationToDelete) return;
-
+    console.log("111");
     setIsDeleting(true);
     try {
       await LocationService.delete(locationToDelete);
@@ -184,7 +174,10 @@ export default function LocationManagement() {
       <DeleteLocationModal
         open={deleteModalOpen}
         onClose={() => setDeleteModalOpen(false)}
-        onConfirm={handleConfirmDelete}
+        onConfirm={() => {
+          console.log("11");
+          handleConfirmDelete();
+        }}
         isLoading={isDeleting}
       />
     </Box>

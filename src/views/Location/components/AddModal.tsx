@@ -1,20 +1,13 @@
-import {
-  Button,
-  Grid,
-  Group,
-  LoadingOverlay,
-  Title,
-  NumberInput,
-} from "@mantine/core";
+import { Button, Grid, Group, LoadingOverlay, Title } from "@mantine/core";
 import "@mantine/core/styles.css";
-import { useState } from "react";
-import { Location } from "../../../api/type/LocationType";
-import { LocationService } from "../../../api/service/LocationService";
-import { useDispatch } from "react-redux";
-import { ADD_LOCATION } from "../../../state_management/actions/actions";
 import { showNotification } from "@mantine/notifications";
+import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { LocationService } from "../../../api/service/LocationService";
+import { Location } from "../../../api/type/LocationType";
 import TextInputCustom from "../../../components/TextInput/TextInputComponent";
 import { COLORS } from "../../../constants/colors";
+import { ADD_LOCATION } from "../../../state_management/actions/actions";
 
 interface AddLocationModalProps {
   open: boolean;
@@ -58,17 +51,28 @@ export default function AddLocationModal({
     if (!validateForm()) return;
 
     setIsSubmitting(true);
+    // const geoData = await LocationService.getLocationDetailsFromAddress(
+    //   formData.address || ""
+    // );
     try {
+      console.log("Địa chỉ gửi đi:", formData.address);
+      const geoData = await LocationService.getLocationDetailsFromAddress(
+        formData.address || ""
+      );
+
       const payload: Location = {
         DiaDiemId: `DD${Math.floor(1000 + Math.random() * 9000)}`,
         name: formData.name || "",
-        latitude: formData.latitude || 0,
-        longitude: formData.longitude || 0,
+        address: formData.address || "",
+        latitude: geoData.latitude,
+        longitude: geoData.longitude,
+        district: geoData.addressDetails.district,
+        province: geoData.addressDetails.province,
       };
+      console.log("payload", payload);
 
       const createdLocation = await LocationService.create(payload);
       dispatch(ADD_LOCATION(createdLocation));
-
       showNotification({
         title: "Thành công",
         message: "Đã thêm địa điểm mới thành công",
@@ -77,10 +81,13 @@ export default function AddLocationModal({
 
       onLocationCreated();
       onClose();
-    } catch (error) {
+    } catch (error: any) {
       showNotification({
         title: "Lỗi",
-        message: "Không thể thêm địa điểm mới",
+        message:
+          error?.message === "Không tìm thấy địa chỉ。"
+            ? "Địa chỉ không hợp lệ. Vui lòng kiểm tra lại."
+            : "Không thể thêm địa điểm mới",
         color: "red",
       });
     } finally {
@@ -154,8 +161,23 @@ export default function AddLocationModal({
                 labelFontSize={14}
               />
             </Grid.Col>
+            <Grid.Col span={12}>
+              <TextInputCustom
+                label="Địa chỉ"
+                placeholder="Nhập địa chỉ"
+                value={formData.address || ""}
+                onChange={(e) =>
+                  handleInputChange("address", e.currentTarget.value)
+                }
+                error={errors.name}
+                required
+                labelColor={COLORS.black}
+                labelFontWeight={"medium"}
+                labelFontSize={14}
+              />
+            </Grid.Col>
 
-            <Grid.Col span={6}>
+            {/* <Grid.Col span={6}>
               <NumberInput
                 label="Vĩ độ"
                 placeholder="Nhập vĩ độ"
@@ -179,7 +201,7 @@ export default function AddLocationModal({
                 error={errors.longitude}
                 required
               />
-            </Grid.Col>
+            </Grid.Col> */}
           </Grid>
 
           <Group justify="flex-end" mt="xl">

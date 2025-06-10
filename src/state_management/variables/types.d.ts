@@ -101,6 +101,9 @@ declare type TRoute = {
 declare type TLocation = {
   DiaDiemId: string;
   name: string;
+  address: string;
+  district: string;
+  province: string;
   latitude: number;
   longitude: number;
 };

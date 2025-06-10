@@ -1,10 +1,20 @@
 import axios from "axios";
 import { ENDPOINTS } from "../End_Point";
-import { Order } from "../type/OrderType";
-import { store } from "../../state_management/store/store";
-import { UPDATE_ORDER } from "../../state_management/actions/actions";
 import { PagedResponse } from "../type/BaseReponse";
+import { Order } from "../type/OrderType";
+interface RouteStop {
+  name: string;
+  address: string;
+  latitude: number;
+  longitude: number;
+  arrivalTime?: string;
+}
 
+interface RouteData {
+  stops: RouteStop[];
+  polyline?: string;
+  estimatedTime?: string;
+}
 export const orderService = {
   // const dispatch = useDispatch();
   // const orders = useSelector((state: RootState) => state.orderSlice);
@@ -100,7 +110,7 @@ export const orderService = {
 
   getDetailOrder: async (donHangId: string): Promise<Order> => {
     try {
-      const apiUrl = `${ENDPOINTS.ORDERS.DETAIL}?donHangId=${donHangId}`;
+      const apiUrl = ENDPOINTS.ORDERS.DETAIL(donHangId);
       console.log("Request URL:", apiUrl);
 
       const response = await axios.get(apiUrl);
@@ -134,9 +144,26 @@ export const orderService = {
         },
         body: JSON.stringify({ order }),
       });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
       return await response.json();
     } catch (error) {
       console.error("Error optimizing route:", error);
+      throw error;
+    }
+  },
+
+  getDeliveryRoute: async (orderId: string) => {
+    try {
+      const response = await axios.get(
+        `${ENDPOINTS.ORDERS.DELIVERY_ROUTE(orderId)}`
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching delivery route:", error);
       throw error;
     }
   },
