@@ -1,12 +1,11 @@
-import { Routes, Route, Outlet } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import AuthRoutes from "./AuthRoutes";
 // import { HomePage } from "../../views/Home/HomePage";
 // import { VehicleManagement } from "../../views/Vehicle/VehicleManagement";
-import { NAV_LINK } from "../components/NAV_LINK";
-import HomeRoutes from "./HomeRoute";
 import { useSelector } from "react-redux";
 import { RootState } from "../../state_management/reducers/rootReducer";
-import AuthLayout from "../layouts/AuthLayout";
+import { NAV_LINK } from "../components/NAV_LINK";
+import HomeRoutes from "./HomeRoute";
 
 export function RootRoutes() {
   const isAuthenticated = useSelector(

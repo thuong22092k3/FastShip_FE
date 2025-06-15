@@ -35,13 +35,7 @@ const ConfirmationStep = ({ formData, packageInfo, fees }: Props) => (
     <Title order={5} c="blue" mt="md">
       Dịch vụ giao hàng
     </Title>
-    <Text>
-      Đối tác:{" "}
-      {
-        // formData.DoiTacGiaoHang ||
-        "Chưa chọn"
-      }
-    </Text>
+    <Text>Phương thức: {formData.deliveryMethod || "Chưa chọn"}</Text>
     <Title order={5} c="blue" mt="md">
       Chi phí
     </Title>

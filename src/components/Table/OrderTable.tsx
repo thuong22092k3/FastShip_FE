@@ -86,6 +86,10 @@ const allColumns = [
   { key: "CreatedAt", label: "Ngày tạo", visible: true },
   { key: "UpdatedAt", label: "Ngày cập nhật", visible: true },
   { key: "GhiChu", label: "Ghi chú", visible: true },
+  { key: "deliveryMethod", label: "Phương thức giao", visible: true },
+  { key: "payer", label: "Người trả phí", visible: true },
+  { key: "additionalServices", label: "Dịch vụ thêm", visible: true },
+  { key: "packageType", label: "Loại bưu kiện", visible: true },
 ];
 
 export const OrderTable: React.FC<Props> = ({
@@ -305,6 +309,47 @@ export const OrderTable: React.FC<Props> = ({
         )}
         {columns.find((c) => c.key === "GhiChu")?.visible && (
           <Table.Td style={cellStyle}>{order.GhiChu}</Table.Td>
+        )}
+        {columns.find((c) => c.key === "deliveryMethod")?.visible && (
+          <Table.Td style={cellStyle}>
+            {order.deliveryMethod === "standard" ? "Tiêu chuẩn" : "Nhanh"}
+          </Table.Td>
+        )}
+        {columns.find((c) => c.key === "payer")?.visible && (
+          <Table.Td style={cellStyle}>
+            {order.payer === "sender" ? "Người gửi" : "Người nhận"}
+          </Table.Td>
+        )}
+        {columns.find((c) => c.key === "additionalServices")?.visible && (
+          <Table.Td style={cellStyle}>
+            {order.additionalServices
+              ?.map((service) => {
+                switch (service) {
+                  case "viewBeforePay":
+                    return "Xem hàng";
+                  case "codCheck":
+                    return "Đồng kiểm";
+                  case "insurance":
+                    return "Bảo hiểm";
+                  default:
+                    return service;
+                }
+              })
+              .join(", ")}
+          </Table.Td>
+        )}
+        {columns.find((c) => c.key === "packageType")?.visible && (
+          <Table.Td style={cellStyle}>
+            {order.packageType === "document"
+              ? "Tài liệu"
+              : order.packageType === "parcel"
+              ? "Hàng thường"
+              : order.packageType === "heavy_parcel"
+              ? "Hàng nặng"
+              : order.packageType === "fragile"
+              ? "Dễ vỡ"
+              : order.packageType}
+          </Table.Td>
         )}
         <Table.Td style={cellStyle}>
           <Group gap="xs">

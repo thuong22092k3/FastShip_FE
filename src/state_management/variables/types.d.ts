@@ -51,6 +51,16 @@ declare type TOrder = {
   CreatedAt: string;
   UpdatedAt: string;
   GhiChu: string;
+  deliveryMethod?: string;
+  payer: "sender" | "receiver";
+  additionalServices?: Array<"viewBeforePay" | "codCheck" | "insurance">;
+  packageInfo?: {
+    length: number;
+    width: number;
+    height: number;
+    weight: number;
+  };
+  packageType?: "document" | "parcel" | "heavy_parcel" | "fragile";
 };
 declare type TDriver = {
   TaiXeID: string;
