@@ -7,8 +7,8 @@ import {
   Paper,
   Select,
   Stepper,
-  TextInput,
   Text,
+  TextInput,
   Title,
 } from "@mantine/core";
 import "@mantine/core/styles.css";
@@ -56,12 +56,14 @@ export default function CreateOrderModal({
               <Title order={5} c="blue">
                 Thông tin người gửi
               </Title>
-              <TextInput
+              {/* <TextInput
                 label="Địa chỉ KH"
                 value="CÔNG TY TNHH MORIMURA BROS. (VIETNAM)"
                 readOnly
                 mt="sm"
-              />
+              /> */}
+              <TextInput label="Địa chỉ KH" required mt="sm" />
+
               <Grid>
                 <Grid.Col span={6}>
                   <TextInput label="Đại diện gửi" mt="sm" />

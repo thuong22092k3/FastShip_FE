@@ -59,7 +59,7 @@ const getStatusColor = (status: string) => {
 const columnWidths: { [key: string]: string } = {
   checkbox: "50px",
   DonHangId: "120px",
-  NhanVienID: "120px",
+  NhanVienId: "120px",
   NguoiGui: "150px",
   NguoiNhan: "150px",
   SDT: "120px",
@@ -71,11 +71,17 @@ const columnWidths: { [key: string]: string } = {
   UpdatedAt: "160px",
   GhiChu: "200px",
   hanhDong: "100px",
+  deliveryMethod: "150px",
+  payer: "120px",
+
+  additionalServices: "120px",
+
+  packageType: "120px",
 };
 
 const allColumns = [
   { key: "DonHangId", label: "ID Đơn hàng", visible: true },
-  { key: "NhanVienID", label: "ID Nhân viên", visible: true },
+  { key: "NhanVienId", label: "ID Nhân viên", visible: true },
   { key: "NguoiGui", label: "Người gửi", visible: true },
   { key: "NguoiNhan", label: "Người nhận", visible: true },
   { key: "SDT", label: "SĐT", visible: true },
@@ -241,8 +247,8 @@ export const OrderTable: React.FC<Props> = ({
         {columns.find((c) => c.key === "DonHangId")?.visible && (
           <Table.Td style={cellStyle}>{order.DonHangId}</Table.Td>
         )}
-        {columns.find((c) => c.key === "NhanVienID")?.visible && (
-          <Table.Td style={cellStyle}>{order.NhanVienID}</Table.Td>
+        {columns.find((c) => c.key === "NhanVienId")?.visible && (
+          <Table.Td style={cellStyle}>{order.NhanVienId}</Table.Td>
         )}
         {columns.find((c) => c.key === "NguoiGui")?.visible && (
           <Table.Td style={cellStyle}>{order.NguoiGui}</Table.Td>

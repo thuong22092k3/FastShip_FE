@@ -42,10 +42,10 @@ const OrderInfoStep = ({
       <TextInput
         label="Địa chỉ KH"
         name="NguoiGui"
-        value={formData.NguoiGui}
+        value={formData.NguoiGui || ""}
         onChange={handleInputChange}
-        readOnly
         mt="sm"
+        required
       />
 
       <Box mt="md">
@@ -53,7 +53,7 @@ const OrderInfoStep = ({
           Thông tin người nhận
         </Title>
         <TextInput
-          label="Số điện thoại *"
+          label="Số điện thoại"
           name="SDT"
           value={formData.SDT || ""}
           onChange={handleInputChange}
@@ -62,7 +62,7 @@ const OrderInfoStep = ({
           mt="sm"
         />
         <TextInput
-          label="Họ và tên *"
+          label="Họ và tên"
           name="NguoiNhan"
           value={formData.NguoiNhan || ""}
           onChange={handleInputChange}
@@ -71,7 +71,7 @@ const OrderInfoStep = ({
           mt="sm"
         />
         <TextInput
-          label="Địa chỉ giao hàng *"
+          label="Địa chỉ giao hàng"
           name="DiaChiGiaoHang"
           value={formData.DiaChiGiaoHang || ""}
           onChange={handleInputChange}

@@ -9,7 +9,7 @@ import {
   Title,
 } from "@mantine/core";
 import "@mantine/core/styles.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { orderService } from "../../../../api/service/OrderService";
 import { Order } from "../../../../api/type/OrderType";
@@ -35,17 +35,52 @@ interface PackageInfo {
   weight: number;
 }
 
-const calculateFees = (packageInfo: PackageInfo) => {
+const calculateFees = (
+  packageInfo: PackageInfo,
+  deliveryMethod?: string,
+  additionalServices?: string[]
+) => {
   const { length, width, height, weight } = packageInfo;
-  const volume = length * width * height;
-  const baseFee = Math.max(volume * 0.0001, weight * 5000, 15000);
-  const vat = baseFee * 0.1;
-  const total = baseFee + vat;
+
+  const volume = (length * width * height) / 1000000;
+
+  let baseFee = 0;
+  switch (deliveryMethod) {
+    case "standard":
+      baseFee = Math.max(volume * 1000000, weight * 5000, 15000);
+      break;
+    case "express":
+      baseFee = Math.max(volume * 1500000, weight * 7500, 25000);
+      break;
+    default:
+      baseFee = Math.max(volume * 1000000, weight * 5000, 15000);
+  }
+
+  let serviceFee = 0;
+  if (additionalServices?.includes("insurance")) {
+    serviceFee += 5000;
+  }
+  if (additionalServices?.includes("codCheck")) {
+    serviceFee += 3000;
+  }
+  if (additionalServices?.includes("viewBeforePay")) {
+    serviceFee += 2000;
+  }
+
+  const subtotal = baseFee + serviceFee;
+  const vat = subtotal * 0.1;
+  const total = subtotal + vat;
 
   return {
     baseFee: Math.round(baseFee),
+    serviceFee: Math.round(serviceFee),
     vat: Math.round(vat),
     total: Math.round(total),
+    insuranceFee: additionalServices?.includes("insurance") ? 5000 : 0,
+    serviceFees: {
+      codCheck: additionalServices?.includes("codCheck") ? 3000 : 0,
+      viewBeforePay: additionalServices?.includes("viewBeforePay") ? 2000 : 0,
+    },
   };
 };
 
@@ -63,16 +98,39 @@ export default function NewModal({
     height: 10,
     weight: 1,
   });
-
+  const [fees, setFees] = useState({
+    baseFee: 0,
+    serviceFee: 0,
+    vat: 0,
+    total: 0,
+    insuranceFee: 0,
+    serviceFees: {
+      codCheck: 0,
+      viewBeforePay: 0,
+    },
+  });
   const [formData, setFormData] = useState<Partial<Order>>({
     TrangThai: "Chờ xác nhận",
     CuocPhi: 0,
-    NguoiGui: "CÔNG TY TNHH MORIMURA BROS. (VIETNAM)",
+    // NguoiGui: "CÔNG TY TNHH MORIMURA BROS. (VIETNAM)",
     DiaChiLayHang: "123 Đường ABC, Quận 1, TP.HCM",
   });
 
   // Calculate fees based on package info
-  const fees = calculateFees(packageInfo);
+  // const fees = calculateFees(packageInfo);
+  const updateFees = () => {
+    const newFees = calculateFees(
+      packageInfo,
+      formData.deliveryMethod,
+      formData.additionalServices
+    );
+    setFees(newFees);
+    return newFees;
+  };
+
+  useEffect(() => {
+    updateFees();
+  }, [packageInfo, formData.deliveryMethod, formData.additionalServices]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -95,60 +153,25 @@ export default function NewModal({
   };
 
   const dispatch = useDispatch();
-  // const handleSubmit = async () => {
-  //   if (!validateForm()) return;
-
-  //   setIsSubmitting(true);
-  //   try {
-  //     const payload = {
-  //       NhanVienId: formData.NhanVienID || "NV001",
-  //       NguoiGui: formData.NguoiGui || "",
-  //       NguoiNhan: formData.NguoiNhan || "",
-  //       SDT: formData.SDT || "",
-  //       DiaChiLayHang: formData.DiaChiLayHang || "",
-  //       DiaChiGiaoHang: formData.DiaChiGiaoHang || "",
-  //       CuocPhi: fees.total,
-  //       TrangThai: formData.TrangThai || "Chờ xác nhận",
-  //       GhiChu: formData.GhiChu || "",
-  //       KichThuoc: `${packageInfo.length}x${packageInfo.width}x${packageInfo.height}cm`,
-  //       CanNang: packageInfo.weight,
-  //       deliveryMethod: formData.deliveryMethod || "standard",
-  //       payer: formData.payer || "sender",
-  //       additionalServices: formData.additionalServices || [],
-  //       packageInfo: {
-  //         length: packageInfo.length,
-  //         width: packageInfo.width,
-  //         height: packageInfo.height,
-  //         weight: packageInfo.weight,
-  //       },
-  //       CreatedAt: new Date().toISOString(),
-  //       UpdatedAt: new Date().toISOString(),
-  //     };
-
-  //     const createdOrder = await orderService.createOrder(payload);
-  //     dispatch(ADD_ORDER(createdOrder));
-  //     onOrderCreated();
-  //     onClose();
-  //   } catch (error) {
-  //     console.error("Error creating order:", error);
-  //   } finally {
-  //     setIsSubmitting(false);
-  //   }
-  // };
 
   const handleSubmit = async () => {
     if (!validateForm()) return;
-
+    // const newFees = calculateFees(
+    //   packageInfo,
+    //   formData.deliveryMethod,
+    //   formData.additionalServices
+    // );
+    const finalFees = updateFees();
     setIsSubmitting(true);
     try {
       const payload = {
-        NhanVienId: formData.NhanVienID || "NV001",
+        NhanVienId: formData.NhanVienId || "NV001",
         NguoiGui: formData.NguoiGui || "",
         NguoiNhan: formData.NguoiNhan || "",
         SDT: formData.SDT || "",
         DiaChiLayHang: formData.DiaChiLayHang || "",
         DiaChiGiaoHang: formData.DiaChiGiaoHang || "",
-        CuocPhi: fees.total,
+        CuocPhi: finalFees.total,
         TrangThai: formData.TrangThai || "Chờ xác nhận",
         GhiChu: formData.GhiChu || "",
         deliveryMethod: formData.deliveryMethod || "standard",
@@ -184,7 +207,7 @@ export default function NewModal({
   if (!open) return null;
 
   return (
-    <div
+    <Box
       style={{
         position: "fixed",
         top: 0,
@@ -199,7 +222,7 @@ export default function NewModal({
         padding: "20px",
       }}
     >
-      <div
+      <Box
         style={{
           background: "white",
           width: "80%",
@@ -320,18 +343,19 @@ export default function NewModal({
 
             <Grid.Col span={{ base: 12, md: 4 }}>
               <OrderSummary
-                fees={fees}
-                packageInfo={{
-                  length: 0,
-                  width: 0,
-                  height: 0,
-                  weight: 0,
-                }}
+                fees={calculateFees(
+                  packageInfo,
+                  formData.deliveryMethod,
+                  formData.additionalServices
+                )}
+                packageInfo={packageInfo}
+                deliveryMethod={formData.deliveryMethod}
+                additionalServices={formData.additionalServices}
               />
             </Grid.Col>
           </Grid>
         </div>
-      </div>
-    </div>
+      </Box>
+    </Box>
   );
 }

@@ -88,10 +88,6 @@ const DeliveryServiceStep = ({
           Dịch vụ giao hàng
         </Title>
 
-        {/* <Select id="select" value="20">
-          <MenuItem value="10">Ten</MenuItem>
-          <MenuItem value="20">Twenty</MenuItem>
-        </Select> */}
         <NativeSelect
           label="Hình thức giao hàng"
           data={[{ value: "", label: "Chọn hình thức" }, ...DELIVERY_METHODS]}
@@ -100,29 +96,6 @@ const DeliveryServiceStep = ({
           required
           mb="md"
         />
-        {/* <Text>hello</Text>
-        <Select
-          label="Hình thức giao hàng"
-          placeholder="Chọn hình thức"
-          data={[
-            { value: "standard", label: "Giao tiêu chuẩn" },
-            { value: "express", label: "Giao hỏa tốc" },
-            { value: "Khac", label: "Khác" },
-          ]}
-          value={formData.deliveryMethod}
-          onChange={(value) =>
-            handleSelectChange
-              ? handleSelectChange("deliveryMethod", value)
-              : handleInputChange({
-                  target: {
-                    name: "deliveryMethod",
-                    value: value || "",
-                  },
-                } as React.ChangeEvent<HTMLInputElement>)
-          }
-          required
-          mb="md"
-        /> */}
       </Box>
 
       <Box>

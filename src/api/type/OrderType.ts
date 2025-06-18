@@ -3,7 +3,7 @@ export type AdditionalService = "viewBeforePay" | "codCheck" | "insurance";
 export type Order = {
   _id: string;
   DonHangId: string;
-  NhanVienID: string;
+  NhanVienId: string;
   NguoiGui: string;
   NguoiNhan: string;
   SDT: string;
@@ -31,7 +31,7 @@ export type Order = {
 export const mockOrders = [
   {
     DonHangId: "DH001",
-    NhanVienID: "NV01",
+    NhanVienId: "NV01",
     NguoiGui: "Nguyễn Văn A",
     NguoiNhan: "Trần Thị B",
     SDT: "0909123456",

@@ -40,7 +40,7 @@ declare type TEmployee = {
 declare type TOrder = {
   _id: string;
   DonHangId: string;
-  NhanVienID: string;
+  NhanVienId: string;
   NguoiGui: string;
   NguoiNhan: string;
   SDT: string;

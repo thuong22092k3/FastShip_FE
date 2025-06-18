@@ -1,21 +1,6 @@
-import {
-  Group,
-  TextInput,
-  ActionIcon,
-  Avatar,
-  Text,
-  Menu,
-  rem,
-} from "@mantine/core";
-import {
-  IconSearch,
-  IconQuestionMark,
-  IconBell,
-  IconLogout,
-  IconChevronDown,
-  IconUserCircle,
-} from "@tabler/icons-react";
+import { TextInput } from "@mantine/core";
 import "@mantine/core/styles.css";
+import { IconSearch, IconUserCircle } from "@tabler/icons-react";
 
 import { COLORS } from "../../constants/colors";
 const CustomHeader = () => {
@@ -30,7 +15,7 @@ const CustomHeader = () => {
         width: "100%",
         position: "sticky",
         top: 0,
-        zIndex: 1000,
+        // zIndex: 1000,
       }}
     >
       <div
