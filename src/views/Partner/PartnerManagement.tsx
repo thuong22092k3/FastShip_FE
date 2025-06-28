@@ -1,37 +1,22 @@
-import React, { useState, useEffect } from "react";
-import {
-  Container,
-  Title,
-  Text,
-  Table,
-  ScrollArea,
-  Group,
-  ActionIcon,
-  Button,
-  Modal,
-  LoadingOverlay,
-  Select,
-  Badge,
-  Box,
-} from "@mantine/core";
+import { Box, Button, Group, Text, Title } from "@mantine/core";
 import "@mantine/core/styles.css";
-import { IconEdit, IconTrash, IconPlus } from "@tabler/icons-react";
 import { showNotification } from "@mantine/notifications";
+import { IconPlus } from "@tabler/icons-react";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { partnerService } from "../../api/service/PartnerService";
 import { DoiTac } from "../../api/type/PartnerType";
-import AddPartnerModal from "./component/AddPartnerModal";
-import EditPartnerModal from "./component/EditPartnerModal";
-import DeletePartnerModal from "./component/DeletePartnerModal";
 import { PartnerTable } from "../../components/Table/PartnerTable";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../state_management/reducers/rootReducer";
-import { uploadPartners } from "../../state_management/slices/partnerSlice";
 import {
   ADD_PARTNER,
   DELETE_PARTNER,
   UPDATE_PARTNER,
 } from "../../state_management/actions/actions";
-import { Console } from "console";
+import { RootState } from "../../state_management/reducers/rootReducer";
+import { uploadPartners } from "../../state_management/slices/partnerSlice";
+import AddPartnerModal from "./component/AddPartnerModal";
+import DeletePartnerModal from "./component/DeletePartnerModal";
+import EditPartnerModal from "./component/EditPartnerModal";
 
 const PartnerManagementScreen = () => {
   // const [partners, setPartners] = useState<DoiTac[]>([]);
@@ -164,7 +149,7 @@ const PartnerManagementScreen = () => {
   };
   console.log("Addmodal:", addModalOpen);
   return (
-    <Box style={{ padding: 0, margin: 0 }}>
+    <Box style={{ padding: 0, margin: 0, maxWidth: "82vw" }}>
       <Group justify="space-between" mb="xl">
         <Title order={2}>Quản lý Đối tác</Title>
         <Button

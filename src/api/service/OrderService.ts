@@ -197,10 +197,10 @@ export const orderService = {
     });
     return response.data;
   },
-  assignDriver: async (donHangId: string, taiXeId: string) => {
+  assignDriver: async (donHangId: string, TaiXeID: string) => {
     const response = await axios.post(ENDPOINTS.ORDERS.ASSIGN_DRIVER, {
       donHangId,
-      taiXeId,
+      TaiXeID,
     });
     return response.data;
   },

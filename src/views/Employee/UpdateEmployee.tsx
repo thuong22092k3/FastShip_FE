@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { employeeService } from "../../api/service/EmployeeService";
 import { NhanVien } from "../../api/type/EmployeeType";
 import TextInputCustom from "../../components/TextInput/TextInputComponent";
+import { COLORS } from "../../constants/colors";
 
 interface UpdateEmployeeModalProps {
   open: boolean;
@@ -218,6 +219,7 @@ export default function UpdateEmployeeModal({
                 value={formData.NhanVienID || ""}
                 setValue={() => {}}
                 readOnly
+                labelColor={COLORS.black}
               />
             </Grid.Col>
 
@@ -231,6 +233,7 @@ export default function UpdateEmployeeModal({
                 setValue={(value) => handleInputChange("FullName", value)}
                 error={errors.FullName}
                 required
+                labelColor={COLORS.black}
               />
             </Grid.Col>
 
@@ -244,6 +247,7 @@ export default function UpdateEmployeeModal({
                 setValue={(value) => handleInputChange("UserName", value)}
                 error={errors.UserName}
                 required
+                labelColor={COLORS.black}
               />
             </Grid.Col>
 
@@ -257,6 +261,7 @@ export default function UpdateEmployeeModal({
                 setValue={(value) => handleInputChange("Email", value)}
                 error={errors.Email}
                 required
+                labelColor={COLORS.black}
               />
             </Grid.Col>
 
@@ -270,6 +275,7 @@ export default function UpdateEmployeeModal({
                 setValue={(value) => handleInputChange("Password", value)}
                 error={errors.Password}
                 required
+                labelColor={COLORS.black}
               />
             </Grid.Col>
 
@@ -284,6 +290,7 @@ export default function UpdateEmployeeModal({
                 error={errors.HieuSuat}
                 required
                 pattern="[0-9]*"
+                labelColor={COLORS.black}
               />
             </Grid.Col>
           </Grid>

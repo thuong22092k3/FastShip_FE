@@ -36,7 +36,7 @@ export default function AddVehicleModal({
   const dispatch = useDispatch();
   const [formData, setFormData] = useState<Partial<Vehicle>>({
     TrangThai: "Hoạt động",
-    // BaoDuong: "Đã bảo dưỡng tháng 3/2024",
+    BaoDuong: "Chưa bảo dưỡng",
     SucChua: 0,
   });
 
@@ -103,7 +103,7 @@ export default function AddVehicleModal({
         LoaiXe: formData.LoaiXe || "",
         SucChua: Number(formData.SucChua) || 0,
         TrangThai: formData.TrangThai || "Hoạt động",
-        BaoDuong: formData.BaoDuong || "",
+        BaoDuong: formData.BaoDuong || "Chưa bảo dưỡng",
       };
 
       const createdVehicle = await vehicleService.createVehicle(payload);

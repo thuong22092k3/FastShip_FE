@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { employeeService } from "../../api/service/EmployeeService";
 import { TaiXe } from "../../api/type/EmployeeType";
 import TextInputCustom from "../../components/TextInput/TextInputComponent";
+import { COLORS } from "../../constants/colors";
 
 interface UpdateDriverModalProps {
   open: boolean;
@@ -188,6 +189,7 @@ export default function UpdateDriverModal({
                 value={formData.TaiXeID || ""}
                 setValue={() => {}}
                 readOnly
+                labelColor={COLORS.black}
               />
             </Grid.Col>
 
@@ -201,6 +203,7 @@ export default function UpdateDriverModal({
                 setValue={(value) => handleInputChange("HoTen", value)}
                 error={errors.HoTen}
                 required
+                labelColor={COLORS.black}
               />
             </Grid.Col>
 
@@ -214,6 +217,7 @@ export default function UpdateDriverModal({
                 setValue={(value) => handleInputChange("UserName", value)}
                 error={errors.UserName}
                 required
+                labelColor={COLORS.black}
               />
             </Grid.Col>
 
@@ -227,6 +231,7 @@ export default function UpdateDriverModal({
                 setValue={(value) => handleInputChange("Email", value)}
                 error={errors.Email}
                 required
+                labelColor={COLORS.black}
               />
             </Grid.Col>
 
@@ -240,6 +245,7 @@ export default function UpdateDriverModal({
                 setValue={(value) => handleInputChange("Password", value)}
                 error={errors.Password}
                 required
+                labelColor={COLORS.black}
               />
             </Grid.Col>
 
@@ -254,6 +260,7 @@ export default function UpdateDriverModal({
                 error={errors.HieuSuat}
                 required
                 pattern="[0-9]*"
+                labelColor={COLORS.black}
               />
             </Grid.Col>
 
@@ -268,6 +275,7 @@ export default function UpdateDriverModal({
                 error={errors.CongViec}
                 required
                 pattern="[0-9]*"
+                labelColor={COLORS.black}
               />
             </Grid.Col>
           </Grid>

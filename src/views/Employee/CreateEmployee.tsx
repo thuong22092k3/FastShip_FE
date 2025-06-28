@@ -14,6 +14,7 @@ import { useDispatch } from "react-redux";
 import { employeeService } from "../../api/service/EmployeeService";
 import { TaiXe } from "../../api/type/EmployeeType";
 import TextInputCustom from "../../components/TextInput/TextInputComponent";
+import { COLORS } from "../../constants/colors";
 import { ADD_EMPLOYEE } from "../../state_management/actions/actions";
 
 interface CreateEmployeeModalProps {
@@ -279,6 +280,7 @@ export default function CreateEmployeeModal({
                 setValue={(value) => handleInputChange("UserName", value)}
                 error={errors.UserName}
                 required
+                labelColor={COLORS.black}
               />
             </Grid.Col>
 
@@ -293,6 +295,7 @@ export default function CreateEmployeeModal({
                 error={errors.Password}
                 required
                 type="password"
+                labelColor={COLORS.black}
               />
             </Grid.Col>
 
@@ -306,6 +309,7 @@ export default function CreateEmployeeModal({
                 setValue={(value) => handleInputChange("HoTen", value)}
                 error={errors.HoTen}
                 required
+                labelColor={COLORS.black}
               />
             </Grid.Col>
 
@@ -319,6 +323,7 @@ export default function CreateEmployeeModal({
                 setValue={(value) => handleInputChange("Email", value)}
                 error={errors.Email}
                 required
+                labelColor={COLORS.black}
               />
             </Grid.Col>
 
@@ -333,6 +338,7 @@ export default function CreateEmployeeModal({
                 error={errors.HieuSuat}
                 required
                 pattern="[0-9]*"
+                labelColor={COLORS.black}
               />
             </Grid.Col>
 

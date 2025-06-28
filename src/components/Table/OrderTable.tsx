@@ -16,7 +16,6 @@ import {
   IconCaretDownFilled,
   IconCaretUpFilled,
   IconColumns,
-  IconEdit,
   IconEye,
   IconTrash,
 } from "@tabler/icons-react";
@@ -462,17 +461,7 @@ export const OrderTable: React.FC<Props> = ({
             >
               <IconEye size={18} />{" "}
             </ActionIcon>
-            <ActionIcon
-              variant="light"
-              color="blue"
-              onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                console.log("Edit", order.DonHangId);
-              }}
-            >
-              <IconEdit size={18} />
-            </ActionIcon>
+
             <ActionIcon
               variant="light"
               color="red"
