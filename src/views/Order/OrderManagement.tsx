@@ -22,6 +22,10 @@ import { OrderDetailModal } from "./components/OrderDtail";
 import { SimpleDeleteModal } from "./components/SimpleModalDelete";
 
 export default function OrderManagementScreen() {
+  const currentUser = useSelector(
+    (state: RootState) => state.authSlice.currentUser
+  );
+
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(true);
@@ -61,10 +65,20 @@ export default function OrderManagementScreen() {
       setLoading(true);
       let response;
 
+      if (!currentUser) {
+        setError("Không có thông tin người dùng");
+        dispatch(uploadOrders([]));
+        setLoading(false);
+        return;
+      }
+
       if (search) {
         response = await orderService.searchOrders(search, page, limit);
       } else {
-        response = await orderService.getOrder(page, limit);
+        response = await orderService.getOrder(page, limit, {
+          id: currentUser.id ?? "",
+          role: currentUser.role || "",
+        });
       }
 
       if (response && Array.isArray(response.data)) {
@@ -80,6 +94,7 @@ export default function OrderManagementScreen() {
       setLoading(false);
     }
   };
+
   const handleSearch = useCallback(() => {
     setCurrentPage(1);
     setRefreshKey((prev) => prev + 1);

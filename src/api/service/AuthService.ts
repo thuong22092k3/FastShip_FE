@@ -12,7 +12,7 @@ import {
 } from "../type/EmployeeType";
 
 export const AuthService = {
-  login: async (UserName: string, Password: string): Promise<Admin> => {
+  login: async (UserName: string, Password: string): Promise<User> => {
     try {
       const response = await axios.post(`${ENDPOINTS.AUTH.LOGIN}`, {
         UserName,
@@ -21,7 +21,7 @@ export const AuthService = {
       console.log("response", response);
       console.log(ENDPOINTS.AUTH.LOGIN);
       if (response.data && response.data.user) {
-        return response.data.user as Admin;
+        return response.data.user as User;
       }
       throw new Error("Invalid response from server");
     } catch (error) {

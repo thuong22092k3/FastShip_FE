@@ -1,17 +1,8 @@
-import {
-  Box,
-  Button,
-  Grid,
-  Group,
-  LoadingOverlay,
-  Select,
-  Text,
-  Title,
-} from "@mantine/core";
-import { useState, useEffect } from "react";
-import { NhanVien } from "../../api/type/EmployeeType";
-import { employeeService } from "../../api/service/EmployeeService";
+import { Button, Grid, Group, LoadingOverlay, Title } from "@mantine/core";
 import { showNotification } from "@mantine/notifications";
+import { useEffect, useState } from "react";
+import { employeeService } from "../../api/service/EmployeeService";
+import { NhanVien } from "../../api/type/EmployeeType";
 import TextInputCustom from "../../components/TextInput/TextInputComponent";
 
 interface UpdateEmployeeModalProps {
@@ -119,7 +110,7 @@ export default function UpdateEmployeeModal({
   const handleSubmit = async () => {
     console.log("Bắt đầu quá trình cập nhật");
     if (!formData.NhanVienID) {
-      console.log("Lỗi: Thiếu TaiXeId", formData);
+      console.log("Lỗi: Thiếu TaiXeID", formData);
       return;
     }
 

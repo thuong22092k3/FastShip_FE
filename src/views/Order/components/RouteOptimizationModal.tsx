@@ -32,9 +32,11 @@ export function RouteModal({ opened, onClose, order }: RouteModalProps) {
   }, [opened, order]);
 
   const fetchRouteData = async () => {
+    if (!order) return; // đảm bảo order không null
+
     setLoading(true);
     try {
-      const data = await orderService.getDeliveryRoute(order!.DonHangId);
+      const data = await orderService.optimizeRoute(order);
       setRouteData(data);
     } catch (error) {
       console.error("Failed to fetch route data:", error);

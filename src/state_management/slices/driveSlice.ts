@@ -1,8 +1,8 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import {
-  RESET_ALL_STORES,
   ADD_DRIVER,
   DELETE_DRIVER,
+  RESET_ALL_STORES,
   UPDATE_DRIVER,
 } from "../actions/actions";
 

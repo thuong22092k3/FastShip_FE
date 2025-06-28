@@ -1,12 +1,10 @@
-import React, { useState } from "react";
 import {
-  Table,
-  ScrollArea,
+  ActionIcon,
   Badge,
   Checkbox,
   Group,
-  ActionIcon,
-  Select,
+  ScrollArea,
+  Table,
 } from "@mantine/core";
 import "@mantine/core/styles.css";
 import {
@@ -16,7 +14,7 @@ import {
   IconTrash,
   IconUser,
 } from "@tabler/icons-react";
-import { showNotification } from "@mantine/notifications";
+import React, { useState } from "react";
 import { NhanVien } from "../../api/type/EmployeeType";
 import CheckboxComponent from "../CheckBox/CheckBoxComponent";
 

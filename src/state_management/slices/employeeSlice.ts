@@ -2,8 +2,8 @@ import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import {
   ADD_EMPLOYEE,
   DELETE_EMPLOYEE,
-  UPDATE_EMPLOYEE,
   RESET_ALL_STORES,
+  UPDATE_EMPLOYEE,
 } from "../actions/actions";
 
 const employeeSlice = createSlice({

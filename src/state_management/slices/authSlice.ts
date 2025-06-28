@@ -9,7 +9,7 @@ import {
 
 // Định nghĩa interface AuthUser
 interface AuthUser {
-  id: string;
+  id?: string;
   username: string;
   fullName: string;
   email?: string;

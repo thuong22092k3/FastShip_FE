@@ -1,5 +1,4 @@
 import {
-  Box,
   Button,
   Grid,
   Group,
@@ -9,13 +8,13 @@ import {
   Title,
 } from "@mantine/core";
 import "@mantine/core/styles.css";
-import { useState } from "react";
-import { Vehicle } from "../../api/type/VehicleType";
-import { vehicleService } from "../../api/service/VehicleService";
-import { useDispatch } from "react-redux";
-import { ADD_VEHICLE } from "../../state_management/actions/actions";
 import { showNotification } from "@mantine/notifications";
+import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { vehicleService } from "../../api/service/VehicleService";
+import { Vehicle } from "../../api/type/VehicleType";
 import TextInputCustom from "../../components/TextInput/TextInputComponent";
+import { ADD_VEHICLE } from "../../state_management/actions/actions";
 
 interface AddVehicleModalProps {
   open: boolean;
@@ -224,9 +223,9 @@ export default function AddVehicleModal({
                 label="Mã tài xế"
                 labelFontWeight="bold"
                 placeHolder="Nhập mã tài xế"
-                name="TaiXeId"
+                name="TaiXeID"
                 value={formData.TaiXeID || "TX134"}
-                setValue={(value) => handleInputChange("TaiXeId", value)}
+                setValue={(value) => handleInputChange("TaiXeID", value)}
               />
             </Grid.Col>
 

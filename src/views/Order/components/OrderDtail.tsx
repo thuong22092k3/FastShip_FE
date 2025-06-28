@@ -196,7 +196,7 @@ export function OrderDetailModal({
                         Nhân viên phụ trách
                       </Text>
                     </Group>
-                    <Text fw={500}>{order.NhanVienId || "Chưa phân công"}</Text>
+                    <Text fw={500}>{order.NhanVienID || "Chưa phân công"}</Text>
                   </Paper>
                 </Stack>
               </Grid.Col>

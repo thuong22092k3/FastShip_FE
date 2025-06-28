@@ -39,9 +39,10 @@ const LoginScreen = () => {
 
     try {
       const response = await AuthService.login(username, password);
+      console.log("response user:", response);
 
       const authUser = {
-        id: response.AdminId,
+        id: response.id,
         username: response.UserName,
         fullName: response.HoTen,
         role: response.role,

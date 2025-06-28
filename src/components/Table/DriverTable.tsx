@@ -1,30 +1,29 @@
-import React, { useState } from "react";
 import {
-  Table,
-  ScrollArea,
+  ActionIcon,
   Badge,
+  Button,
   Checkbox,
   Group,
-  ActionIcon,
-  Select,
-  Pagination,
   Menu,
+  Pagination,
+  ScrollArea,
+  Select,
+  Table,
   Text,
-  Button,
 } from "@mantine/core";
+import "@mantine/core/styles.css";
 import {
   IconCaretDownFilled,
   IconCaretUpFilled,
+  IconColumns,
   IconEdit,
   IconTrash,
   IconUserCheck,
-  IconColumns,
 } from "@tabler/icons-react";
-import { showNotification } from "@mantine/notifications";
+import React, { useState } from "react";
 import { TaiXe } from "../../api/type/EmployeeType";
-import "@mantine/core/styles.css";
+import { PAGE_SIZE_OPTIONS, PageSize } from "../../utils/constants/enum";
 import CheckboxComponent from "../CheckBox/CheckBoxComponent";
-import { PageSize, PAGE_SIZE_OPTIONS } from "../../utils/constants/enum";
 
 type Props = {
   data: TaiXe[];

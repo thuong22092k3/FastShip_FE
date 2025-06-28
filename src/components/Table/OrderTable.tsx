@@ -20,12 +20,14 @@ import {
   IconEye,
   IconTrash,
 } from "@tabler/icons-react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { employeeService } from "../../api/service/EmployeeService";
 import { orderService } from "../../api/service/OrderService";
 import { Order } from "../../api/type/OrderType";
 import { UPDATE_ORDER } from "../../state_management/actions/actions";
 import { RootState } from "../../state_management/reducers/rootReducer";
+import { uploadDrivers } from "../../state_management/slices/driveSlice";
 import { PAGE_SIZE_OPTIONS, PageSize } from "../../utils/constants/enum";
 import CheckboxComponent from "../CheckBox/CheckBoxComponent";
 import TextComponent from "../Text/TextComponent";
@@ -59,7 +61,7 @@ const getStatusColor = (status: string) => {
 const columnWidths: { [key: string]: string } = {
   checkbox: "50px",
   DonHangId: "120px",
-  NhanVienId: "120px",
+  NhanVienID: "120px",
   NguoiGui: "150px",
   NguoiNhan: "150px",
   SDT: "120px",
@@ -77,11 +79,12 @@ const columnWidths: { [key: string]: string } = {
   additionalServices: "120px",
 
   packageType: "120px",
+  TaiXeID: "200px",
 };
 
 const allColumns = [
   { key: "DonHangId", label: "ID Đơn hàng", visible: true },
-  { key: "NhanVienId", label: "ID Nhân viên", visible: true },
+  { key: "NhanVienID", label: "ID Nhân viên", visible: true },
   { key: "NguoiGui", label: "Người gửi", visible: true },
   { key: "NguoiNhan", label: "Người nhận", visible: true },
   { key: "SDT", label: "SĐT", visible: true },
@@ -95,6 +98,7 @@ const allColumns = [
   { key: "deliveryMethod", label: "Phương thức giao", visible: true },
   { key: "payer", label: "Người trả phí", visible: true },
   { key: "additionalServices", label: "Dịch vụ thêm", visible: true },
+  { key: "TaiXeID", label: "Tài xế", visible: true },
   { key: "packageType", label: "Loại bưu kiện", visible: true },
 ];
 
@@ -161,6 +165,27 @@ export const OrderTable: React.FC<Props> = ({
     { value: "Đã giao", label: "Đã giao" },
     { value: "Hủy", label: "Hủy" },
   ];
+  useEffect(() => {
+    const fetchDrivers = async (page: number = 1, limit: number = 10) => {
+      try {
+        let response;
+
+        response = await employeeService.getAllDrivers(page, limit);
+        console.log("response total", response.total);
+        if (response && Array.isArray(response)) {
+          dispatch(uploadDrivers(response));
+        } else {
+          dispatch(uploadDrivers([]));
+        }
+      } catch (err) {
+        dispatch(uploadDrivers([]));
+      } finally {
+      }
+    };
+    fetchDrivers();
+  }, []);
+  const drivers = useSelector((state: RootState) => state.driverSlice);
+
   const handleUpdateStatus = async (orderId: string, newStatus: string) => {
     try {
       const result = await orderService.updateStatusOrder(orderId, newStatus);
@@ -247,8 +272,8 @@ export const OrderTable: React.FC<Props> = ({
         {columns.find((c) => c.key === "DonHangId")?.visible && (
           <Table.Td style={cellStyle}>{order.DonHangId}</Table.Td>
         )}
-        {columns.find((c) => c.key === "NhanVienId")?.visible && (
-          <Table.Td style={cellStyle}>{order.NhanVienId}</Table.Td>
+        {columns.find((c) => c.key === "NhanVienID")?.visible && (
+          <Table.Td style={cellStyle}>{order.NhanVienID}</Table.Td>
         )}
         {columns.find((c) => c.key === "NguoiGui")?.visible && (
           <Table.Td style={cellStyle}>{order.NguoiGui}</Table.Td>
@@ -326,6 +351,47 @@ export const OrderTable: React.FC<Props> = ({
             {order.payer === "sender" ? "Người gửi" : "Người nhận"}
           </Table.Td>
         )}
+        {columns.find((c) => c.key === "TaiXeID")?.visible && (
+          // <Table.Td style={cellStyle}>
+          //   {order?.CuocPhi?.toLocaleString()}₫
+          // </Table.Td>
+          <Table.Td style={cellStyle}>
+            <Select
+              placeholder="Chọn tài xế"
+              value={order.TaiXeID || ""}
+              onChange={async (value) => {
+                if (!value || value === order.TaiXeID) return;
+                try {
+                  await orderService.assignDriver(order.DonHangId, value);
+                  showNotification({
+                    title: "Thành công",
+                    message: "Đã gán tài xế cho đơn hàng",
+                    color: "green",
+                  });
+
+                  const updatedOrder = {
+                    ...order,
+                    TaiXeID: value,
+                    UpdatedAt: new Date().toISOString(),
+                  };
+
+                  dispatch(UPDATE_ORDER(updatedOrder));
+                } catch (err) {
+                  showNotification({
+                    title: "Lỗi",
+                    message: "Không thể gán tài xế",
+                    color: "red",
+                  });
+                }
+              }}
+              data={drivers.map((d) => ({ label: d.HoTen, value: d.TaiXeID }))}
+              size="xs"
+              searchable
+              clearable
+            />
+          </Table.Td>
+        )}
+
         {columns.find((c) => c.key === "additionalServices")?.visible && (
           <Table.Td style={cellStyle}>
             {order.additionalServices
@@ -357,6 +423,7 @@ export const OrderTable: React.FC<Props> = ({
               : order.packageType}
           </Table.Td>
         )}
+
         <Table.Td style={cellStyle}>
           <Group gap="xs">
             <ActionIcon
@@ -450,7 +517,7 @@ export const OrderTable: React.FC<Props> = ({
         offsetScrollbars
         style={{
           width: "100%",
-          maxWidth: "85vw",
+          maxWidth: "80vw",
           position: "relative",
         }}
       >

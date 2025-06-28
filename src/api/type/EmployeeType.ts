@@ -1,7 +1,7 @@
 export type UserRole = "Admin" | "NhanVien" | "TaiXe";
 
 export type UserBase = {
-  _id?: string;
+  id?: string;
   UserName: string;
   Password: string;
   HoTen: string;

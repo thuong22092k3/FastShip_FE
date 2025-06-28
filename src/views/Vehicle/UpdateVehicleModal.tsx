@@ -1,5 +1,4 @@
 import {
-  Box,
   Button,
   Grid,
   Group,
@@ -9,10 +8,10 @@ import {
   Title,
 } from "@mantine/core";
 import "@mantine/core/styles.css";
-import { useState, useEffect } from "react";
-import { Vehicle } from "../../api/type/VehicleType";
-import { vehicleService } from "../../api/service/VehicleService";
 import { showNotification } from "@mantine/notifications";
+import { useEffect, useState } from "react";
+import { vehicleService } from "../../api/service/VehicleService";
+import { Vehicle } from "../../api/type/VehicleType";
 import TextInputCustom from "../../components/TextInput/TextInputComponent";
 
 interface UpdateVehicleModalProps {
@@ -243,9 +242,9 @@ export default function UpdateVehicleModal({
                 label="Mã tài xế"
                 labelFontWeight="bold"
                 placeHolder="Nhập mã tài xế"
-                name="TaiXeId"
+                name="TaiXeID"
                 value={formData.TaiXeID || ""}
-                setValue={(value) => handleInputChange("TaiXeId", value)}
+                setValue={(value) => handleInputChange("TaiXeID", value)}
               />
             </Grid.Col>
 

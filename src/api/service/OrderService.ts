@@ -89,11 +89,26 @@ export const orderService = {
   //   const response = await axios.get(ENDPOINTS.ORDERS.LIST);
   //   return response.data || { orders: [] };
   // },
+  // getOrder: async (
+  //   page: number = 1,
+  //   limit: number = 10
+  // ): Promise<PagedResponse<Order>> => {
+  //   const response = await axios.get(ENDPOINTS.ORDERS.LIST(page, limit));
+  //   return response.data;
+  // },
   getOrder: async (
     page: number = 1,
-    limit: number = 10
+    limit: number = 10,
+    user: { role: string; id: string }
   ): Promise<PagedResponse<Order>> => {
-    const response = await axios.get(ENDPOINTS.ORDERS.LIST(page, limit));
+    const params = new URLSearchParams({
+      page: page.toString(),
+      limit: limit.toString(),
+      role: user.role,
+      id: user.id,
+    });
+
+    const response = await axios.get(`${ENDPOINTS.ORDERS.LIST()}?${params}`);
     return response.data;
   },
 
@@ -179,6 +194,13 @@ export const orderService = {
         page,
         limit,
       },
+    });
+    return response.data;
+  },
+  assignDriver: async (donHangId: string, taiXeId: string) => {
+    const response = await axios.post(ENDPOINTS.ORDERS.ASSIGN_DRIVER, {
+      donHangId,
+      taiXeId,
     });
     return response.data;
   },

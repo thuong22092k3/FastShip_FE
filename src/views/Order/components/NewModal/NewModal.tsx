@@ -10,10 +10,11 @@ import {
 } from "@mantine/core";
 import "@mantine/core/styles.css";
 import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { orderService } from "../../../../api/service/OrderService";
 import { Order } from "../../../../api/type/OrderType";
 import { ADD_ORDER } from "../../../../state_management/actions/actions";
+import { RootState } from "../../../../state_management/reducers/rootReducer";
 import ConfirmationStep from "./components/ConfirmationStep";
 import DeliveryServiceStep from "./components/DeliveryServiceStep";
 import OrderInfoStep from "./components/OrderInfoStep";
@@ -89,6 +90,8 @@ export default function NewModal({
   onClose,
   onOrderCreated,
 }: NewModalProps) {
+  const { currentUser } = useSelector((state: RootState) => state.authSlice);
+
   const [active, setActive] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -165,7 +168,7 @@ export default function NewModal({
     setIsSubmitting(true);
     try {
       const payload = {
-        NhanVienId: formData.NhanVienId || "NV001",
+        NhanVienID: currentUser?.id,
         NguoiGui: formData.NguoiGui || "",
         NguoiNhan: formData.NguoiNhan || "",
         SDT: formData.SDT || "",

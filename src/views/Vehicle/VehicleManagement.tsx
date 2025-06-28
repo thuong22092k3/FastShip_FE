@@ -1,32 +1,20 @@
-import {
-  Box,
-  Button,
-  Card,
-  Container,
-  Flex,
-  Group,
-  TextInput,
-  Title,
-  Pagination,
-} from "@mantine/core";
+import { Box, Button, Flex, Pagination, TextInput, Title } from "@mantine/core";
 import "@mantine/core/styles.css";
 import {
-  IconSearch,
   IconPlus,
-  IconTruck,
-  IconCircleCheck,
-  IconFolderCheck,
-  IconTruckDelivery,
+  IconSearch,
   IconSettings,
+  IconTruck,
+  IconTruckDelivery,
 } from "@tabler/icons-react";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../state_management/reducers/rootReducer";
 import { vehicleService } from "../../api/service/VehicleService";
-import { uploadVehicles } from "../../state_management/slices/vehicleSlice";
-import { DELETE_VEHICLE } from "../../state_management/actions/actions";
 import CardComponent from "../../components/Card/CardComponent";
 import { VehicleTable } from "../../components/Table/VehicleTable";
+import { DELETE_VEHICLE } from "../../state_management/actions/actions";
+import { RootState } from "../../state_management/reducers/rootReducer";
+import { uploadVehicles } from "../../state_management/slices/vehicleSlice";
 // import NewVehicleModal from "./NewVehicleModal";
 // import { VehicleDetailModal } from "./VehicleDetailModal";
 // import { SimpleDeleteModal } from "./SimpleDeleteModal";

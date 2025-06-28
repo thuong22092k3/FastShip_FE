@@ -1,27 +1,24 @@
 import {
   ActionIcon,
-  Box,
   Button,
   Container,
   Flex,
   Group,
-  Pagination,
   TextInput,
   Title,
 } from "@mantine/core";
+import { showNotification } from "@mantine/notifications";
 import { IconPlus, IconSearch } from "@tabler/icons-react";
 import { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { showNotification } from "@mantine/notifications";
 
-import { RootState } from "../../state_management/reducers/rootReducer";
-import { TaiXe } from "../../api/type/EmployeeType";
 import { employeeService } from "../../api/service/EmployeeService";
-import { uploadDrivers } from "../../state_management/slices/driveSlice";
+import { TaiXe } from "../../api/type/EmployeeType";
 import { TaiXeTable } from "../../components/Table/DriverTable";
-import { DeleteEmployeeModal } from "./DeleteEployeeModal";
+import { RootState } from "../../state_management/reducers/rootReducer";
+import { uploadDrivers } from "../../state_management/slices/driveSlice";
 import AddEmployeeModal from "./CreateEmployee";
-import UpdateEmployeeModal from "./UpdateEmployee";
+import { DeleteEmployeeModal } from "./DeleteEployeeModal";
 import UpdateDriverModal from "./UpdateDriver";
 
 export default function DriverScreen() {

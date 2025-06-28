@@ -1,5 +1,4 @@
 import {
-  Box,
   Button,
   Container,
   Flex,
@@ -8,19 +7,19 @@ import {
   TextInput,
   Title,
 } from "@mantine/core";
-import { IconPlus, IconSearch } from "@tabler/icons-react";
-import { useCallback, useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import { showNotification } from "@mantine/notifications";
+import { IconPlus, IconSearch } from "@tabler/icons-react";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
-import { RootState } from "../../state_management/reducers/rootReducer";
-import { NhanVien } from "../../api/type/EmployeeType";
 import { employeeService } from "../../api/service/EmployeeService";
-import { uploadEmployees } from "../../state_management/slices/employeeSlice";
+import { NhanVien } from "../../api/type/EmployeeType";
 import { NhanVienTable } from "../../components/Table/EmployeeTable";
+import { RootState } from "../../state_management/reducers/rootReducer";
+import { uploadEmployees } from "../../state_management/slices/employeeSlice";
 import AddEmployeeModal from "./CreateEmployee";
-import UpdateEmployeeModal from "./UpdateEmployee";
 import { DeleteEmployeeModal } from "./DeleteEployeeModal";
+import UpdateEmployeeModal from "./UpdateEmployee";
 
 export default function EmployeeManagementScreen() {
   const dispatch = useDispatch();

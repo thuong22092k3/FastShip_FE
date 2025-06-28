@@ -1,17 +1,8 @@
-import {
-  Box,
-  Button,
-  Grid,
-  Group,
-  LoadingOverlay,
-  Select,
-  Text,
-  Title,
-} from "@mantine/core";
-import { useState, useEffect } from "react";
-import { TaiXe } from "../../api/type/EmployeeType";
-import { employeeService } from "../../api/service/EmployeeService";
+import { Button, Grid, Group, LoadingOverlay, Title } from "@mantine/core";
 import { showNotification } from "@mantine/notifications";
+import { useEffect, useState } from "react";
+import { employeeService } from "../../api/service/EmployeeService";
+import { TaiXe } from "../../api/type/EmployeeType";
 import TextInputCustom from "../../components/TextInput/TextInputComponent";
 
 interface UpdateDriverModalProps {
@@ -89,7 +80,7 @@ export default function UpdateDriverModal({
   const handleSubmit = async () => {
     console.log("Bắt đầu quá trình cập nhật");
     if (!formData.TaiXeID) {
-      console.log("Lỗi: Thiếu TaiXeId", formData);
+      console.log("Lỗi: Thiếu TaiXeID", formData);
       return;
     }
 
@@ -103,7 +94,7 @@ export default function UpdateDriverModal({
     console.log("Chuẩn bị gửi dữ liệu cập nhật:", formData);
     try {
       const updateData = {
-        TaiXeId: formData.TaiXeID || "",
+        TaiXeID: formData.TaiXeID || "",
         HoTen: formData.HoTen || "",
         UserName: formData.UserName || "",
         Email: formData.Email || "",

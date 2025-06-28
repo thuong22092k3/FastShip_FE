@@ -40,7 +40,7 @@ declare type TEmployee = {
 declare type TOrder = {
   _id: string;
   DonHangId: string;
-  NhanVienId: string;
+  NhanVienID: string;
   NguoiGui: string;
   NguoiNhan: string;
   SDT: string;
@@ -61,6 +61,7 @@ declare type TOrder = {
     weight: number;
   };
   packageType?: "document" | "parcel" | "heavy_parcel" | "fragile";
+  TaiXeID?: string;
 };
 declare type TDriver = {
   TaiXeID: string;

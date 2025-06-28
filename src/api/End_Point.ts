@@ -13,8 +13,7 @@ export const ENDPOINTS = {
   ORDERS: {
     CREATE: `${BASE_URL}/api/order/createOrder`,
     // LIST: `${BASE_URL}/api/order/getOrder`,
-    LIST: (page: number = 1, limit: number = 10) =>
-      `${BASE_URL}/api/order/getOrder?page=${page}&limit=${limit}`,
+    LIST: () => `${BASE_URL}/api/order/getOrder`,
     // DETAIL: (id: string) => `${BASE_URL}/api/order/getOrderDetail/?id=${id}`,
     DETAIL: (donHangId: string) =>
       `${BASE_URL}/api/order/getOrderDetail?donHangId=${donHangId}`,
@@ -27,6 +26,7 @@ export const ENDPOINTS = {
     SEARCH: `${BASE_URL}/api/order/search`,
     DELIVERY_ROUTE: (donHangId: string) =>
       `${BASE_URL}/api/optimize/delivery_route?donHangId=${donHangId}`,
+    ASSIGN_DRIVER: `${BASE_URL}/api/order/assignDriver`,
   },
   USERS: {
     LIST: `${BASE_URL}/api/auth/users`,

@@ -1,21 +1,20 @@
 import {
-  Box,
   Button,
   Grid,
   Group,
   LoadingOverlay,
+  Radio,
   Select,
   Text,
   Title,
-  Radio,
 } from "@mantine/core";
+import { showNotification } from "@mantine/notifications";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { showNotification } from "@mantine/notifications";
 import { employeeService } from "../../api/service/EmployeeService";
-import { ADD_EMPLOYEE } from "../../state_management/actions/actions";
-import TextInputCustom from "../../components/TextInput/TextInputComponent";
 import { TaiXe } from "../../api/type/EmployeeType";
+import TextInputCustom from "../../components/TextInput/TextInputComponent";
+import { ADD_EMPLOYEE } from "../../state_management/actions/actions";
 
 interface CreateEmployeeModalProps {
   open: boolean;
@@ -98,7 +97,7 @@ export default function CreateEmployeeModal({
   //         ? { ...basePayload, NhanVienID: employeeId }
   //         : {
   //             ...basePayload,
-  //             TaiXeId: employeeId,
+  //             TaiXeID: employeeId,
   //             CongViec: formData.CongViec,
   //           };
   //     // Type assertion here

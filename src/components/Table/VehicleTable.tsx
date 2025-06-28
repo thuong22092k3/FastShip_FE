@@ -1,25 +1,24 @@
-import React, { useState } from "react";
 import {
-  Table,
-  ScrollArea,
+  ActionIcon,
   Badge,
   Checkbox,
   Group,
-  ActionIcon,
+  ScrollArea,
   Select,
+  Table,
 } from "@mantine/core";
 import "@mantine/core/styles.css";
-import { Vehicle } from "../../api/type/VehicleType";
-import CheckboxComponent from "../CheckBox/CheckBoxComponent";
+import { showNotification } from "@mantine/notifications";
 import {
   IconCaretDownFilled,
   IconCaretUpFilled,
   IconEdit,
-  IconEye,
   IconTrash,
 } from "@tabler/icons-react";
+import React, { useState } from "react";
 import { vehicleService } from "../../api/service/VehicleService";
-import { showNotification } from "@mantine/notifications";
+import { Vehicle } from "../../api/type/VehicleType";
+import CheckboxComponent from "../CheckBox/CheckBoxComponent";
 
 type Props = {
   data: Vehicle[];

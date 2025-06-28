@@ -1,7 +1,7 @@
 import axios from "axios";
 import { ENDPOINTS } from "../End_Point";
-import { Admin, NhanVien, TaiXe, User, UserRole } from "../type/EmployeeType";
 import { PagedResponse } from "../type/BaseReponse";
+import { Admin, NhanVien, TaiXe, User, UserRole } from "../type/EmployeeType";
 
 export type CreateUserInput =
   | (Omit<Admin, "AdminID"> & { role: "Admin" })
