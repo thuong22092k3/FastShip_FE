@@ -1,29 +1,47 @@
 import { NavLink } from "@mantine/core";
+import "@mantine/core/styles.css";
 import {
+  IconBrandOffice,
+  IconChartBar,
+  IconLayoutSidebarRightExpand,
+  IconLogout,
+  IconPackage,
   IconShoppingCart,
   IconUsers,
-  IconLayoutSidebarRightExpand,
-  IconPackage,
-  IconChartBar,
-  IconLogout,
-  IconBrandOffice,
 } from "@tabler/icons-react";
-import "@mantine/core/styles.css";
-import { useNavigate, useLocation } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { NAV_LINK } from "./NAV_LINK";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useLocation, useNavigate } from "react-router-dom";
 import { COLORS } from "../../constants/colors";
+import { RootState } from "../../state_management/reducers/rootReducer";
+import { setDrawer } from "../../state_management/slices/controlSlice";
+import { NAV_LINK } from "./NAV_LINK";
 
 interface DrawerItem {
   label: string;
   icon: React.ReactNode;
   link: string;
+  roles: ("Admin" | "TaiXe" | "NhanVien")[];
 }
 
 export default function Drawer() {
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useDispatch();
+
+  const { currentUser, isAuthenticated } = useSelector(
+    (state: RootState) => state.authSlice
+  );
+
+  const openDrawer = useSelector(
+    (state: RootState) => state.controlSlice.openDrawer
+  );
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      navigate(NAV_LINK.LOGIN);
+    }
+  }, [isAuthenticated, navigate]);
 
   const handleClick = (link: string) => {
     if (link === "SignOut") {
@@ -33,55 +51,64 @@ export default function Drawer() {
       navigate(NAV_LINK.LOGIN);
     } else {
       navigate(link);
+      dispatch(setDrawer(true));
     }
   };
 
-  const items: DrawerItem[] = [
+  const allItems: DrawerItem[] = [
     {
       label: "Đơn hàng",
       icon: <IconShoppingCart size={18} />,
       link: NAV_LINK.ORDER_MANAGEMENT,
+      roles: ["Admin", "NhanVien", "TaiXe"],
     },
     {
       label: "Nhân viên",
       icon: <IconUsers size={18} />,
       link: NAV_LINK.EMPLOYEE_MANAGEMENT,
+      roles: ["Admin"],
     },
     {
       label: "Đối tác",
       icon: <IconLayoutSidebarRightExpand size={18} />,
       link: NAV_LINK.PARTNER_MANAGEMENT,
+      roles: ["Admin"],
     },
     {
       label: "Phương tiện",
       icon: <IconPackage size={18} />,
       link: NAV_LINK.VEHICLE_MANAGEMENT,
+      roles: ["Admin", "NhanVien"],
     },
     {
       label: "Bưu cục",
       icon: <IconBrandOffice size={18} />,
       link: NAV_LINK.POST_OFFICE_MANAGEMENT,
+      roles: ["Admin"],
     },
-
     {
       label: "Thống kê",
       icon: <IconChartBar size={18} />,
       link: NAV_LINK.STATISTICS,
+      roles: ["Admin"],
     },
-
     {
       label: "Đăng xuất",
       icon: <IconLogout size={18} />,
       link: "SignOut",
+      roles: ["Admin", "NhanVien", "TaiXe"],
     },
   ];
+
+  const filteredItems = allItems.filter((item) =>
+    item.roles.includes(currentUser?.role || "TaiXe")
+  );
 
   return (
     <div
       style={{
         height: "100vh",
-        width: "250px",
-        // background: "linear-gradient(160deg, #1e3a8a 0%, #1e40af 100%)",
+        minWidth: "250px",
         background: COLORS.mediumBlue,
         color: "white",
         display: "flex",
@@ -106,7 +133,7 @@ export default function Drawer() {
           gap: "10px",
         }}
       >
-        {items.map((item) => {
+        {filteredItems.map((item) => {
           const isActive = location.pathname === item.link;
 
           return (

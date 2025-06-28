@@ -1,47 +1,47 @@
-import { Route, Routes, useLocation } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { Box, ScrollArea } from "@mantine/core";
 import { useMemo } from "react";
-import { AppShell, Box, ScrollArea } from "@mantine/core";
+import { useSelector } from "react-redux";
+import { Route, Routes, useLocation } from "react-router-dom";
+import CustomHeader from "../../components/Header/Header";
 import { RootState } from "../../state_management/reducers/rootReducer";
 import Drawer from "../components/Drawer";
-import CustomHeader from "../../components/Header/Header";
 
+import "@mantine/core/styles.css";
 import EmployeeManagementScreen from "../../views/Employee/EmployeeManagement";
+import LocationManagement from "../../views/Location/LocationManagement";
 import OrderManagementScreen from "../../views/Order/OrderManagement";
 import PartnerManagementScreen from "../../views/Partner/PartnerManagement";
 import StatisticScreen from "../../views/Statistics/StatisticsScreen";
 import VehicleManagementScreen from "../../views/Vehicle/VehicleManagement";
-import LocationManagement from "../../views/Location/LocationManagement";
-import "@mantine/core/styles.css";
 
 const ROUTES = [
   {
-    path: "employee",
+    path: "/home/employee",
     element: <EmployeeManagementScreen />,
     name: "Employee Management",
   },
   {
-    path: "order",
+    path: "/home/order",
     element: <OrderManagementScreen />,
     name: "Order Management",
   },
   {
-    path: "partner",
+    path: "/home/partner",
     element: <PartnerManagementScreen />,
     name: "Partner Management",
   },
   {
-    path: "vehicle",
+    path: "/home/vehicle",
     element: <VehicleManagementScreen />,
     name: "Vehicle Management",
   },
   {
-    path: "post",
+    path: "/home/post",
     element: <LocationManagement />,
     name: "Post office",
   },
   {
-    path: "statistics",
+    path: "/home/statistics",
     element: <StatisticScreen />,
     name: "Statistics",
   },

@@ -1,10 +1,10 @@
 // src/slices/authSlice.ts
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import {
-  RESET_ALL_STORES,
   ADD_ADMIN,
   ADD_DRIVER,
   ADD_EMPLOYEE,
+  RESET_ALL_STORES,
 } from "../actions/actions";
 
 // Định nghĩa interface AuthUser
@@ -12,9 +12,8 @@ interface AuthUser {
   id: string;
   username: string;
   fullName: string;
-  email: string;
-  role: "admin" | "driver" | "employee";
-  token: string;
+  email?: string;
+  role?: "Admin" | "TaiXe" | "NhanVien";
 }
 
 // Định nghĩa interface AuthState
@@ -68,8 +67,7 @@ const authSlice = createSlice({
           username: action.payload.UserName,
           fullName: action.payload.HoTen,
           email: action.payload.Email,
-          role: "admin",
-          token: state.currentUser.token,
+          role: "Admin",
         };
       }
     });
@@ -81,8 +79,7 @@ const authSlice = createSlice({
           username: action.payload.UserName,
           fullName: action.payload.HoTen,
           email: action.payload.Email,
-          role: "driver",
-          token: state.currentUser.token,
+          role: "TaiXe",
         };
       }
     });
@@ -94,8 +91,7 @@ const authSlice = createSlice({
           username: action.payload.UserName,
           fullName: action.payload.HoTen,
           email: action.payload.Email,
-          role: "employee",
-          token: state.currentUser.token,
+          role: "NhanVien",
         };
       }
     });

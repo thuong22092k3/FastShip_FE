@@ -2,10 +2,10 @@
 import axios from "axios";
 import { ENDPOINTS } from "../End_Point";
 import {
-  User,
   Admin,
   NhanVien,
   TaiXe,
+  User,
   isAdmin,
   isNhanVien,
   isTaiXe,
@@ -18,7 +18,7 @@ export const AuthService = {
         UserName,
         Password,
       });
-      console.log(response);
+      console.log("response", response);
       console.log(ENDPOINTS.AUTH.LOGIN);
       if (response.data && response.data.user) {
         return response.data.user as Admin;
