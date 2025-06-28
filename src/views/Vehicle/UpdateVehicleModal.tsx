@@ -3,17 +3,19 @@ import {
   Grid,
   Group,
   LoadingOverlay,
-  Select,
+  NativeSelect,
   Text,
   Title,
 } from "@mantine/core";
 import "@mantine/core/styles.css";
+import { DateTimePicker } from "@mantine/dates";
+import "@mantine/dates/styles.css";
 import { showNotification } from "@mantine/notifications";
 import { useEffect, useState } from "react";
 import { vehicleService } from "../../api/service/VehicleService";
 import { Vehicle } from "../../api/type/VehicleType";
 import TextInputCustom from "../../components/TextInput/TextInputComponent";
-
+import { COLORS } from "../../constants/colors";
 interface UpdateVehicleModalProps {
   open: boolean;
   onClose: () => void;
@@ -37,11 +39,11 @@ export default function UpdateVehicleModal({
     BienSo: "",
     LoaiXe: "",
     SucChua: 0,
-    TrangThai: "Hoạt động",
-    BaoDuong: "Đã bảo dưỡng",
+    TrangThai: "",
+    BaoDuong: "",
+    ThoiGianBaoDuong: "",
   });
 
-  // Cập nhật formData khi vehicleData thay đổi
   useEffect(() => {
     if (vehicleData) {
       setFormData({
@@ -53,6 +55,7 @@ export default function UpdateVehicleModal({
         SucChua: vehicleData.SucChua,
         TrangThai: vehicleData.TrangThai,
         BaoDuong: vehicleData.BaoDuong,
+        ThoiGianBaoDuong: vehicleData.ThoiGianBaoDuong,
       });
     }
   }, [vehicleData]);
@@ -99,6 +102,7 @@ export default function UpdateVehicleModal({
         SucChua: Number(formData.SucChua),
         TrangThai: formData.TrangThai,
         BaoDuong: formData.BaoDuong,
+        ThoiGianBaoDuong: formData.ThoiGianBaoDuong,
       });
 
       showNotification({
@@ -181,6 +185,7 @@ export default function UpdateVehicleModal({
                 value={formData.PhuongTienId || ""}
                 setValue={() => {}}
                 readOnly
+                labelColor={COLORS.black}
               />
             </Grid.Col>
 
@@ -194,6 +199,7 @@ export default function UpdateVehicleModal({
                 setValue={(value) => handleInputChange("HangXe", value)}
                 error={errors.HangXe}
                 required
+                labelColor={COLORS.black}
               />
             </Grid.Col>
 
@@ -207,6 +213,7 @@ export default function UpdateVehicleModal({
                 setValue={(value) => handleInputChange("BienSo", value)}
                 error={errors.BienSo}
                 required
+                labelColor={COLORS.black}
               />
             </Grid.Col>
 
@@ -220,6 +227,7 @@ export default function UpdateVehicleModal({
                 setValue={(value) => handleInputChange("LoaiXe", value)}
                 error={errors.LoaiXe}
                 required
+                labelColor={COLORS.black}
               />
             </Grid.Col>
 
@@ -234,6 +242,7 @@ export default function UpdateVehicleModal({
                 error={errors.SucChua}
                 required
                 pattern="[0-9]*"
+                labelColor={COLORS.black}
               />
             </Grid.Col>
 
@@ -245,46 +254,86 @@ export default function UpdateVehicleModal({
                 name="TaiXeID"
                 value={formData.TaiXeID || ""}
                 setValue={(value) => handleInputChange("TaiXeID", value)}
+                labelColor={COLORS.black}
               />
             </Grid.Col>
 
             <Grid.Col span={6}>
-              <Text fw={500} mb="sm">
+              <Text
+                fw={600}
+                mt="xs"
+                mb="sm"
+                style={{ color: "black", fontSize: 12 }}
+              >
                 Trạng thái
               </Text>
-              <Select
+              <NativeSelect
                 data={[
                   { value: "Đang hoạt động", label: "Đang hoạt động" },
                   { value: "Đang bảo dưỡng", label: "Đang bảo dưỡng" },
                   { value: "Ngừng hoạt động", label: "Ngừng hoạt động" },
                 ]}
                 value={formData.TrangThai}
-                onChange={(value) =>
+                onChange={(e) =>
                   setFormData((prev) => ({
                     ...prev,
-                    TrangThai: value || "Đang hoạt động",
+                    TrangThai: e.target.value || "Đang Hoạt động",
                   }))
                 }
               />
             </Grid.Col>
 
             <Grid.Col span={6}>
-              <Text fw={500} mb="sm">
+              <Text
+                fw={600}
+                mt="xs"
+                mb="sm"
+                style={{ color: "black", fontSize: 12 }}
+              >
                 Tình trạng bảo dưỡng
               </Text>
-              <Select
+              <NativeSelect
                 data={[
                   { value: "Đã bảo dưỡng", label: "Đã bảo dưỡng" },
                   { value: "Đang bảo dưỡng", label: "Đang bảo dưỡng" },
                   { value: "Chờ bảo dưỡng", label: "Chờ bảo dưỡng" },
                 ]}
                 value={formData.BaoDuong}
-                onChange={(value) =>
+                onChange={(e) =>
                   setFormData((prev) => ({
                     ...prev,
-                    BaoDuong: value || "Đã bảo dưỡng",
+                    BaoDuong: e.target.value || "Đã bảo dưỡng",
                   }))
                 }
+              />
+            </Grid.Col>
+
+            <Grid.Col span={6}>
+              <Text
+                fw={600}
+                mt="xs"
+                mb="sm"
+                style={{ color: "black", fontSize: 12 }}
+              >
+                Thời gian bảo dưỡng
+              </Text>
+              <DateTimePicker
+                label="Thời gian bảo dưỡng"
+                value={
+                  formData.ThoiGianBaoDuong
+                    ? new Date(formData.ThoiGianBaoDuong)
+                    : null
+                }
+                onChange={(date: Date | null) =>
+                  handleInputChange(
+                    "ThoiGianBaoDuong",
+                    date?.toISOString() || ""
+                  )
+                }
+                popoverProps={{ withinPortal: true, zIndex: 10001 }}
+                placeholder="Chọn ngày và giờ"
+                valueFormat="DD/MM/YYYY HH:mm"
+                style={{ width: "100%" }}
               />
             </Grid.Col>
           </Grid>

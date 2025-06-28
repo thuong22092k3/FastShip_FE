@@ -1,3 +1,4 @@
+import { showNotification } from "@mantine/notifications";
 import axios from "axios";
 import { ENDPOINTS } from "../End_Point";
 import { Vehicle } from "../type/VehicleType";
@@ -15,8 +16,28 @@ export const vehicleService = {
     try {
       const response = await axios.post(ENDPOINTS.VEHICLES.CREATE, data);
       return response.data;
-    } catch (error) {
-      console.error("Error creating vehicle:", error);
+    } catch (error: any) {
+      if (axios.isAxiosError(error)) {
+        if (error.response?.status === 409) {
+          showNotification({
+            title: "Trùng biển số",
+            message: "Phương tiện với biển số này đã tồn tại!",
+            color: "red",
+          });
+        } else {
+          showNotification({
+            title: "Lỗi",
+            message: "Không thể thêm phương tiện. Vui lòng thử lại.",
+            color: "red",
+          });
+        }
+      } else {
+        showNotification({
+          title: "Lỗi không xác định",
+          message: "Đã xảy ra lỗi không xác định khi thêm phương tiện.",
+          color: "red",
+        });
+      }
       throw error;
     }
   },

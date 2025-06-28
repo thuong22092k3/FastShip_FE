@@ -3,18 +3,22 @@ import {
   Grid,
   Group,
   LoadingOverlay,
-  Select,
+  NativeSelect,
   Text,
   Title,
 } from "@mantine/core";
 import "@mantine/core/styles.css";
 import { showNotification } from "@mantine/notifications";
-import { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { employeeService } from "../../api/service/EmployeeService";
 import { vehicleService } from "../../api/service/VehicleService";
 import { Vehicle } from "../../api/type/VehicleType";
 import TextInputCustom from "../../components/TextInput/TextInputComponent";
+import { COLORS } from "../../constants/colors";
 import { ADD_VEHICLE } from "../../state_management/actions/actions";
+import { RootState } from "../../state_management/reducers/rootReducer";
+import { uploadDrivers } from "../../state_management/slices/driveSlice";
 
 interface AddVehicleModalProps {
   open: boolean;
@@ -32,8 +36,8 @@ export default function AddVehicleModal({
   const dispatch = useDispatch();
   const [formData, setFormData] = useState<Partial<Vehicle>>({
     TrangThai: "Hoạt động",
-    BaoDuong: "Đã bảo dưỡng tháng 3/2024",
-    SucChua: 1000,
+    // BaoDuong: "Đã bảo dưỡng tháng 3/2024",
+    SucChua: 0,
   });
 
   const handleInputChange = (name: string, value: string) => {
@@ -53,6 +57,27 @@ export default function AddVehicleModal({
     }
   };
 
+  useEffect(() => {
+    const fetchDrivers = async (page: number = 1, limit: number = 10) => {
+      try {
+        let response;
+
+        response = await employeeService.getAllDrivers(page, limit);
+        console.log("response total", response.total);
+        if (response && Array.isArray(response)) {
+          dispatch(uploadDrivers(response));
+        } else {
+          dispatch(uploadDrivers([]));
+        }
+      } catch (err) {
+        dispatch(uploadDrivers([]));
+      } finally {
+      }
+    };
+    fetchDrivers();
+  }, []);
+  const drivers = useSelector((state: RootState) => state.driverSlice);
+
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
     if (!formData.HangXe) newErrors.HangXe = "Vui lòng nhập hãng xe";
@@ -64,7 +89,7 @@ export default function AddVehicleModal({
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
-
+  console.log("TaiXeID", formData.TaiXeID);
   const handleSubmit = async () => {
     if (!validateForm()) return;
 
@@ -78,7 +103,7 @@ export default function AddVehicleModal({
         LoaiXe: formData.LoaiXe || "",
         SucChua: Number(formData.SucChua) || 0,
         TrangThai: formData.TrangThai || "Hoạt động",
-        BaoDuong: formData.BaoDuong || "Đã bảo dưỡng tháng 3/2024",
+        BaoDuong: formData.BaoDuong || "",
       };
 
       const createdVehicle = await vehicleService.createVehicle(payload);
@@ -108,8 +133,8 @@ export default function AddVehicleModal({
   const resetForm = () => {
     setFormData({
       TrangThai: "Hoạt động",
-      BaoDuong: "Đã bảo dưỡng tháng 3/2024",
-      SucChua: 1000,
+      BaoDuong: "",
+      SucChua: 0,
     });
     setErrors({});
   };
@@ -175,6 +200,7 @@ export default function AddVehicleModal({
                 setValue={(value) => handleInputChange("HangXe", value)}
                 error={errors.HangXe}
                 required
+                labelColor={COLORS.black}
               />
             </Grid.Col>
 
@@ -188,6 +214,7 @@ export default function AddVehicleModal({
                 setValue={(value) => handleInputChange("BienSo", value)}
                 error={errors.BienSo}
                 required
+                labelColor={COLORS.black}
               />
             </Grid.Col>
 
@@ -201,6 +228,7 @@ export default function AddVehicleModal({
                 setValue={(value) => handleInputChange("LoaiXe", value)}
                 error={errors.LoaiXe}
                 required
+                labelColor={COLORS.black}
               />
             </Grid.Col>
 
@@ -210,46 +238,72 @@ export default function AddVehicleModal({
                 labelFontWeight="bold"
                 placeHolder="Nhập sức chứa"
                 name="SucChua"
-                value={formData.SucChua?.toString() || "1000"}
+                value={formData.SucChua?.toString() || "0"}
                 setValue={(value) => handleInputChange("SucChua", value)}
                 error={errors.SucChua}
                 required
                 pattern="[0-9]*"
+                labelColor={COLORS.black}
               />
             </Grid.Col>
 
             <Grid.Col span={6}>
-              <TextInputCustom
-                label="Mã tài xế"
-                labelFontWeight="bold"
-                placeHolder="Nhập mã tài xế"
-                name="TaiXeID"
-                value={formData.TaiXeID || "TX134"}
-                setValue={(value) => handleInputChange("TaiXeID", value)}
+              <Text
+                fw={600}
+                mt="xs"
+                mb="sm"
+                style={{ color: "black", fontSize: 12 }}
+              >
+                Tài xế phụ trách
+              </Text>
+
+              <NativeSelect
+                data={[
+                  { value: "", label: "Chọn tài xế" },
+                  ...drivers.map((driver) => ({
+                    value: driver.TaiXeID,
+                    label: driver.HoTen,
+                  })),
+                ]}
+                value={formData.TaiXeID || ""}
+                onChange={(e) =>
+                  setFormData((prev) => ({
+                    ...prev,
+                    TaiXeID: e.target.value || "",
+                  }))
+                }
+                required
+                mb="md"
               />
             </Grid.Col>
 
             <Grid.Col span={6}>
-              <Text fw={500} mb="sm">
+              <Text
+                fw={600}
+                mt="xs"
+                mb="sm"
+                style={{ color: "black", fontSize: 12 }}
+              >
                 Trạng thái
               </Text>
-              <Select
+              <NativeSelect
                 data={[
                   { value: "Hoạt động", label: "Hoạt động" },
                   { value: "Không hoạt động", label: "Không hoạt động" },
                   { value: "Bảo trì", label: "Bảo trì" },
                 ]}
-                value={formData.TrangThai}
-                onChange={(value) =>
+                value={formData.TrangThai || "Hoạt động"}
+                onChange={(e) =>
                   setFormData((prev) => ({
                     ...prev,
-                    TrangThai: value || "Hoạt động",
+                    TrangThai: e.target.value || "Hoạt động",
                   }))
                 }
+                disabled
               />
             </Grid.Col>
 
-            <Grid.Col span={12}>
+            {/* <Grid.Col span={12}>
               <TextInputCustom
                 label="Tình trạng bảo dưỡng"
                 labelFontWeight="bold"
@@ -258,7 +312,7 @@ export default function AddVehicleModal({
                 value={formData.BaoDuong || "Đã bảo dưỡng tháng 3/2024"}
                 setValue={(value) => handleInputChange("BaoDuong", value)}
               />
-            </Grid.Col>
+            </Grid.Col> */}
           </Grid>
 
           <Group justify="flex-end" mt="xl">

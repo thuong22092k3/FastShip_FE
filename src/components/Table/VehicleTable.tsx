@@ -16,8 +16,10 @@ import {
   IconTrash,
 } from "@tabler/icons-react";
 import React, { useState } from "react";
+import { useDispatch } from "react-redux";
 import { vehicleService } from "../../api/service/VehicleService";
 import { Vehicle } from "../../api/type/VehicleType";
+import { uploadVehicles } from "../../state_management/slices/vehicleSlice";
 import CheckboxComponent from "../CheckBox/CheckBoxComponent";
 
 type Props = {
@@ -65,6 +67,7 @@ const columnWidths: { [key: string]: string } = {
   sucChua: "100px",
   trangThai: "150px",
   baoDuong: "150px",
+  thoiGianBaoDuong: "150px",
   hanhDong: "120px",
 };
 
@@ -80,6 +83,7 @@ export const VehicleTable: React.FC<Props> = ({
   const [isChecked, setIsChecked] = useState(false);
   const [sortBy, setSortBy] = useState<keyof Vehicle | null>(null);
   const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc");
+  const dispatch = useDispatch();
 
   const statusOptions = [
     { value: "Đang hoạt động", label: "Đang hoạt động" },
@@ -138,6 +142,10 @@ export const VehicleTable: React.FC<Props> = ({
       await vehicleService.updateVehicle(phuongTienId, {
         TrangThai: newStatus,
       });
+
+      const updatedVehicles = await vehicleService.getAllVehicles();
+      dispatch(uploadVehicles(updatedVehicles.data));
+
       showNotification({
         title: "Cập nhật thành công",
         message: "Trạng thái phương tiện đã được cập nhật",
@@ -160,6 +168,8 @@ export const VehicleTable: React.FC<Props> = ({
       await vehicleService.updateVehicle(phuongTienId, {
         BaoDuong: newMaintenanceStatus,
       });
+      const updatedVehicles = await vehicleService.getAllVehicles();
+      dispatch(uploadVehicles(updatedVehicles.data));
       showNotification({
         title: "Cập nhật thành công",
         message: "Trạng thái bảo dưỡng đã được cập nhật",
@@ -265,6 +275,7 @@ export const VehicleTable: React.FC<Props> = ({
             />
           </div>
         </Table.Td>
+        <Table.Td style={cellStyle}>{vehicle.ThoiGianBaoDuong}</Table.Td>
         <Table.Td style={cellStyle}>
           <Group gap="xs">
             <ActionIcon
@@ -316,57 +327,6 @@ export const VehicleTable: React.FC<Props> = ({
           borderCollapse: "collapse",
         }}
       >
-        {/* <Table.Thead>
-          <Table.Tr style={{ borderBottom: "1px solid #ccc" }}>
-            <Table.Th
-              style={{ ...headerStyle, minWidth: columnWidths.checkbox }}
-            >
-              <CheckboxComponent
-                isChecked={isChecked}
-                setIsChecked={setIsChecked}
-              />
-            </Table.Th>
-            <Table.Th
-              style={{ ...headerStyle, minWidth: columnWidths.phuongTienId }}
-            >
-              ID Phương tiện
-            </Table.Th>
-            <Table.Th style={{ ...headerStyle, minWidth: columnWidths.hangXe }}>
-              Hãng xe
-            </Table.Th>
-            <Table.Th
-              style={{ ...headerStyle, minWidth: columnWidths.TaiXeID }}
-            >
-              Tài xế ID
-            </Table.Th>
-            <Table.Th style={{ ...headerStyle, minWidth: columnWidths.bienSo }}>
-              Biển số
-            </Table.Th>
-            <Table.Th style={{ ...headerStyle, minWidth: columnWidths.loaiXe }}>
-              Loại xe
-            </Table.Th>
-            <Table.Th
-              style={{ ...headerStyle, minWidth: columnWidths.sucChua }}
-            >
-              Sức chứa
-            </Table.Th>
-            <Table.Th
-              style={{ ...headerStyle, minWidth: columnWidths.trangThai }}
-            >
-              Trạng thái
-            </Table.Th>
-            <Table.Th
-              style={{ ...headerStyle, minWidth: columnWidths.baoDuong }}
-            >
-              Bảo dưỡng
-            </Table.Th>
-            <Table.Th
-              style={{ ...headerStyle, minWidth: columnWidths.hanhDong }}
-            >
-              Hành động
-            </Table.Th>
-          </Table.Tr>
-        </Table.Thead> */}
         <Table.Th style={{ ...headerStyle, minWidth: columnWidths.checkbox }}>
           <CheckboxComponent
             isChecked={isChecked}
@@ -382,6 +342,7 @@ export const VehicleTable: React.FC<Props> = ({
           { key: "SucChua", label: "Sức chứa" },
           { key: "trangThai", label: "Trạng thái" },
           { key: "baoDuong", label: "Bảo dưỡng" },
+          { key: "thoiGianBaoDuong", label: "Thời gian bảo dưỡng" },
         ].map(({ key, label }) => (
           <Table.Th
             key={key}

@@ -28,6 +28,7 @@ declare type TVehicle = {
   SucChua: number;
   TrangThai: string;
   BaoDuong: string;
+  ThoiGianBaoDuong?: string;
 };
 declare type TEmployee = {
   NhanVienID: string;

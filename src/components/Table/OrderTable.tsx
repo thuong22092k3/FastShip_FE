@@ -114,10 +114,11 @@ export const OrderTable: React.FC<Props> = ({
   limit = 10,
   onLimitChange,
 }) => {
+  const { currentUser } = useSelector((state: RootState) => state.authSlice);
   const [selectedRows, setSelectedRows] = useState<string[]>([]);
   const [sortBy, setSortBy] = useState<keyof Order | null>(null);
   const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc");
-  const [columns, setColumns] = useState(allColumns);
+  const [columns, setColumns] = useState(allColumns.map((col) => ({ ...col })));
   const dispatch = useDispatch();
   const orders = useSelector((state: RootState) => state.orderSlice);
   const pageSizeOptions = PAGE_SIZE_OPTIONS;
@@ -184,6 +185,30 @@ export const OrderTable: React.FC<Props> = ({
     };
     fetchDrivers();
   }, []);
+  useEffect(() => {
+    if (!currentUser?.role) return;
+
+    setColumns((prevColumns) =>
+      prevColumns.map((col) => {
+        if (currentUser.role === "Admin") {
+          return { ...col, visible: true };
+        }
+
+        if (currentUser.role === "NhanVien") {
+          if (col.key === "TaiXeID") return { ...col, visible: true };
+          if (col.key === "NhanVienID") return { ...col, visible: false };
+        }
+
+        if (currentUser.role === "TaiXe") {
+          if (col.key === "TaiXeID" || col.key === "NhanVienID") {
+            return { ...col, visible: false };
+          }
+        }
+
+        return col;
+      })
+    );
+  }, [currentUser?.role]);
   const drivers = useSelector((state: RootState) => state.driverSlice);
 
   const handleUpdateStatus = async (orderId: string, newStatus: string) => {

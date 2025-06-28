@@ -7,4 +7,5 @@ export type Vehicle = {
   SucChua: number;
   TrangThai: string;
   BaoDuong: string;
+  ThoiGianBaoDuong?: string;
 };
