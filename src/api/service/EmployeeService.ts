@@ -89,6 +89,7 @@ export const employeeService = {
               HoTen: user.HoTen,
               Email: user.Email,
               HieuSuat: user.HieuSuat || 0,
+              DiaDiemId: user.DiaDiemId,
               role: "NhanVien",
             };
           case "TaiXe":
@@ -101,6 +102,7 @@ export const employeeService = {
               Email: user.Email,
               HieuSuat: user.HieuSuat || 0,
               CongViec: user.CongViec || 0,
+              DiaDiemId: user.DiaDiemId,
               role: "TaiXe",
             };
           default:
@@ -159,6 +161,7 @@ export const employeeService = {
         Password: user.Password,
         Email: user.Email,
         HieuSuat: user.HieuSuat || 0,
+        DiaDiemId: user.DiaDiemId,
         role: "NhanVien" as const,
       }));
     } catch (error) {
@@ -178,6 +181,7 @@ export const employeeService = {
         Email: user.Email,
         HieuSuat: user.HieuSuat || 0,
         CongViec: user.CongViec || 0,
+        DiaDiemId: user.DiaDiemId,
         role: "TaiXe" as const,
       }));
     } catch (error) {

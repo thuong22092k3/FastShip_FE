@@ -13,6 +13,7 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import { employeeService } from "../../api/service/EmployeeService";
+import { LocationService } from "../../api/service/LocationService";
 import { NhanVien } from "../../api/type/EmployeeType";
 import { NhanVienTable } from "../../components/Table/EmployeeTable";
 import { RootState } from "../../state_management/reducers/rootReducer";
@@ -37,6 +38,8 @@ export default function EmployeeManagementScreen() {
   );
   const [openUpdateModal, setOpenUpdateModal] = useState(false);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
+
+  const [locations, setLocations] = useState<TLocation[]>([]);
 
   // const fetchEmployees = async () => {
   //   try {
@@ -66,8 +69,19 @@ export default function EmployeeManagementScreen() {
       setLoading(false);
     }
   };
+
+  const fetchLocations = async () => {
+    try {
+      const response = await LocationService.getAll();
+      setLocations(response);
+    } catch (error) {
+      console.error("Error fetching locations:", error);
+    }
+  };
+
   useEffect(() => {
     fetchEmployees();
+    fetchLocations();
   }, [refreshKey]);
 
   const filteredEmployees = employees?.filter(
@@ -118,6 +132,7 @@ export default function EmployeeManagementScreen() {
     Password: emp.Password,
     Email: emp.Email,
     HieuSuat: emp.HieuSuat,
+    DiaDiemId: emp.DiaDiemId,
     role: "NhanVien",
   }));
 
@@ -148,6 +163,7 @@ export default function EmployeeManagementScreen() {
         error={error}
         onEdit={handleUpdate}
         onDelete={handleDelete}
+        locations={locations}
       />
 
       <Pagination total={1} value={page} onChange={setPage} mt="md" />

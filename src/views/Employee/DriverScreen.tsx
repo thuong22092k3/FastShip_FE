@@ -13,6 +13,7 @@ import { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import { employeeService } from "../../api/service/EmployeeService";
+import { LocationService } from "../../api/service/LocationService";
 import { TaiXe } from "../../api/type/EmployeeType";
 import { TaiXeTable } from "../../components/Table/DriverTable";
 import { RootState } from "../../state_management/reducers/rootReducer";
@@ -39,6 +40,8 @@ export default function DriverScreen() {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
   const [totalDrivers, setTotalDrivers] = useState(0);
+
+  const [locations, setLocations] = useState<TLocation[]>([]);
   // const fetchDrivers = async () => {
   //   try {
   //     setLoading(true);
@@ -95,12 +98,23 @@ export default function DriverScreen() {
       setLoading(false);
     }
   };
+
+  const fetchLocations = async () => {
+    try {
+      const response = await LocationService.getAll();
+      setLocations(response);
+    } catch (error) {
+      console.error("Error fetching locations:", error);
+    }
+  };
+
   const handleSearch = useCallback(() => {
     setCurrentPage(1);
     setRefreshKey((prev) => prev + 1);
   }, []);
   useEffect(() => {
     fetchDrivers(currentPage, itemsPerPage);
+    fetchLocations();
   }, [refreshKey, currentPage, itemsPerPage, search]);
   const handleOrderCreated = () => {
     setRefreshKey((prev) => prev + 1);
@@ -121,6 +135,7 @@ export default function DriverScreen() {
     Email: emp.Email,
     HieuSuat: emp.HieuSuat,
     CongViec: emp.CongViec || 0,
+    DiaDiemId: emp.DiaDiemId,
     role: "TaiXe" as const,
   }));
 
@@ -210,6 +225,7 @@ export default function DriverScreen() {
           setItemsPerPage(newLimit);
           setCurrentPage(1);
         }}
+        locations={locations}
       />
 
       {/* <Pagination total={1} value={page} onChange={setPage} mt="md" /> */}

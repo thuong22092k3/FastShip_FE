@@ -36,6 +36,7 @@ type Props = {
   onLimitChange?: (limit: number) => void;
   total?: number;
   limit?: number;
+  locations: TLocation[];
 };
 
 const columnWidths: { [key: string]: string } = {
@@ -57,6 +58,7 @@ const allColumns = [
   { key: "Email", label: "Email", visible: true },
   { key: "HieuSuat", label: "Hiệu suất", visible: true },
   { key: "CongViec", label: "Tình trạng", visible: true },
+  { key: "DiaDiemId", label: "Địa điểm", visible: true },
 ];
 
 const getPerformanceColor = (hieuSuat: number) => {
@@ -89,12 +91,20 @@ export const TaiXeTable: React.FC<Props> = ({
   total = 0,
   limit = 10,
   onLimitChange,
+  locations,
 }) => {
   const [selectedRows, setSelectedRows] = useState<string[]>([]);
   const [isChecked, setIsChecked] = useState(false);
   const [sortBy, setSortBy] = useState<keyof TaiXe | null>(null);
   const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc");
   const [columns, setColumns] = useState(allColumns);
+
+  const getLocationName = (locationId: string) => {
+    const location = locations.find((loc) => loc.DiaDiemId === locationId);
+    return location
+      ? `${location.name} (${location.district})`
+      : "Chưa phân công";
+  };
 
   const handleRowSelect = (id: string, checked: boolean) => {
     setSelectedRows((prev) =>
@@ -203,6 +213,9 @@ export const TaiXeTable: React.FC<Props> = ({
             <Badge color={jobStatus.color}>{jobStatus.label}</Badge>
           </Table.Td>
         )}
+        <Table.Td style={cellStyle}>
+          {getLocationName(taiXe.DiaDiemId)}
+        </Table.Td>
         <Table.Td style={cellStyle}>
           <Group gap="xs">
             <ActionIcon

@@ -17,6 +17,7 @@ export type NhanVien = UserBase & {
   NhanVienID: string;
   HieuSuat: number;
   role: "NhanVien";
+  DiaDiemId: string;
 };
 
 export type TaiXe = UserBase & {
@@ -24,6 +25,7 @@ export type TaiXe = UserBase & {
   HieuSuat: number;
   CongViec: number;
   role: "TaiXe";
+  DiaDiemId: string;
 };
 
 export type User = Admin | NhanVien | TaiXe;

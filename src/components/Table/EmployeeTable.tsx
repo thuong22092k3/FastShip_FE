@@ -24,6 +24,7 @@ type Props = {
   error?: string;
   onDelete: (UserName: string) => void;
   onEdit: (nhanVien: NhanVien) => void;
+  locations: TLocation[];
 };
 
 const columnWidths: { [key: string]: string } = {
@@ -33,6 +34,7 @@ const columnWidths: { [key: string]: string } = {
   userName: "150px",
   email: "200px",
   hieuSuat: "120px",
+  location: "250px",
   hanhDong: "120px",
 };
 
@@ -48,11 +50,19 @@ export const NhanVienTable: React.FC<Props> = ({
   error,
   onDelete,
   onEdit,
+  locations,
 }) => {
   const [selectedRows, setSelectedRows] = useState<string[]>([]);
   const [isChecked, setIsChecked] = useState(false);
   const [sortBy, setSortBy] = useState<keyof NhanVien | null>(null);
   const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc");
+
+  const getLocationName = (locationId: string) => {
+    const location = locations.find((loc) => loc.DiaDiemId === locationId);
+    return location
+      ? `${location.name} (${location.district})`
+      : "Chưa phân công";
+  };
 
   const handleRowSelect = (id: string, checked: boolean) => {
     setSelectedRows((prev) =>
@@ -123,6 +133,9 @@ export const NhanVienTable: React.FC<Props> = ({
           <Badge color={getPerformanceColor(nhanVien.HieuSuat)}>
             {nhanVien.HieuSuat}%
           </Badge>
+        </Table.Td>
+        <Table.Td style={cellStyle}>
+          {getLocationName(nhanVien.DiaDiemId)}
         </Table.Td>
         <Table.Td style={cellStyle}>
           <Group gap="xs">
@@ -212,6 +225,7 @@ export const NhanVienTable: React.FC<Props> = ({
           { key: "UserName", label: "Tài khoản" },
           { key: "Email", label: "Email" },
           { key: "HieuSuat", label: "Hiệu suất" },
+          { key: "DiaDiemId", label: "Bưu cục" },
         ].map(({ key, label }) => (
           <Table.Th
             key={key}

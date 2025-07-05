@@ -37,6 +37,7 @@ declare type TEmployee = {
   Password: string;
   Email: string;
   HieuSuat: number;
+  DiaDiemId: string;
 };
 declare type TOrder = {
   _id: string;
@@ -72,6 +73,7 @@ declare type TDriver = {
   Email: string;
   HieuSuat: number;
   CongViec: number;
+  DiaDiemId: string;
 };
 declare type TAdmin = {
   AdminId: string;

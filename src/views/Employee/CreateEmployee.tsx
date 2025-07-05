@@ -3,15 +3,17 @@ import {
   Grid,
   Group,
   LoadingOverlay,
+  NativeSelect,
   Radio,
   Select,
   Text,
   Title,
 } from "@mantine/core";
 import { showNotification } from "@mantine/notifications";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { employeeService } from "../../api/service/EmployeeService";
+import { LocationService } from "../../api/service/LocationService";
 import { TaiXe } from "../../api/type/EmployeeType";
 import TextInputCustom from "../../components/TextInput/TextInputComponent";
 import { COLORS } from "../../constants/colors";
@@ -31,6 +33,10 @@ export default function CreateEmployeeModal({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [employeeType, setEmployeeType] = useState<string>("NhanVien");
+  const [locations, setLocations] = useState<
+    { value: string; label: string }[]
+  >([]);
+  const [selectedLocation, setSelectedLocation] = useState<string | null>(null);
   const dispatch = useDispatch();
 
   const [formData, setFormData] = useState({
@@ -41,6 +47,23 @@ export default function CreateEmployeeModal({
     HieuSuat: 100,
     CongViec: 0,
   });
+
+  useEffect(() => {
+    const fetchLocations = async () => {
+      try {
+        const response = await LocationService.getAll();
+        const formattedLocations = response.map((loc) => ({
+          value: loc.DiaDiemId,
+          label: `${loc.name} - ${loc.district}, ${loc.province}`,
+        }));
+        setLocations(formattedLocations);
+      } catch (error) {
+        console.error("Error fetching locations:", error);
+      }
+    };
+
+    fetchLocations();
+  }, []);
 
   const handleInputChange = (name: string, value: string) => {
     if (name === "HieuSuat" || name === "CongViec") {
@@ -150,19 +173,18 @@ export default function CreateEmployeeModal({
         Email: formData.Email,
         HieuSuat: formData.HieuSuat,
         role: employeeType,
+        DiaDiemId: selectedLocation,
       };
 
-      // Thêm đoạn mã này vào đây
       const extendedPayload =
         employeeType === "NhanVien"
-          ? { ...basePayload, NhanVienID: employeeId } // Đảm bảo có NhanVienID
+          ? { ...basePayload, NhanVienID: employeeId }
           : {
               ...basePayload,
               TaiXeID: employeeId,
               CongViec: formData.CongViec,
             };
 
-      // Type assertion here
       const createdEmployee = await employeeService.createUser(
         extendedPayload as TaiXe
       );
@@ -324,6 +346,19 @@ export default function CreateEmployeeModal({
                 error={errors.Email}
                 required
                 labelColor={COLORS.black}
+              />
+            </Grid.Col>
+
+            <Grid.Col span={12}>
+              <NativeSelect
+                label="Bưu cục làm việc"
+                data={[{ value: "", label: "Chọn bưu cục" }, ...locations]}
+                value={selectedLocation ?? ""}
+                onChange={(event) =>
+                  setSelectedLocation(event.currentTarget.value)
+                }
+                required
+                error={errors.selectedLocation}
               />
             </Grid.Col>
 
