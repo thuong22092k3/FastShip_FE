@@ -204,4 +204,20 @@ export const orderService = {
     });
     return response.data;
   },
+  getOrderStats: async (user: {
+    role: string;
+    id: string;
+  }): Promise<{
+    total: number;
+    active: number;
+    completed: number;
+  }> => {
+    const params = new URLSearchParams({
+      role: user.role,
+      id: user.id,
+    });
+
+    const response = await axios.get(`${ENDPOINTS.ORDERS.STATS}?${params}`);
+    return response.data.stats;
+  },
 };

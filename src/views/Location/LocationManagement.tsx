@@ -1,12 +1,11 @@
 import { Box, Button, Flex, Pagination, TextInput, Title } from "@mantine/core";
 import "@mantine/core/styles.css";
 import { showNotification } from "@mantine/notifications";
-import { IconMapPin, IconPlus, IconSearch } from "@tabler/icons-react";
+import { IconPlus, IconSearch } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { LocationService } from "../../api/service/LocationService";
 import { Location } from "../../api/type/LocationType";
-import CardComponent from "../../components/Card/CardComponent";
 import LocationTable from "../../components/Table/LocationTable";
 import { DELETE_LOCATION } from "../../state_management/actions/actions";
 import { RootState } from "../../state_management/reducers/rootReducer";
@@ -99,7 +98,7 @@ export default function LocationManagement() {
     <Box style={{ padding: 0, margin: 0 }}>
       <Title order={2}>Quản lý địa điểm</Title>
 
-      <Box
+      {/* <Box
         style={{
           display: "flex",
           justifyContent: "space-around",
@@ -113,10 +112,10 @@ export default function LocationManagement() {
         />
         <CardComponent
           title="Địa điểm đang hoạt động"
-          value={locations.length} // Có thể thay bằng trạng thái nếu có
+          value={locations.length}
           icon={<IconMapPin size={24} />}
         />
-      </Box>
+      </Box> */}
 
       <Flex justify="space-between" align="center" mt="md" mb="xl">
         <TextInput

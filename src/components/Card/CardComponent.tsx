@@ -1,11 +1,13 @@
 import { Card, Text, Title } from "@mantine/core";
-import { IconBox } from "@tabler/icons-react";
 import "@mantine/core/styles.css";
+import { IconBox } from "@tabler/icons-react";
+
 interface CardProps {
   title: string;
   value: string | number;
   updatedText?: string;
   icon?: React.ReactNode;
+  color?: string;
 }
 
 const CardComponent = ({
@@ -13,12 +15,12 @@ const CardComponent = ({
   value = "233",
   updatedText = "Recently updated",
   icon = <IconBox size={24} />,
+  color = "blue",
 }: CardProps) => {
   return (
     <Card
       shadow="sm"
       radius="lg"
-      // p="xl"
       style={{
         width: "240px",
         border: "1px solid #eaeaea",
@@ -39,12 +41,12 @@ const CardComponent = ({
         }}
       >
         {icon}
-        <Text size="sm" color="dimmed">
+        <Text size="sm" c="dimmed">
           {title}
         </Text>
       </div>
 
-      <Title order={2} mt="sm" mb="xs">
+      <Title order={2} mt="sm" mb="xs" c={color}>
         {value}
       </Title>
     </Card>

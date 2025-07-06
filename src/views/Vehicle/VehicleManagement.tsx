@@ -1,4 +1,12 @@
-import { Box, Button, Flex, Pagination, TextInput, Title } from "@mantine/core";
+import {
+  Box,
+  Button,
+  Flex,
+  Pagination,
+  SimpleGrid,
+  TextInput,
+  Title,
+} from "@mantine/core";
 import "@mantine/core/styles.css";
 import {
   IconPlus,
@@ -6,8 +14,9 @@ import {
   IconSettings,
   IconTruck,
   IconTruckDelivery,
+  IconTruckOff,
 } from "@tabler/icons-react";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { vehicleService } from "../../api/service/VehicleService";
 import CardComponent from "../../components/Card/CardComponent";
@@ -24,6 +33,13 @@ import AddVehicleModal from "./AddVehicleModal";
 import { DeleteVehicleModal } from "./DeleteVehicleModal";
 import UpdateVehicleModal from "./UpdateVehicleModal";
 
+interface VehicleStats {
+  total: number;
+  active: number;
+  maintenance: number;
+  inactive: number;
+}
+
 export default function VehicleManagementScreen() {
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
@@ -31,6 +47,12 @@ export default function VehicleManagementScreen() {
   const [error, setError] = useState("");
   const [refreshKey, setRefreshKey] = useState(0);
   const [openCreateModal, setOpenCreateModal] = useState(false);
+  // const [stats, setStats] = useState<VehicleStats>({
+  //   total: 0,
+  //   active: 0,
+  //   maintenance: 0,
+  //   inactive: 0,
+  // });
 
   const dispatch = useDispatch();
   const vehicles = useSelector((state: RootState) => state.vehicleSlice);
@@ -149,33 +171,56 @@ export default function VehicleManagementScreen() {
     setVehicleToUpdate(vehicle);
     setUpdateModalOpen(true);
   };
+
+  const calculateStats = (vehicles: Vehicle[]): VehicleStats => {
+    return {
+      total: vehicles.length,
+      active: vehicles.filter(
+        (vehicle) => vehicle.TrangThai === "Đang hoạt động"
+      ).length,
+      maintenance: vehicles.filter(
+        (vehicle) => vehicle.TrangThai === "Đang bảo dưỡng"
+      ).length,
+      inactive: vehicles.filter(
+        (vehicle) => vehicle.TrangThai === "Ngừng hoạt động"
+      ).length,
+    };
+  };
+
+  const stats = useMemo(() => {
+    return calculateStats(vehicles);
+  }, [vehicles]);
+
   return (
     <Box style={{ padding: 0, margin: 0 }}>
       <Title order={2}>Quản lý phương tiện</Title>
 
-      <Box
-        style={{
-          display: "flex",
-          justifyContent: "space-around",
-          flexWrap: "wrap",
-        }}
-      >
+      <SimpleGrid cols={{ base: 1, sm: 2, md: 4 }} spacing="lg" mb="xl">
         <CardComponent
           title="Tổng phương tiện"
-          value={vehicles.length}
+          value={stats.total}
           icon={<IconTruckDelivery size={24} />}
+          color="blue"
         />
         <CardComponent
-          title="Phương tiện đang hoạt động"
-          value={filteredVehicles.length}
-          icon={<IconSettings size={24} />}
-        />
-        <CardComponent
-          title="Phương tiện đã kiểm định"
-          value={filteredVehicles.length}
+          title="Đang hoạt động"
+          value={stats.active}
           icon={<IconTruck size={24} />}
+          color="green"
         />
-      </Box>
+        <CardComponent
+          title="Đang bảo dưỡng"
+          value={stats.maintenance}
+          icon={<IconSettings size={24} />}
+          color="orange"
+        />
+        <CardComponent
+          title="Ngừng hoạt động"
+          value={stats.inactive}
+          icon={<IconTruckOff size={24} />}
+          color="red"
+        />
+      </SimpleGrid>
 
       <Flex justify="space-between" align="center" mt="md" mb="xl">
         <TextInput

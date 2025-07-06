@@ -29,6 +29,7 @@ export const ENDPOINTS = {
     ASSIGN_DRIVER: `${BASE_URL}/api/order/assignDriver`,
     UPDATE_STATUS: (id: string) =>
       `${BASE_URL}/api/order/updateStatusOrder/?id=${id}`,
+    STATS: `${BASE_URL}/api/order/stats`,
   },
   USERS: {
     LIST: `${BASE_URL}/api/auth/users`,

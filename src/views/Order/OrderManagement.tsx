@@ -1,14 +1,24 @@
-import { ActionIcon, Box, Button, Flex, TextInput, Title } from "@mantine/core";
+import {
+  ActionIcon,
+  Box,
+  Button,
+  Flex,
+  SimpleGrid,
+  TextInput,
+  Title,
+} from "@mantine/core";
 import "@mantine/core/styles.css";
 import { showNotification } from "@mantine/notifications";
 import {
   IconArchive,
   IconCircleCheck,
-  IconFolderCheck,
+  IconCircleDashedCheck,
+  IconCubeSend,
+  IconMailX,
   IconPlus,
   IconSearch,
 } from "@tabler/icons-react";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { orderService } from "../../api/service/OrderService";
 import { Order } from "../../api/type/OrderType";
@@ -21,6 +31,13 @@ import NewModal from "./components/NewModal/NewModal";
 import { OrderDetailModal } from "./components/OrderDtail";
 import { SimpleDeleteModal } from "./components/SimpleModalDelete";
 
+interface OrderStats {
+  total: number;
+  confirming: number;
+  active: number;
+  completed: number;
+  cancelled: number;
+}
 export default function OrderManagementScreen() {
   const currentUser = useSelector(
     (state: RootState) => state.authSlice.currentUser
@@ -167,33 +184,57 @@ export default function OrderManagementScreen() {
     );
   };
 
+  const calculateStats = (orders: Order[]): OrderStats => {
+    return {
+      total: orders.length,
+      confirming: orders.filter((order) => order.TrangThai === "Chờ xác nhận")
+        .length,
+      active: orders.filter((order) => order.TrangThai === "Đang giao").length,
+      completed: orders.filter((order) => order.TrangThai === "Đã giao").length,
+      cancelled: orders.filter((order) => order.TrangThai === "Hủy").length,
+    };
+  };
+  const stats = useMemo(() => {
+    return calculateStats(orders);
+  }, [orders]);
+
   console.log("selectedOrder", selectedOrder);
   return (
     <Box style={{ padding: 0, margin: 0 }}>
       <Title order={2}>Quản lý đơn hàng</Title>
-      <Box
-        style={{
-          display: "flex",
-          justifyContent: "space-around",
-          flexWrap: "wrap",
-        }}
-      >
+      <SimpleGrid cols={{ base: 1, sm: 2, md: 3, lg: 5 }} spacing="lg" mb="xl">
         <CardComponent
           title="Tổng đơn hàng"
-          value={orders.length}
+          value={stats.total}
           icon={<IconArchive size={24} />}
+          color="yellow"
         />
         <CardComponent
-          title="Các đơn hàng đang hoạt động"
-          value={orders.length}
-          icon={<IconFolderCheck size={24} />}
+          title="Đơn hàng đang chờ xác nhận"
+          value={stats.confirming}
+          icon={<IconCircleDashedCheck size={24} />}
+          color="gray"
         />
         <CardComponent
-          title="Các đơn hàng đã hoàn thành"
-          value={orders.length}
+          title="Đơn hàng đang giao"
+          value={stats.active}
+          icon={<IconCubeSend size={24} />}
+          color="blue"
+        />
+        <CardComponent
+          title="Đơn hàng đã giao"
+          value={stats.completed}
           icon={<IconCircleCheck size={24} />}
+          color="green"
         />
-      </Box>
+        <CardComponent
+          title="Đơn hàng đã hủy"
+          value={stats.cancelled}
+          icon={<IconMailX size={24} />}
+          color="red"
+        />
+      </SimpleGrid>
+
       <Flex justify="space-between" align="center" mt="md" mb="xl">
         <TextInput
           placeholder="Tìm kiếm đơn hàng"
