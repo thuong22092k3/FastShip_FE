@@ -58,7 +58,7 @@ const allColumns = [
   { key: "Email", label: "Email", visible: true },
   { key: "HieuSuat", label: "Hiệu suất", visible: true },
   { key: "CongViec", label: "Tình trạng", visible: true },
-  { key: "DiaDiemId", label: "Địa điểm", visible: true },
+  { key: "DiaDiemId", label: "Bưu cục", visible: true },
 ];
 
 const getPerformanceColor = (hieuSuat: number) => {

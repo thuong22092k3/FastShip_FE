@@ -1,11 +1,4 @@
-import {
-  Button,
-  Grid,
-  Group,
-  LoadingOverlay,
-  NumberInput,
-  Title,
-} from "@mantine/core";
+import { Button, Grid, Group, LoadingOverlay, Title } from "@mantine/core";
 import "@mantine/core/styles.css";
 import { showNotification } from "@mantine/notifications";
 import "@mantine/notifications/styles.css";
@@ -33,6 +26,7 @@ export default function UpdateLocationModal({
   const [formData, setFormData] = useState<Partial<Location>>({
     DiaDiemId: "",
     name: "",
+    address: "",
     latitude: 0,
     longitude: 0,
   });
@@ -42,6 +36,7 @@ export default function UpdateLocationModal({
       setFormData({
         DiaDiemId: locationData.DiaDiemId,
         name: locationData.name,
+        address: locationData.address,
         latitude: locationData.latitude,
         longitude: locationData.longitude,
       });
@@ -57,7 +52,7 @@ export default function UpdateLocationModal({
 
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
-    if (!formData.name) newErrors.name = "Vui lòng nhập tên địa điểm";
+    if (!formData.name) newErrors.name = "Vui lòng nhập tên bưu cục";
     if (formData.latitude === undefined)
       newErrors.latitude = "Vui lòng nhập vĩ độ";
     if (formData.longitude === undefined)
@@ -80,7 +75,7 @@ export default function UpdateLocationModal({
 
       showNotification({
         title: "Thành công",
-        message: "Đã cập nhật địa điểm thành công",
+        message: "Đã cập nhật bưu cục thành công",
         color: "green",
       });
 
@@ -89,7 +84,7 @@ export default function UpdateLocationModal({
     } catch (error) {
       showNotification({
         title: "Lỗi",
-        message: "Không thể cập nhật địa điểm",
+        message: "Không thể cập nhật bưu cục",
         color: "red",
       });
     } finally {
@@ -144,25 +139,25 @@ export default function UpdateLocationModal({
           </button>
 
           <Title order={3} mb="xl">
-            Cập nhật địa điểm
+            Cập nhật bưu cục
           </Title>
 
           <Grid gutter="xl">
-            <Grid.Col span={12}>
+            {/* <Grid.Col span={12}>
               <TextInputCustom
-                label="ID Địa điểm"
+                label="ID bưu cục"
                 value={formData.DiaDiemId || ""}
                 readOnly
                 labelColor={COLORS.black}
                 labelFontWeight={"medium"}
                 labelFontSize={14}
               />
-            </Grid.Col>
+            </Grid.Col> */}
 
             <Grid.Col span={12}>
               <TextInputCustom
-                label="Tên địa điểm"
-                placeholder="Nhập tên địa điểm"
+                label="Tên bưu cục"
+                placeholder="Nhập tên bưu cục"
                 value={formData.name || ""}
                 onChange={(e) =>
                   handleInputChange("name", e.currentTarget.value)
@@ -175,7 +170,23 @@ export default function UpdateLocationModal({
               />
             </Grid.Col>
 
-            <Grid.Col span={6}>
+            <Grid.Col span={12}>
+              <TextInputCustom
+                label="Địa chỉ bưu cục"
+                placeholder="Nhập địa chỉ bưu cục"
+                value={formData.address || ""}
+                onChange={(e) =>
+                  handleInputChange("address", e.currentTarget.value)
+                }
+                error={errors.address}
+                required
+                labelColor={COLORS.black}
+                labelFontWeight={"medium"}
+                labelFontSize={14}
+              />
+            </Grid.Col>
+
+            {/* <Grid.Col span={6}>
               <NumberInput
                 label="Vĩ độ"
                 placeholder="Nhập vĩ độ"
@@ -199,7 +210,7 @@ export default function UpdateLocationModal({
                 error={errors.longitude}
                 required
               />
-            </Grid.Col>
+            </Grid.Col> */}
           </Grid>
 
           <Group justify="flex-end" mt="xl">

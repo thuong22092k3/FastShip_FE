@@ -8,4 +8,5 @@ export type Vehicle = {
   TrangThai: string;
   BaoDuong: string;
   ThoiGianBaoDuong?: string;
+  DiaDiemId: string;
 };

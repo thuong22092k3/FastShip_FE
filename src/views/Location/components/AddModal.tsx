@@ -38,7 +38,7 @@ export default function AddLocationModal({
 
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
-    if (!formData.name) newErrors.name = "Vui lòng nhập tên địa điểm";
+    if (!formData.name) newErrors.name = "Vui lòng nhập tên bưu cục";
     if (formData.latitude === undefined)
       newErrors.latitude = "Vui lòng nhập vĩ độ";
     if (formData.longitude === undefined)
@@ -76,7 +76,7 @@ export default function AddLocationModal({
       dispatch(ADD_LOCATION(createdLocation));
       showNotification({
         title: "Thành công",
-        message: "Đã thêm địa điểm mới thành công",
+        message: "Đã thêm bưu cục mới thành công",
         color: "green",
       });
 
@@ -88,7 +88,7 @@ export default function AddLocationModal({
         message:
           error?.message === "Không tìm thấy địa chỉ。"
             ? "Địa chỉ không hợp lệ. Vui lòng kiểm tra lại."
-            : "Không thể thêm địa điểm mới",
+            : "Không thể thêm bưu cục mới",
         color: "red",
       });
     } finally {
@@ -143,14 +143,14 @@ export default function AddLocationModal({
           </button>
 
           <Title order={3} mb="xl">
-            Thêm địa điểm mới
+            Thêm bưu cục mới
           </Title>
 
           <Grid gutter="xl">
             <Grid.Col span={12}>
               <TextInputCustom
-                label="Tên địa điểm"
-                placeholder="Nhập tên địa điểm"
+                label="Tên bưu cục"
+                placeholder="Nhập tên bưu cục"
                 value={formData.name || ""}
                 onChange={(e) =>
                   handleInputChange("name", e.currentTarget.value)

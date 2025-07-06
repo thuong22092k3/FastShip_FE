@@ -29,6 +29,7 @@ declare type TVehicle = {
   TrangThai: string;
   BaoDuong: string;
   ThoiGianBaoDuong?: string;
+  DiaDiemId: string;
 };
 declare type TEmployee = {
   NhanVienID: string;

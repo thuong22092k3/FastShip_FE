@@ -6,7 +6,6 @@ import {
   Group,
   Paper,
   Progress,
-  Select,
   SimpleGrid,
   Skeleton,
   Table,
@@ -14,11 +13,9 @@ import {
   Title,
 } from "@mantine/core";
 import "@mantine/core/styles.css";
-import { DatePickerInput } from "@mantine/dates";
 import { useForm } from "@mantine/form";
 import {
   IconBox,
-  IconCalendar,
   IconChartBar,
   IconClock,
   IconMapPin,
@@ -172,7 +169,7 @@ export default function StatisticScreen() {
 
   return (
     <Container size="xl" py="xl">
-      <Paper withBorder p="md" radius="md" mb="xl">
+      {/* <Paper withBorder p="md" radius="md" mb="xl">
         <Group justify="space-between" mb="md">
           <Title order={3}>Bộ lọc thống kê</Title>
           <Select
@@ -216,7 +213,7 @@ export default function StatisticScreen() {
         <Button mt="md" onClick={handleFilter} loading={loading}>
           Áp dụng bộ lọc
         </Button>
-      </Paper>
+      </Paper> */}
 
       <SimpleGrid cols={{ base: 1, sm: 2, md: 4 }} spacing="lg" mb="xl">
         <CardComponent2
@@ -281,25 +278,18 @@ export default function StatisticScreen() {
             alignItems: "flex-end",
             gap: "2rem",
             padding: "1rem",
-            // border: "1px dashed #ccc",
           }}
         >
           {monthlyStats.map((month) => {
-            console.log(`Month ${month.month}:`, month.count, month.completed);
-
+            const adjustedCompleted = Math.min(month.completed, month.count);
             const maxCount = Math.max(1, ...monthlyStats.map((m) => m.count));
 
-            const totalHeight =
-              Math.max(0, (month.count / maxCount) * 200) || 0;
-            const completedHeight =
-              Math.max(0, (month.completed / maxCount) * 200) || 0;
+            const totalHeight = Math.max(0, (month.count / maxCount) * 200);
+            const completedHeight = Math.max(
+              0,
+              (adjustedCompleted / maxCount) * 200
+            );
             const remainingHeight = Math.max(0, totalHeight - completedHeight);
-
-            console.log(`Calculated heights for ${month.month}:`, {
-              totalHeight,
-              completedHeight,
-              remainingHeight,
-            });
 
             return (
               <div
@@ -318,24 +308,23 @@ export default function StatisticScreen() {
                     height: "200px",
                     width: "100%",
                     justifyContent: "flex-end",
-                    // border: "1px solid rgba(0,0,0,0.1)",
                   }}
                 >
                   <div
                     style={{
-                      height: `${completedHeight}px`,
-                      backgroundColor: "#00C1A2",
+                      height: `${remainingHeight}px`,
+                      backgroundColor: "#4D6CFA",
                       borderRadius: "4px 4px 0 0",
-                      minHeight: month.completed > 0 ? "4px" : "0",
+                      minHeight: month.count > 0 ? "4px" : "0",
                     }}
                   />
                   <div
                     style={{
-                      height: `${remainingHeight}px`,
-                      backgroundColor: "#4D6CFA",
-                      borderRadius: month.completed > 0 ? "0 0 4px 4px" : "4px",
-                      minHeight:
-                        month.count - month.completed > 0 ? "4px" : "0",
+                      height: `${completedHeight}px`,
+                      backgroundColor: "#00C1A2",
+                      borderRadius:
+                        adjustedCompleted > 0 ? "0 0 4px 4px" : "4px",
+                      minHeight: adjustedCompleted > 0 ? "4px" : "0",
                     }}
                   />
                 </div>
@@ -375,7 +364,6 @@ export default function StatisticScreen() {
           </Group>
         </Group>
       </Paper>
-
       <SimpleGrid cols={{ base: 1, md: 2 }} spacing="lg" mb="xl">
         <Paper withBorder p="md" radius="md">
           <Title order={3} mb="sm">

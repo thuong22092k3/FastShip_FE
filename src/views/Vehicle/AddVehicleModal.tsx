@@ -13,6 +13,7 @@ import "@mantine/notifications/styles.css";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { employeeService } from "../../api/service/EmployeeService";
+import { LocationService } from "../../api/service/LocationService";
 import { vehicleService } from "../../api/service/VehicleService";
 import { Vehicle } from "../../api/type/VehicleType";
 import TextInputCustom from "../../components/TextInput/TextInputComponent";
@@ -35,10 +36,19 @@ export default function AddVehicleModal({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const dispatch = useDispatch();
+  const currentUser = useSelector(
+    (state: RootState) => state.authSlice.currentUser
+  );
+  const [locations, setLocations] = useState<
+    { value: string; label: string }[]
+  >([]);
+  const [selectedLocation, setSelectedLocation] = useState<string | null>(null);
+  const isAdmin = currentUser?.role === "Admin";
   const [formData, setFormData] = useState<Partial<Vehicle>>({
     TrangThai: "Hoạt động",
     BaoDuong: "Chưa bảo dưỡng",
     SucChua: 0,
+    DiaDiemId: currentUser?.DiaDiemId || "",
   });
 
   const handleInputChange = (name: string, value: string) => {
@@ -59,6 +69,23 @@ export default function AddVehicleModal({
   };
 
   useEffect(() => {
+    const fetchLocations = async () => {
+      try {
+        const response = await LocationService.getAll();
+        const formattedLocations = response.map((loc) => ({
+          value: loc.DiaDiemId,
+          label: `${loc.name} - ${loc.district}, ${loc.province}`,
+        }));
+        setLocations(formattedLocations);
+      } catch (error) {
+        console.error("Error fetching locations:", error);
+      }
+    };
+
+    fetchLocations();
+  }, []);
+
+  useEffect(() => {
     const fetchDrivers = async (page: number = 1, limit: number = 10) => {
       try {
         let response;
@@ -77,6 +104,7 @@ export default function AddVehicleModal({
     };
     fetchDrivers();
   }, []);
+
   const drivers = useSelector((state: RootState) => state.driverSlice);
 
   const validateForm = () => {
@@ -105,6 +133,9 @@ export default function AddVehicleModal({
         SucChua: Number(formData.SucChua) || 0,
         TrangThai: formData.TrangThai || "Hoạt động",
         BaoDuong: formData.BaoDuong || "Chưa bảo dưỡng",
+        DiaDiemId: isAdmin
+          ? formData.DiaDiemId ?? ""
+          : currentUser?.DiaDiemId ?? "",
       };
 
       const createdVehicle = await vehicleService.createVehicle(payload);
@@ -276,6 +307,48 @@ export default function AddVehicleModal({
                 required
                 mb="md"
               />
+            </Grid.Col>
+
+            <Grid.Col span={6}>
+              {isAdmin ? (
+                <>
+                  <Text
+                    fw={600}
+                    mt="xs"
+                    mb="sm"
+                    style={{ color: "black", fontSize: 12 }}
+                  >
+                    Bưu cục
+                  </Text>
+                  <NativeSelect
+                    data={[{ value: "", label: "Chọn bưu cục" }, ...locations]}
+                    value={formData.DiaDiemId ?? ""}
+                    onChange={(event) =>
+                      setFormData((prev) => ({
+                        ...prev,
+                        DiaDiemId: event.currentTarget.value,
+                      }))
+                    }
+                    required
+                    error={errors.DiaDiemId}
+                  />
+                </>
+              ) : (
+                <TextInputCustom
+                  label="Bưu cục"
+                  labelFontWeight="bold"
+                  placeHolder="Bưu cục của bạn"
+                  name="DiaDiem"
+                  value={
+                    locations.find(
+                      (loc) => loc.value === currentUser?.DiaDiemId
+                    )?.label ?? "Không xác định"
+                  }
+                  setValue={() => {}}
+                  readOnly
+                  labelColor={COLORS.black}
+                />
+              )}
             </Grid.Col>
 
             <Grid.Col span={6}>

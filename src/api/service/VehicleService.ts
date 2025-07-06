@@ -13,6 +13,7 @@ export const vehicleService = {
     SucChua: number;
     TrangThai: string;
     BaoDuong: string;
+    DiaDiemId: string;
   }) => {
     try {
       const response = await axios.post(ENDPOINTS.VEHICLES.CREATE, data);

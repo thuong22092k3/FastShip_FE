@@ -32,7 +32,7 @@ export default function LocationManagement() {
       const locations = await LocationService.getAll();
       dispatch(uploadLocations(locations));
     } catch (err) {
-      setError("Không thể tải dữ liệu địa điểm");
+      setError("Không thể tải dữ liệu bưu cục");
       dispatch(uploadLocations([]));
     } finally {
       setLoading(false);
@@ -70,14 +70,14 @@ export default function LocationManagement() {
       dispatch(DELETE_LOCATION({ DiaDiemId: locationToDelete }));
       showNotification({
         title: "Thành công",
-        message: "Đã xóa địa điểm thành công",
+        message: "Đã xóa bưu cục thành công",
         color: "green",
       });
       setDeleteModalOpen(false);
     } catch (error) {
       showNotification({
         title: "Lỗi",
-        message: "Không thể xóa địa điểm",
+        message: "Không thể xóa bưu cục",
         color: "red",
       });
     } finally {
@@ -97,7 +97,7 @@ export default function LocationManagement() {
 
   return (
     <Box style={{ padding: 0, margin: 0 }}>
-      <Title order={2}>Quản lý địa điểm</Title>
+      <Title order={2}>Quản lý bưu cục</Title>
 
       {/* <Box
         style={{
@@ -107,12 +107,12 @@ export default function LocationManagement() {
         }}
       >
         <CardComponent
-          title="Tổng địa điểm"
+          title="Tổng bưu cục"
           value={locations.length}
           icon={<IconMapPin size={24} />}
         />
         <CardComponent
-          title="Địa điểm đang hoạt động"
+          title="bưu cục đang hoạt động"
           value={locations.length}
           icon={<IconMapPin size={24} />}
         />
@@ -120,7 +120,7 @@ export default function LocationManagement() {
 
       <Flex justify="space-between" align="center" mt="md" mb="xl">
         <TextInput
-          placeholder="Tìm kiếm địa điểm"
+          placeholder="Tìm kiếm bưu cục"
           value={search}
           onChange={(e) => setSearch(e.currentTarget.value)}
           leftSection={<IconSearch size={16} />}
@@ -130,7 +130,7 @@ export default function LocationManagement() {
           leftSection={<IconPlus size={18} />}
           onClick={() => setOpenCreateModal(true)}
         >
-          Thêm địa điểm mới
+          Thêm bưu cục mới
         </Button>
       </Flex>
 
@@ -139,9 +139,9 @@ export default function LocationManagement() {
       ) : error ? (
         <Box py="xl">{error}</Box>
       ) : locations.length === 0 ? (
-        <Box py="xl">Không tìm thấy địa điểm nào</Box>
+        <Box py="xl">Không tìm thấy bưu cục nào</Box>
       ) : filteredLocations.length === 0 ? (
-        <Box py="xl">Không tìm thấy địa điểm phù hợp với tìm kiếm</Box>
+        <Box py="xl">Không tìm thấy bưu cục phù hợp với tìm kiếm</Box>
       ) : (
         <>
           <LocationTable

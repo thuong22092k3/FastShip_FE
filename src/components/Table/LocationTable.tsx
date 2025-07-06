@@ -127,7 +127,7 @@ const LocationTable: React.FC<Props> = ({
   if (data.length === 0) {
     return (
       <Box py="xl" ta="center">
-        Không tìm thấy địa điểm nào
+        Không tìm thấy bưu cục nào
       </Box>
     );
   }
@@ -153,10 +153,10 @@ const LocationTable: React.FC<Props> = ({
             <Table.Th
               style={{ ...headerStyle, minWidth: columnWidths.DiaDiemId }}
             >
-              ID Địa điểm
+              ID Bưu cụ<canvas></canvas>
             </Table.Th>
             <Table.Th style={{ ...headerStyle, minWidth: columnWidths.name }}>
-              Tên địa điểm
+              Tên bưu cục
             </Table.Th>
             <Table.Th
               style={{ ...headerStyle, minWidth: columnWidths.actions }}
