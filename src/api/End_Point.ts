@@ -27,6 +27,8 @@ export const ENDPOINTS = {
     DELIVERY_ROUTE: (donHangId: string) =>
       `${BASE_URL}/api/optimize/delivery_route?donHangId=${donHangId}`,
     ASSIGN_DRIVER: `${BASE_URL}/api/order/assignDriver`,
+    UPDATE_STATUS: (id: string) =>
+      `${BASE_URL}/api/order/updateStatusOrder/?id=${id}`,
   },
   USERS: {
     LIST: `${BASE_URL}/api/auth/users`,
@@ -54,7 +56,7 @@ export const ENDPOINTS = {
     CREATE: `${BASE_URL}/api/location/create`,
     LIST: `${BASE_URL}/api/location/all`,
     SEARCH: `${BASE_URL}/api/location/search`,
-    DETAIL: (DiaDiemId: string) => `${BASE_URL}/api/location/get/:${DiaDiemId}`,
+    DETAIL: (DiaDiemId: string) => `${BASE_URL}/api/location/get/${DiaDiemId}`,
     DELETE: (DiaDiemId: string) =>
       `${BASE_URL}/api/location/delete/${DiaDiemId}`,
     UPDATE: (DiaDiemId: string) =>

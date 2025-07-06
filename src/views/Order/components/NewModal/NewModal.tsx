@@ -18,7 +18,6 @@ import { RootState } from "../../../../state_management/reducers/rootReducer";
 import ConfirmationStep from "./components/ConfirmationStep";
 import DeliveryServiceStep from "./components/DeliveryServiceStep";
 import OrderInfoStep from "./components/OrderInfoStep";
-import OrderSummary from "./components/OrderSummary";
 import PackageInfoStep from "./components/PackageInfoStep";
 
 // src/components/order/NewModal.tsx
@@ -116,7 +115,7 @@ export default function NewModal({
     TrangThai: "Chờ xác nhận",
     CuocPhi: 0,
     // NguoiGui: "CÔNG TY TNHH MORIMURA BROS. (VIETNAM)",
-    DiaChiLayHang: "123 Đường ABC, Quận 1, TP.HCM",
+    // DiaChiLayHang: "123 Đường ABC, Quận 1, TP.HCM",
   });
 
   // Calculate fees based on package info
@@ -344,7 +343,7 @@ export default function NewModal({
               </Paper>
             </Grid.Col>
 
-            <Grid.Col span={{ base: 12, md: 4 }}>
+            {/* <Grid.Col span={{ base: 12, md: 4 }}>
               <OrderSummary
                 fees={calculateFees(
                   packageInfo,
@@ -355,7 +354,7 @@ export default function NewModal({
                 deliveryMethod={formData.deliveryMethod}
                 additionalServices={formData.additionalServices}
               />
-            </Grid.Col>
+            </Grid.Col> */}
           </Grid>
         </div>
       </Box>

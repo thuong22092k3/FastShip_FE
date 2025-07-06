@@ -1,5 +1,9 @@
 import { Box, NativeSelect, TextInput, Title } from "@mantine/core";
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { LocationService } from "../../../../../api/service/LocationService";
 import { Order } from "../../../../../api/type/OrderType";
+import { RootState } from "../../../../../state_management/reducers/rootReducer";
 
 interface Props {
   formData: Partial<Order>;
@@ -21,6 +25,9 @@ const OrderInfoStep = ({
   handleInputChange,
   handleSelectChange,
 }: Props) => {
+  const { currentUser } = useSelector((state: RootState) => state.authSlice);
+  const [locationAddress, setLocationAddress] = useState("");
+
   const handleOrderMethodChange = (value: string | null) => {
     if (handleSelectChange) {
       handleSelectChange("deliveryMethod", value);
@@ -34,18 +41,57 @@ const OrderInfoStep = ({
     }
   };
 
+  useEffect(() => {
+    const fetchDiaDiem = async () => {
+      if (!currentUser?.DiaDiemId) return;
+
+      try {
+        const res = await LocationService.getById(currentUser.DiaDiemId);
+        if (res.address) {
+          setLocationAddress(res.address);
+          if (!formData.NguoiGui) {
+            handleInputChange({
+              target: {
+                name: "DiaChiLayHang",
+                value: res.address,
+              },
+            } as React.ChangeEvent<HTMLInputElement>);
+          }
+        }
+      } catch (error) {
+        console.error("Không thể lấy địa chỉ bưu cục:", error);
+      }
+    };
+
+    fetchDiaDiem();
+  }, [currentUser?.DiaDiemId]);
+
   return (
     <>
       <Title order={5} c="blue">
         Thông tin người gửi
       </Title>
+
       <TextInput
-        label="Địa chỉ KH"
+        label="Tên người gửi"
         name="NguoiGui"
         value={formData.NguoiGui || ""}
         onChange={handleInputChange}
+        error={errors.NguoiGui}
+        required
+        mt="sm"
+      />
+      <TextInput
+        label="Địa chỉ KH"
+        name="DiaChiLayHang"
+        value={formData.DiaChiLayHang || locationAddress || ""}
+        onChange={handleInputChange}
         mt="sm"
         required
+        readOnly={!!locationAddress && !formData.DiaChiLayHang}
+        placeholder={
+          locationAddress ? "Địa chỉ bưu cục: " + locationAddress : ""
+        }
       />
 
       <Box mt="md">

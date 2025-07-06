@@ -22,7 +22,6 @@ import {
   IconChartBar,
   IconClock,
   IconMapPin,
-  IconUsers,
 } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
 import { statisticsService } from "../../api/service/StatisticsService";
@@ -263,12 +262,12 @@ export default function StatisticScreen() {
           )}% tổng đơn`}
           icon={<IconClock size={24} />}
         />
-        <CardComponent2
+        {/* <CardComponent2
           title="Nhân viên tích cực"
           value={overviewData?.staffStats?.[0]?.staffId || "N/A"}
           updatedText={`${overviewData?.staffStats?.[0]?.count || 0} đơn`}
           icon={<IconUsers size={24} />}
-        />
+        /> */}
       </SimpleGrid>
 
       <Paper withBorder p="md" radius="md" mb="xl">
@@ -282,24 +281,20 @@ export default function StatisticScreen() {
             alignItems: "flex-end",
             gap: "2rem",
             padding: "1rem",
-            border: "1px dashed #ccc", // Thêm border để debug
+            // border: "1px dashed #ccc",
           }}
         >
           {monthlyStats.map((month) => {
-            // Debug: Log dữ liệu từng tháng
             console.log(`Month ${month.month}:`, month.count, month.completed);
 
-            // Tính maxCount, đảm bảo ít nhất là 1
             const maxCount = Math.max(1, ...monthlyStats.map((m) => m.count));
 
-            // Tính chiều cao (đảm bảo không NaN và không âm)
             const totalHeight =
               Math.max(0, (month.count / maxCount) * 200) || 0;
             const completedHeight =
               Math.max(0, (month.completed / maxCount) * 200) || 0;
             const remainingHeight = Math.max(0, totalHeight - completedHeight);
 
-            // Debug: Log các giá trị tính toán
             console.log(`Calculated heights for ${month.month}:`, {
               totalHeight,
               completedHeight,
@@ -323,10 +318,9 @@ export default function StatisticScreen() {
                     height: "200px",
                     width: "100%",
                     justifyContent: "flex-end",
-                    border: "1px solid rgba(0,0,0,0.1)", // Thêm border để debug
+                    // border: "1px solid rgba(0,0,0,0.1)",
                   }}
                 >
-                  {/* Phần đơn hoàn thành */}
                   <div
                     style={{
                       height: `${completedHeight}px`,
@@ -453,7 +447,6 @@ export default function StatisticScreen() {
               <Table.Th>Tổng đơn</Table.Th>
               <Table.Th>Đơn hoàn thành</Table.Th>
               <Table.Th>Tỷ lệ hoàn thành</Table.Th>
-              <Table.Th>Thời gian xử lý TB</Table.Th>
             </Table.Tr>
           </Table.Thead>
           <Table.Tbody>
@@ -465,13 +458,13 @@ export default function StatisticScreen() {
                 <Table.Td>
                   <Badge color="teal">{staff.completionRate.toFixed(1)}%</Badge>
                 </Table.Td>
-                <Table.Td>
+                {/* <Table.Td>
                   {staff.avgProcessingTime
                     ? `${Math.round(
                         staff.avgProcessingTime / (1000 * 60 * 60 * 24)
                       )} ngày`
                     : "N/A"}
-                </Table.Td>
+                </Table.Td> */}
               </Table.Tr>
             ))}
           </Table.Tbody>

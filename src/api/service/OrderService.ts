@@ -37,7 +37,7 @@ export const orderService = {
   updateStatusOrder: async (DonHangId: string, TrangThai: string) => {
     try {
       const response = await axios.put(
-        `https://fastship-be-1.onrender.com/api/order/updateStatusOrder?id=${DonHangId}`,
+        ENDPOINTS.ORDERS.UPDATE_STATUS(DonHangId),
         { TrangThai },
         {
           headers: {

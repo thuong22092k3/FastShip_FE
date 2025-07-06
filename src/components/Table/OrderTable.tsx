@@ -539,44 +539,50 @@ export const OrderTable: React.FC<Props> = ({
           striped
           highlightOnHover
           withTableBorder
-          style={{
-            border: "1px solid #ccc",
-            borderCollapse: "collapse",
-          }}
+          style={{ border: "1px solid #ccc", borderCollapse: "collapse" }}
         >
-          <Table.Th style={{ ...headerStyle, minWidth: columnWidths.checkbox }}>
-            <CheckboxComponent
-              isChecked={isChecked}
-              setIsChecked={setIsChecked}
-            />
-          </Table.Th>
-          {columns
-            .filter((column) => column.visible)
-            .map(({ key, label }) => (
+          <Table.Thead>
+            <Table.Tr>
               <Table.Th
-                key={key}
-                style={{
-                  ...headerStyle,
-                  minWidth: columnWidths[key],
-                  cursor: "pointer",
-                }}
-                onClick={() => handleSort(key as keyof Order)}
+                style={{ ...headerStyle, minWidth: columnWidths.checkbox }}
               >
-                {label}
-                {sortBy === key ? (
-                  sortDirection === "asc" ? (
-                    <IconCaretUpFilled size={14} />
-                  ) : (
-                    <IconCaretDownFilled size={14} />
-                  )
-                ) : (
-                  <IconCaretUpFilled size={14} color="gray" />
-                )}
+                <CheckboxComponent
+                  isChecked={isChecked}
+                  setIsChecked={setIsChecked}
+                />
               </Table.Th>
-            ))}
-          <Table.Th style={{ ...headerStyle, minWidth: columnWidths.hanhDong }}>
-            Hành động
-          </Table.Th>
+              {columns
+                .filter((column) => column.visible)
+                .map(({ key, label }) => (
+                  <Table.Th
+                    key={key}
+                    style={{
+                      ...headerStyle,
+                      minWidth: columnWidths[key],
+                      cursor: "pointer",
+                    }}
+                    onClick={() => handleSort(key as keyof Order)}
+                  >
+                    {label}
+                    {sortBy === key ? (
+                      sortDirection === "asc" ? (
+                        <IconCaretUpFilled size={14} />
+                      ) : (
+                        <IconCaretDownFilled size={14} />
+                      )
+                    ) : (
+                      <IconCaretUpFilled size={14} color="gray" />
+                    )}
+                  </Table.Th>
+                ))}
+              <Table.Th
+                style={{ ...headerStyle, minWidth: columnWidths.hanhDong }}
+              >
+                Hành động
+              </Table.Th>
+            </Table.Tr>
+          </Table.Thead>
+
           <Table.Tbody>{rows}</Table.Tbody>
         </Table>
       </ScrollArea>

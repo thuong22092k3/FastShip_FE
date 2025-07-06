@@ -10,7 +10,7 @@ export const LocationService = {
 
   getById: async (DiaDiemId: string): Promise<Location> => {
     const url = ENDPOINTS.LOCATIONS.DETAIL(DiaDiemId).replace(
-      ":${DiaDiemId}",
+      `${DiaDiemId}`,
       DiaDiemId
     );
     const res = await axios.get(url);
