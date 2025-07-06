@@ -1,6 +1,7 @@
 import { Box, Button, Flex, Pagination, TextInput, Title } from "@mantine/core";
 import "@mantine/core/styles.css";
 import { showNotification } from "@mantine/notifications";
+import "@mantine/notifications/styles.css";
 import { IconPlus, IconSearch } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";

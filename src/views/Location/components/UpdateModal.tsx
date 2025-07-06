@@ -1,19 +1,17 @@
 import {
-  Box,
   Button,
   Grid,
   Group,
   LoadingOverlay,
-  Text,
-  Title,
   NumberInput,
-  TextInput,
+  Title,
 } from "@mantine/core";
 import "@mantine/core/styles.css";
-import { useState, useEffect } from "react";
-import { Location } from "../../../api/type/LocationType";
-import { LocationService } from "../../../api/service/LocationService";
 import { showNotification } from "@mantine/notifications";
+import "@mantine/notifications/styles.css";
+import { useEffect, useState } from "react";
+import { LocationService } from "../../../api/service/LocationService";
+import { Location } from "../../../api/type/LocationType";
 import TextInputCustom from "../../../components/TextInput/TextInputComponent";
 import { COLORS } from "../../../constants/colors";
 

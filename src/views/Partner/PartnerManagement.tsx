@@ -1,6 +1,7 @@
 import { Box, Button, Group, Text, Title } from "@mantine/core";
 import "@mantine/core/styles.css";
 import { showNotification } from "@mantine/notifications";
+import "@mantine/notifications/styles.css";
 import { IconPlus } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";

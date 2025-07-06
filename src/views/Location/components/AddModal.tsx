@@ -1,6 +1,7 @@
 import { Button, Grid, Group, LoadingOverlay, Title } from "@mantine/core";
 import "@mantine/core/styles.css";
 import { showNotification } from "@mantine/notifications";
+import "@mantine/notifications/styles.css";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { LocationService } from "../../../api/service/LocationService";

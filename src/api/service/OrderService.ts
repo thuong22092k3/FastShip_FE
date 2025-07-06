@@ -34,42 +34,32 @@ export const orderService = {
     return response.data;
   },
 
-  updateStatusOrder: async (DonHangId: string, TrangThai: string) => {
+  updateStatusOrder: async (
+    DonHangId: string,
+    TrangThai: string,
+    currentStatus: string
+  ) => {
+    const validTransitions: Record<string, string[]> = {
+      "Chờ xác nhận": ["Đang giao", "Hủy"],
+      "Đang giao": ["Đã giao"],
+    };
+
+    if (
+      validTransitions[currentStatus] &&
+      !validTransitions[currentStatus].includes(TrangThai)
+    ) {
+      throw new Error(`Không thể chuyển từ ${currentStatus} sang ${TrangThai}`);
+    }
+
     try {
       const response = await axios.put(
         ENDPOINTS.ORDERS.UPDATE_STATUS(DonHangId),
         { TrangThai },
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
+        { headers: { "Content-Type": "application/json" } }
       );
-      // dispatch(
-      //   UPDATE_ORDER({
-      //     DonHangId,
-      //     TrangThai,
-      //     UpdateAt: new Date().toISOString(),
-      //   } as TOrder)
-      // );
-      return {
-        success: true,
-        data: response.data,
-        updatedOrder: { DonHangId, TrangThai },
-      };
+      return response.data;
     } catch (error) {
       console.error("Update status error:", error);
-
-      // Thêm thông tin chi tiết lỗi
-      if (axios.isAxiosError(error)) {
-        console.error("Error details:", {
-          url: error.config?.url,
-          status: error.response?.status,
-          data: error.response?.data,
-          message: error.message,
-        });
-      }
-
       throw error;
     }
   },

@@ -1,15 +1,15 @@
-import React, { useState, useEffect } from "react";
 import {
-  TextInput,
-  Select,
-  NumberInput,
-  Group,
   Button,
+  Group,
+  NumberInput,
+  Select,
   Text,
+  TextInput,
 } from "@mantine/core";
 import "@mantine/core/styles.css";
+import "@mantine/notifications/styles.css";
+import React, { useEffect, useState } from "react";
 import { DoiTac } from "../../../api/type/PartnerType";
-import { showNotification } from "@mantine/notifications";
 
 interface EditPartnerModalProps {
   open: boolean;

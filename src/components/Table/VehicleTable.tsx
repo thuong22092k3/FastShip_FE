@@ -9,6 +9,7 @@ import {
 } from "@mantine/core";
 import "@mantine/core/styles.css";
 import { showNotification } from "@mantine/notifications";
+import "@mantine/notifications/styles.css";
 import {
   IconCaretDownFilled,
   IconCaretUpFilled,
@@ -20,6 +21,7 @@ import { useDispatch } from "react-redux";
 import { vehicleService } from "../../api/service/VehicleService";
 import { Vehicle } from "../../api/type/VehicleType";
 import { uploadVehicles } from "../../state_management/slices/vehicleSlice";
+import { ConfirmModal } from "../../views/Order/components/ConfirmStatusModal";
 import CheckboxComponent from "../CheckBox/CheckBoxComponent";
 
 type Props = {
@@ -46,12 +48,12 @@ const getStatusColor = (status: string) => {
 
 const getMaintenanceColor = (status: string) => {
   switch (status?.toLowerCase()) {
-    case "đã bảo dưỡng":
-      return "green";
-    case "đang bảo dưỡng":
-      return "blue";
     case "chờ bảo dưỡng":
       return "orange";
+    case "đang bảo dưỡng":
+      return "blue";
+    case "đã bảo dưỡng":
+      return "green";
     default:
       return "gray";
   }
@@ -92,10 +94,33 @@ export const VehicleTable: React.FC<Props> = ({
   ];
 
   const maintenanceOptions = [
-    { value: "Đã bảo dưỡng", label: "Đã bảo dưỡng" },
-    { value: "Đang bảo dưỡng", label: "Đang bảo dưỡng" },
     { value: "Chờ bảo dưỡng", label: "Chờ bảo dưỡng" },
+    { value: "Đang bảo dưỡng", label: "Đang bảo dưỡng" },
+    { value: "Đã bảo dưỡng", label: "Đã bảo dưỡng" },
   ];
+
+  const [confirmModal, setConfirmModal] = useState({
+    opened: false,
+    title: "",
+    message: "",
+    warning: "",
+    onConfirm: () => {},
+  });
+
+  const openConfirmModal = (config: {
+    title: string;
+    message: string;
+    warning?: string;
+    onConfirm: () => void;
+  }) => {
+    setConfirmModal({
+      opened: true,
+      title: config.title,
+      message: config.message,
+      warning: config.warning ?? "",
+      onConfirm: config.onConfirm,
+    });
+  };
 
   const handleSelectAll = (checked: boolean) => {
     if (checked) {
@@ -157,6 +182,8 @@ export const VehicleTable: React.FC<Props> = ({
         message: "Không thể cập nhật trạng thái phương tiện",
         color: "red",
       });
+    } finally {
+      setConfirmModal((prev) => ({ ...prev, opened: false }));
     }
   };
 
@@ -168,8 +195,10 @@ export const VehicleTable: React.FC<Props> = ({
       await vehicleService.updateVehicle(phuongTienId, {
         BaoDuong: newMaintenanceStatus,
       });
+
       const updatedVehicles = await vehicleService.getAllVehicles();
       dispatch(uploadVehicles(updatedVehicles.data));
+
       showNotification({
         title: "Cập nhật thành công",
         message: "Trạng thái bảo dưỡng đã được cập nhật",
@@ -181,8 +210,11 @@ export const VehicleTable: React.FC<Props> = ({
         message: "Không thể cập nhật trạng thái bảo dưỡng",
         color: "red",
       });
+    } finally {
+      setConfirmModal((prev) => ({ ...prev, opened: false }));
     }
   };
+
   const sortedData = [...data].sort((a, b) => {
     if (!sortBy) return 0;
 
@@ -239,7 +271,12 @@ export const VehicleTable: React.FC<Props> = ({
               value={vehicle.TrangThai}
               onChange={(value) => {
                 if (value && value !== vehicle.TrangThai) {
-                  handleUpdateStatus(vehicle.PhuongTienId, value);
+                  openConfirmModal({
+                    title: "Xác nhận thay đổi trạng thái",
+                    message: `Bạn có chắc chắn muốn thay đổi trạng thái từ "${vehicle.TrangThai}" sang "${value}"?`,
+                    onConfirm: () =>
+                      handleUpdateStatus(vehicle.PhuongTienId, value),
+                  });
                 }
               }}
               data={statusOptions}
@@ -266,7 +303,12 @@ export const VehicleTable: React.FC<Props> = ({
               value={vehicle.BaoDuong}
               onChange={(value) => {
                 if (value && value !== vehicle.BaoDuong) {
-                  handleUpdateMaintenance(vehicle.PhuongTienId, value);
+                  openConfirmModal({
+                    title: "Xác nhận thay đổi bảo dưỡng",
+                    message: `Bạn có chắc chắn muốn thay đổi trạng thái bảo dưỡng từ "${vehicle.BaoDuong}" sang "${value}"?`,
+                    onConfirm: () =>
+                      handleUpdateMaintenance(vehicle.PhuongTienId, value),
+                  });
                 }
               }}
               data={maintenanceOptions}
@@ -308,68 +350,79 @@ export const VehicleTable: React.FC<Props> = ({
   });
 
   return (
-    <ScrollArea
-      type="scroll"
-      scrollbars="x"
-      offsetScrollbars
-      style={{
-        width: "100%",
-        maxWidth: "85vw",
-        position: "relative",
-      }}
-    >
-      <Table
-        striped
-        highlightOnHover
-        withTableBorder
+    <>
+      {" "}
+      <ScrollArea
+        type="scroll"
+        scrollbars="x"
+        offsetScrollbars
         style={{
-          border: "1px solid #ccc",
-          borderCollapse: "collapse",
+          width: "100%",
+          maxWidth: "85vw",
+          position: "relative",
         }}
       >
-        <Table.Th style={{ ...headerStyle, minWidth: columnWidths.checkbox }}>
-          <CheckboxComponent
-            isChecked={isChecked}
-            setIsChecked={setIsChecked}
-          />
-        </Table.Th>
-        {[
-          { key: "PhuongTienId", label: "ID Phương tiện" },
-          { key: "HangXe", label: "Hãng xe" },
-          { key: "TaiXeID", label: "Tài xế ID" },
-          { key: "BienSo", label: "Biển số" },
-          { key: "LoaiXe", label: "Loại xe" },
-          { key: "SucChua", label: "Sức chứa" },
-          { key: "trangThai", label: "Trạng thái" },
-          { key: "baoDuong", label: "Bảo dưỡng" },
-          { key: "thoiGianBaoDuong", label: "Thời gian bảo dưỡng" },
-        ].map(({ key, label }) => (
-          <Table.Th
-            key={key}
-            style={{
-              ...headerStyle,
-              minWidth: columnWidths[key],
-              cursor: "pointer",
-            }}
-            onClick={() => handleSort(key as keyof Vehicle)}
-          >
-            {label}
-            {sortBy === key ? (
-              sortDirection === "asc" ? (
-                <IconCaretUpFilled size={14} />
-              ) : (
-                <IconCaretDownFilled size={14} />
-              )
-            ) : (
-              <IconCaretUpFilled size={14} color="gray" />
-            )}
+        <Table
+          striped
+          highlightOnHover
+          withTableBorder
+          style={{
+            border: "1px solid #ccc",
+            borderCollapse: "collapse",
+          }}
+        >
+          <Table.Th style={{ ...headerStyle, minWidth: columnWidths.checkbox }}>
+            <CheckboxComponent
+              isChecked={isChecked}
+              setIsChecked={setIsChecked}
+            />
           </Table.Th>
-        ))}
-        <Table.Th style={{ ...headerStyle, minWidth: columnWidths.hanhDong }}>
-          Hành động
-        </Table.Th>
-        <Table.Tbody>{rows}</Table.Tbody>
-      </Table>
-    </ScrollArea>
+          {[
+            { key: "PhuongTienId", label: "ID Phương tiện" },
+            { key: "HangXe", label: "Hãng xe" },
+            { key: "TaiXeID", label: "Tài xế ID" },
+            { key: "BienSo", label: "Biển số" },
+            { key: "LoaiXe", label: "Loại xe" },
+            { key: "SucChua", label: "Sức chứa" },
+            { key: "trangThai", label: "Trạng thái" },
+            { key: "baoDuong", label: "Bảo dưỡng" },
+            { key: "thoiGianBaoDuong", label: "Thời gian bảo dưỡng" },
+          ].map(({ key, label }) => (
+            <Table.Th
+              key={key}
+              style={{
+                ...headerStyle,
+                minWidth: columnWidths[key],
+                cursor: "pointer",
+              }}
+              onClick={() => handleSort(key as keyof Vehicle)}
+            >
+              {label}
+              {sortBy === key ? (
+                sortDirection === "asc" ? (
+                  <IconCaretUpFilled size={14} />
+                ) : (
+                  <IconCaretDownFilled size={14} />
+                )
+              ) : (
+                <IconCaretUpFilled size={14} color="gray" />
+              )}
+            </Table.Th>
+          ))}
+          <Table.Th style={{ ...headerStyle, minWidth: columnWidths.hanhDong }}>
+            Hành động
+          </Table.Th>
+          <Table.Tbody>{rows}</Table.Tbody>
+        </Table>
+      </ScrollArea>
+      <ConfirmModal
+        opened={confirmModal.opened}
+        onClose={() => setConfirmModal((prev) => ({ ...prev, opened: false }))}
+        onConfirm={confirmModal.onConfirm}
+        title={confirmModal.title}
+        message={confirmModal.message}
+        warningMessage={confirmModal.warning}
+      />
+    </>
   );
 };

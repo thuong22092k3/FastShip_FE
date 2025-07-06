@@ -11,6 +11,7 @@ import "@mantine/core/styles.css";
 import { DateTimePicker } from "@mantine/dates";
 import "@mantine/dates/styles.css";
 import { showNotification } from "@mantine/notifications";
+import "@mantine/notifications/styles.css";
 import { useEffect, useState } from "react";
 import { vehicleService } from "../../api/service/VehicleService";
 import { Vehicle } from "../../api/type/VehicleType";

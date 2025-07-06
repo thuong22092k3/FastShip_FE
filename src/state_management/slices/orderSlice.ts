@@ -2,8 +2,8 @@ import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import {
   ADD_ORDER,
   DELETE_ORDER,
-  UPDATE_ORDER,
   RESET_ALL_STORES,
+  UPDATE_ORDER,
 } from "../actions/actions";
 const orderSlice = createSlice({
   name: "orderSlice",

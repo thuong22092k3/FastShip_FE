@@ -10,6 +10,7 @@ import {
   Title,
 } from "@mantine/core";
 import { showNotification } from "@mantine/notifications";
+import "@mantine/notifications/styles.css";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { employeeService } from "../../api/service/EmployeeService";

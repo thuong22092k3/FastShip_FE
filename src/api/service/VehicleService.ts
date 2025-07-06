@@ -1,4 +1,5 @@
 import { showNotification } from "@mantine/notifications";
+import "@mantine/notifications/styles.css";
 import axios from "axios";
 import { ENDPOINTS } from "../End_Point";
 import { Vehicle } from "../type/VehicleType";

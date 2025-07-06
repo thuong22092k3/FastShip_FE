@@ -12,6 +12,7 @@ import {
 } from "@mantine/core";
 import "@mantine/core/styles.css";
 import { showNotification } from "@mantine/notifications";
+import "@mantine/notifications/styles.css";
 import {
   IconCaretDownFilled,
   IconCaretUpFilled,
@@ -28,6 +29,7 @@ import { UPDATE_ORDER } from "../../state_management/actions/actions";
 import { RootState } from "../../state_management/reducers/rootReducer";
 import { uploadDrivers } from "../../state_management/slices/driveSlice";
 import { PAGE_SIZE_OPTIONS, PageSize } from "../../utils/constants/enum";
+import { ConfirmModal } from "../../views/Order/components/ConfirmStatusModal";
 import CheckboxComponent from "../CheckBox/CheckBoxComponent";
 import TextComponent from "../Text/TextComponent";
 
@@ -121,6 +123,10 @@ export const OrderTable: React.FC<Props> = ({
   const dispatch = useDispatch();
   const orders = useSelector((state: RootState) => state.orderSlice);
   const pageSizeOptions = PAGE_SIZE_OPTIONS;
+  const [modalOpened, setModalOpened] = useState(false);
+  const [selectedOrderId, setSelectedOrderId] = useState<string | null>(null);
+  const [currentStatus, setCurrentStatus] = useState("");
+  const [newStatus, setNewStatus] = useState("");
 
   const handleSelectAll = (checked: boolean) => {
     if (checked) {
@@ -148,6 +154,28 @@ export const OrderTable: React.FC<Props> = ({
   const allSelected = data.length > 0 && selectedRows.length === data.length;
   const someSelected = selectedRows.length > 0 && !allSelected;
   const [isChecked, setIsChecked] = useState(false);
+  const [confirmModal, setConfirmModal] = useState({
+    opened: false,
+    title: "",
+    message: "",
+    warning: "",
+    onConfirm: () => {},
+  });
+
+  const openConfirmModal = (config: {
+    title: string;
+    message: string;
+    warning?: string;
+    onConfirm: () => void;
+  }) => {
+    setConfirmModal({
+      opened: true,
+      title: config.title,
+      message: config.message,
+      warning: config.warning ?? "",
+      onConfirm: config.onConfirm,
+    });
+  };
 
   const cellStyle = {
     borderRight: "1px solid #ccc",
@@ -212,33 +240,66 @@ export const OrderTable: React.FC<Props> = ({
 
   const handleUpdateStatus = async (orderId: string, newStatus: string) => {
     try {
-      const result = await orderService.updateStatusOrder(orderId, newStatus);
+      const order = data.find((o) => o.DonHangId === orderId);
+      if (!order) return;
 
-      if (result.success) {
-        const order = data.find((o) => o.DonHangId === orderId);
-        if (!order) return;
+      const tempUpdatedOrder = {
+        ...order,
+        TrangThai: newStatus,
+        UpdatedAt: new Date().toISOString(),
+      };
+      dispatch(UPDATE_ORDER(tempUpdatedOrder));
 
-        const updatedOrder = {
-          ...order,
-          TrangThai: newStatus,
-          UpdateAt: new Date().toISOString(),
-          CreateAt: order.CreatedAt ?? order.CreatedAt,
-        };
+      const result = await orderService.updateStatusOrder(
+        orderId,
+        newStatus,
+        order.TrangThai
+      );
 
-        dispatch(UPDATE_ORDER(updatedOrder));
-        console.log("status: ", updatedOrder);
-        showNotification({
-          title: "Cập nhật thành công",
-          message: "Trạng thái đơn hàng đã được cập nhật",
-          color: "green",
-        });
-      }
+      showNotification({
+        title: "Cập nhật thành công",
+        message: "Trạng thái đơn hàng đã được cập nhật",
+        color: "green",
+      });
+
+      setConfirmModal((prev) => ({ ...prev, opened: false }));
+    } catch (error: any) {
+      showNotification({
+        title: "Lỗi",
+        message: error.message || "Không thể cập nhật trạng thái đơn hàng",
+        color: "red",
+      });
+    }
+  };
+
+  const handleAssignDriver = async (orderId: string, driverId: string) => {
+    try {
+      const order = data.find((o) => o.DonHangId === orderId);
+      if (!order) return;
+
+      // Optimistic update
+      const tempUpdatedOrder = {
+        ...order,
+        TaiXeID: driverId,
+        UpdatedAt: new Date().toISOString(),
+      };
+      dispatch(UPDATE_ORDER(tempUpdatedOrder));
+
+      await orderService.assignDriver(orderId, driverId);
+
+      showNotification({
+        title: "Thành công",
+        message: "Đã gán tài xế cho đơn hàng",
+        color: "green",
+      });
     } catch (error) {
       showNotification({
         title: "Lỗi",
-        message: "Không thể cập nhật trạng thái đơn hàng",
+        message: "Không thể gán tài xế",
         color: "red",
       });
+    } finally {
+      setConfirmModal((prev) => ({ ...prev, opened: false }));
     }
   };
 
@@ -337,9 +398,48 @@ export const OrderTable: React.FC<Props> = ({
               <Select
                 value={order.TrangThai}
                 onChange={(value) => {
-                  if (value && value !== order.TrangThai) {
-                    handleUpdateStatus(order.DonHangId, value);
+                  if (!value || value === order.TrangThai) return;
+
+                  const validTransitions: Record<string, string[]> = {
+                    "Chờ xác nhận": ["Đang giao", "Hủy"],
+                    "Đang giao": ["Đã giao"],
+                    "Đã giao": [],
+                    Hủy: [],
+                  };
+
+                  const isValid =
+                    validTransitions[order.TrangThai]?.includes(value);
+
+                  if (!isValid) {
+                    let warning = `Không thể chuyển từ ${order.TrangThai} sang ${value}`;
+
+                    if (
+                      order.TrangThai === "Chờ xác nhận" &&
+                      value === "Đã giao"
+                    ) {
+                      warning =
+                        "Phải chuyển sang 'Đang giao' trước khi có thể giao hàng";
+                    } else if (
+                      order.TrangThai === "Đang giao" &&
+                      value === "Hủy"
+                    ) {
+                      warning =
+                        "Không thể hủy đơn hàng đang trong quá trình giao";
+                    }
+
+                    showNotification({
+                      title: "Không hợp lệ",
+                      message: warning,
+                      color: "red",
+                    });
+                    return;
                   }
+
+                  openConfirmModal({
+                    title: "Xác nhận thay đổi trạng thái",
+                    message: `Bạn có chắc chắn muốn chuyển đơn hàng từ "${order.TrangThai}" sang "${value}"?`,
+                    onConfirm: () => handleUpdateStatus(order.DonHangId, value),
+                  });
                 }}
                 data={statusOptions}
                 size="xs"
@@ -383,30 +483,21 @@ export const OrderTable: React.FC<Props> = ({
             <Select
               placeholder="Chọn tài xế"
               value={order.TaiXeID || ""}
-              onChange={async (value) => {
+              onChange={(value) => {
                 if (!value || value === order.TaiXeID) return;
-                try {
-                  await orderService.assignDriver(order.DonHangId, value);
-                  showNotification({
-                    title: "Thành công",
-                    message: "Đã gán tài xế cho đơn hàng",
-                    color: "green",
-                  });
 
-                  const updatedOrder = {
-                    ...order,
-                    TaiXeID: value,
-                    UpdatedAt: new Date().toISOString(),
-                  };
+                const currentDriver = drivers.find(
+                  (d) => d.TaiXeID === order.TaiXeID
+                );
+                const newDriver = drivers.find((d) => d.TaiXeID === value);
 
-                  dispatch(UPDATE_ORDER(updatedOrder));
-                } catch (err) {
-                  showNotification({
-                    title: "Lỗi",
-                    message: "Không thể gán tài xế",
-                    color: "red",
-                  });
-                }
+                openConfirmModal({
+                  title: "Xác nhận thay đổi tài xế",
+                  message: `Bạn có chắc chắn muốn thay đổi tài xế từ "${
+                    currentDriver?.HoTen || "Chưa có"
+                  }" sang "${newDriver?.HoTen || "Chưa có"}"?`,
+                  onConfirm: () => handleAssignDriver(order.DonHangId, value),
+                });
               }}
               data={drivers.map((d) => ({ label: d.HoTen, value: d.TaiXeID }))}
               size="xs"
@@ -596,6 +687,14 @@ export const OrderTable: React.FC<Props> = ({
           mt="md"
         />
       )}
+      <ConfirmModal
+        opened={confirmModal.opened}
+        onClose={() => setConfirmModal((prev) => ({ ...prev, opened: false }))}
+        onConfirm={confirmModal.onConfirm}
+        title={confirmModal.title}
+        message={confirmModal.message}
+        warningMessage={confirmModal.warning}
+      />
     </>
   );
 };

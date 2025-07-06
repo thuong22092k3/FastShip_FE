@@ -1,5 +1,6 @@
 import { Button, Grid, Group, LoadingOverlay, Title } from "@mantine/core";
 import { showNotification } from "@mantine/notifications";
+import "@mantine/notifications/styles.css";
 import { useEffect, useState } from "react";
 import { employeeService } from "../../api/service/EmployeeService";
 import { TaiXe } from "../../api/type/EmployeeType";

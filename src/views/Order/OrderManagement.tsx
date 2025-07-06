@@ -9,6 +9,7 @@ import {
 } from "@mantine/core";
 import "@mantine/core/styles.css";
 import { showNotification } from "@mantine/notifications";
+import "@mantine/notifications/styles.css";
 import {
   IconArchive,
   IconCircleCheck,
