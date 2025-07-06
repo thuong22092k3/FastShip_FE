@@ -14,6 +14,7 @@ interface AuthUser {
   fullName: string;
   email?: string;
   role?: "Admin" | "TaiXe" | "NhanVien";
+  DiaDiemId?: string;
 }
 
 // Định nghĩa interface AuthState
@@ -80,6 +81,7 @@ const authSlice = createSlice({
           fullName: action.payload.HoTen,
           email: action.payload.Email,
           role: "TaiXe",
+          DiaDiemId: action.payload.DiaDiemId,
         };
       }
     });
@@ -92,6 +94,7 @@ const authSlice = createSlice({
           fullName: action.payload.HoTen,
           email: action.payload.Email,
           role: "NhanVien",
+          DiaDiemId: action.payload.DiaDiemId,
         };
       }
     });

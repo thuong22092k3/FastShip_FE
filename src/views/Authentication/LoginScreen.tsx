@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { AuthService } from "../../api/service/AuthService";
+import { isNhanVien, isTaiXe } from "../../api/type/EmployeeType";
 import ButtonComponent from "../../components/Button/ButtonComponent";
 import TextComponent from "../../components/Text/TextComponent";
 import TextButtonComponent from "../../components/TextButton/TextButtonComponent";
@@ -41,12 +42,21 @@ const LoginScreen = () => {
       const response = await AuthService.login(username, password);
       console.log("response user:", response);
 
+      let DiaDiemId: string | undefined = undefined;
+
+      if (isNhanVien(response) || isTaiXe(response)) {
+        DiaDiemId = response.DiaDiemId;
+      }
+
       const authUser = {
         id: response.id,
         username: response.UserName,
         fullName: response.HoTen,
+        email: response.Email,
         role: response.role,
+        DiaDiemId,
       };
+
       dispatch(loginSuccess(authUser));
       navigate(NAV_LINK.STATISTICS);
     } catch (err: unknown) {
@@ -60,6 +70,7 @@ const LoginScreen = () => {
       setLoading(false);
     }
   };
+
   // const handleLogin = async () => {
   //   navigate(NAV_LINK.STATISTICS);
   // };

@@ -1,4 +1,4 @@
-export const BASE_URL = "https://fastship-be.onrender.com";
+export const BASE_URL = "http://localhost:5000";
 
 export const ENDPOINTS = {
   AUTH: {
@@ -59,5 +59,15 @@ export const ENDPOINTS = {
       `${BASE_URL}/api/location/delete/${DiaDiemId}`,
     UPDATE: (DiaDiemId: string) =>
       `${BASE_URL}/api/location/update/${DiaDiemId}`,
+  },
+
+  STATISTICS: {
+    OVERVIEW: `${BASE_URL}/api/statistics/overview`,
+    LOCATIONS: `${BASE_URL}/api/statistics/locations`,
+    STAFF_PERFORMANCE: `${BASE_URL}/api/statistics/staff-performance`,
+    FILTER: `${BASE_URL}/api/statistics/filter`,
+    MONTHLY: `${BASE_URL}/api/statistics/monthly`,
+    STATUS: `${BASE_URL}/api/statistics/status`,
+    TOP_STAFF: `${BASE_URL}/api/statistics/top-staff`,
   },
 };
