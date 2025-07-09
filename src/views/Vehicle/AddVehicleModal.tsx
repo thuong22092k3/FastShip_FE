@@ -134,7 +134,7 @@ export default function AddVehicleModal({
         TrangThai: formData.TrangThai || "Hoạt động",
         BaoDuong: formData.BaoDuong || "Chưa bảo dưỡng",
         DiaDiemId: isAdmin
-          ? formData.DiaDiemId ?? ""
+          ? formData.DiaDiemId || ""
           : currentUser?.DiaDiemId ?? "",
       };
 
@@ -323,12 +323,13 @@ export default function AddVehicleModal({
                   <NativeSelect
                     data={[{ value: "", label: "Chọn bưu cục" }, ...locations]}
                     value={formData.DiaDiemId ?? ""}
-                    onChange={(event) =>
+                    onChange={(event) => {
+                      const value = event?.currentTarget?.value ?? "";
                       setFormData((prev) => ({
                         ...prev,
-                        DiaDiemId: event.currentTarget.value,
-                      }))
-                    }
+                        DiaDiemId: value,
+                      }));
+                    }}
                     required
                     error={errors.DiaDiemId}
                   />

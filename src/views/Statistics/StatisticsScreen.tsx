@@ -40,6 +40,7 @@ interface LocationStats {
 
 interface StaffPerformance {
   staffId: string;
+  staffName: string;
   totalOrders?: number;
   completedOrders: number;
   completionRate: number;
@@ -245,6 +246,37 @@ export default function StatisticScreen() {
           trendValue={overviewData?.percentageChange}
         />
         <CardComponent2
+          title="Đơn Chờ xác nhận"
+          value={
+            overviewData?.statusStats
+              ?.find((s) => s.status === "Chờ xác nhận")
+              ?.count.toString() || "0"
+          }
+          updatedText={`${Math.round(
+            ((overviewData?.statusStats?.find(
+              (s) => s.status === "Chờ xác nhận"
+            )?.count || 0) /
+              (overviewData?.totalOrders || 1)) *
+              100
+          )}% tổng đơn`}
+          icon={<IconClock size={24} />}
+        />
+        <CardComponent2
+          title="Đơn đang giao"
+          value={
+            overviewData?.statusStats
+              ?.find((s) => s.status === "Đang giao")
+              ?.count.toString() || "0"
+          }
+          updatedText={`${Math.round(
+            ((overviewData?.statusStats?.find((s) => s.status === "Đang giao")
+              ?.count || 0) /
+              (overviewData?.totalOrders || 1)) *
+              100
+          )}% tổng đơn`}
+          icon={<IconClock size={24} />}
+        />
+        <CardComponent2
           title="Đơn hoàn thành"
           value={
             overviewData?.statusStats
@@ -259,6 +291,22 @@ export default function StatisticScreen() {
           )}% tổng đơn`}
           icon={<IconClock size={24} />}
         />
+        <CardComponent2
+          title="Đơn đã hủy"
+          value={
+            overviewData?.statusStats
+              ?.find((s) => s.status === "Hủy")
+              ?.count.toString() || "0"
+          }
+          updatedText={`${Math.round(
+            ((overviewData?.statusStats?.find((s) => s.status === "Hủy")
+              ?.count || 0) /
+              (overviewData?.totalOrders || 1)) *
+              100
+          )}% tổng đơn`}
+          icon={<IconClock size={24} />}
+        />
+
         {/* <CardComponent2
           title="Nhân viên tích cực"
           value={overviewData?.staffStats?.[0]?.staffId || "N/A"}
@@ -440,7 +488,7 @@ export default function StatisticScreen() {
           <Table.Tbody>
             {staffPerformance.map((staff) => (
               <Table.Tr key={staff.staffId}>
-                <Table.Td>{staff.staffId}</Table.Td>
+                <Table.Td>{staff.staffName}</Table.Td>
                 <Table.Td>{staff.totalOrders || 0}</Table.Td>
                 <Table.Td>{staff.completedOrders}</Table.Td>
                 <Table.Td>

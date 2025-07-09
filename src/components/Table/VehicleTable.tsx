@@ -89,7 +89,7 @@ export const VehicleTable: React.FC<Props> = ({
 
   const statusOptions = [
     { value: "Đang hoạt động", label: "Đang hoạt động" },
-    { value: "Đang bảo dưỡng", label: "Đang bảo dưỡng" },
+    // { value: "Đang bảo dưỡng", label: "Đang bảo dưỡng" },
     { value: "Ngừng hoạt động", label: "Ngừng hoạt động" },
   ];
 
@@ -194,6 +194,7 @@ export const VehicleTable: React.FC<Props> = ({
     try {
       await vehicleService.updateVehicle(phuongTienId, {
         BaoDuong: newMaintenanceStatus,
+        ThoiGianBaoDuong: new Date().toISOString(),
       });
 
       const updatedVehicles = await vehicleService.getAllVehicles();
@@ -371,47 +372,58 @@ export const VehicleTable: React.FC<Props> = ({
             borderCollapse: "collapse",
           }}
         >
-          <Table.Th style={{ ...headerStyle, minWidth: columnWidths.checkbox }}>
-            <CheckboxComponent
-              isChecked={isChecked}
-              setIsChecked={setIsChecked}
-            />
-          </Table.Th>
-          {[
-            { key: "PhuongTienId", label: "ID Phương tiện" },
-            { key: "HangXe", label: "Hãng xe" },
-            { key: "TaiXeID", label: "Tài xế ID" },
-            { key: "BienSo", label: "Biển số" },
-            { key: "LoaiXe", label: "Loại xe" },
-            { key: "SucChua", label: "Sức chứa" },
-            { key: "trangThai", label: "Trạng thái" },
-            { key: "baoDuong", label: "Bảo dưỡng" },
-            { key: "thoiGianBaoDuong", label: "Thời gian bảo dưỡng" },
-          ].map(({ key, label }) => (
-            <Table.Th
-              key={key}
-              style={{
-                ...headerStyle,
-                minWidth: columnWidths[key],
-                cursor: "pointer",
-              }}
-              onClick={() => handleSort(key as keyof Vehicle)}
-            >
-              {label}
-              {sortBy === key ? (
-                sortDirection === "asc" ? (
-                  <IconCaretUpFilled size={14} />
-                ) : (
-                  <IconCaretDownFilled size={14} />
-                )
-              ) : (
-                <IconCaretUpFilled size={14} color="gray" />
-              )}
-            </Table.Th>
-          ))}
-          <Table.Th style={{ ...headerStyle, minWidth: columnWidths.hanhDong }}>
-            Hành động
-          </Table.Th>
+          <Table.Thead>
+            <Table.Tr>
+              <Table.Th
+                style={{ ...headerStyle, minWidth: columnWidths.checkbox }}
+              >
+                <CheckboxComponent
+                  isChecked={isChecked}
+                  setIsChecked={setIsChecked}
+                />
+              </Table.Th>
+
+              {[
+                { key: "PhuongTienId", label: "ID Phương tiện" },
+                { key: "HangXe", label: "Hãng xe" },
+                { key: "TaiXeID", label: "Tài xế ID" },
+                { key: "BienSo", label: "Biển số" },
+                { key: "LoaiXe", label: "Loại xe" },
+                { key: "SucChua", label: "Sức chứa" },
+                { key: "trangThai", label: "Trạng thái" },
+                { key: "baoDuong", label: "Bảo dưỡng" },
+                { key: "thoiGianBaoDuong", label: "Thời gian bảo dưỡng" },
+              ].map(({ key, label }) => (
+                <Table.Th
+                  key={key}
+                  style={{
+                    ...headerStyle,
+                    minWidth: columnWidths[key],
+                    cursor: "pointer",
+                  }}
+                  onClick={() => handleSort(key as keyof Vehicle)}
+                >
+                  {label}
+                  {sortBy === key ? (
+                    sortDirection === "asc" ? (
+                      <IconCaretUpFilled size={14} />
+                    ) : (
+                      <IconCaretDownFilled size={14} />
+                    )
+                  ) : (
+                    <IconCaretUpFilled size={14} color="gray" />
+                  )}
+                </Table.Th>
+              ))}
+
+              <Table.Th
+                style={{ ...headerStyle, minWidth: columnWidths.hanhDong }}
+              >
+                Hành động
+              </Table.Th>
+            </Table.Tr>
+          </Table.Thead>
+
           <Table.Tbody>{rows}</Table.Tbody>
         </Table>
       </ScrollArea>

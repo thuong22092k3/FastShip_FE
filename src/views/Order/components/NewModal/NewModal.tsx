@@ -1,7 +1,6 @@
 import {
   Box,
   Button,
-  Grid,
   Group,
   LoadingOverlay,
   Paper,
@@ -256,92 +255,83 @@ export default function NewModal({
             Tạo đơn hàng mới
           </Title>
 
-          <Grid gutter="md">
-            <Grid.Col span={{ base: 12, md: 8 }}>
-              <Paper p="md" withBorder radius="md" shadow="sm">
-                <Stepper
-                  active={active}
-                  onStepClick={setActive}
-                  allowNextStepsSelect={false}
-                >
-                  <Stepper.Step
-                    label="Bước 1"
-                    description="Thông tin đơn hàng"
-                  />
-                  <Stepper.Step
-                    label="Bước 2"
-                    description="Thông tin kiện hàng"
-                  />
-                  <Stepper.Step
-                    label="Bước 3"
-                    description="Hình thức giao hàng"
-                  />
-                  <Stepper.Step label="Bước 4" description="Xác nhận" />
-                </Stepper>
+          {/* <Grid gutter="md">
+            <Grid.Col span={{ base: 12, md: 8 }}> */}
+          <Paper p="md" withBorder radius="md" shadow="sm">
+            <Stepper
+              active={active}
+              onStepClick={setActive}
+              allowNextStepsSelect={false}
+            >
+              <Stepper.Step label="Bước 1" description="Thông tin đơn hàng" />
+              <Stepper.Step label="Bước 2" description="Thông tin kiện hàng" />
+              <Stepper.Step label="Bước 3" description="Hình thức giao hàng" />
+              <Stepper.Step label="Bước 4" description="Xác nhận" />
+            </Stepper>
 
-                <Box mt="xl">
-                  {active === 0 && (
-                    <OrderInfoStep
-                      formData={formData}
-                      errors={errors}
-                      handleInputChange={handleInputChange}
-                    />
-                  )}
+            <Box mt="xl">
+              {active === 0 && (
+                <OrderInfoStep
+                  formData={formData}
+                  errors={errors}
+                  handleInputChange={handleInputChange}
+                />
+              )}
 
-                  {active === 1 && (
-                    <PackageInfoStep
-                      packageInfo={packageInfo}
-                      setPackageInfo={setPackageInfo}
-                    />
-                  )}
-                  {active === 2 && (
-                    <DeliveryServiceStep
-                      formData={formData}
-                      handleInputChange={handleInputChange}
-                      handleSelectChange={handleSelectChange}
-                    />
-                  )}
-                  {active === 3 && (
-                    <ConfirmationStep
-                      formData={formData}
-                      packageInfo={packageInfo}
-                      fees={fees}
-                    />
-                  )}
+              {active === 1 && (
+                <PackageInfoStep
+                  packageInfo={packageInfo}
+                  setPackageInfo={setPackageInfo}
+                />
+              )}
+              {active === 2 && (
+                <DeliveryServiceStep
+                  formData={formData}
+                  handleInputChange={handleInputChange}
+                  handleSelectChange={handleSelectChange}
+                />
+              )}
+              {active === 3 && (
+                <ConfirmationStep
+                  formData={formData}
+                  packageInfo={packageInfo}
+                  fees={fees}
+                />
+              )}
 
-                  <Group justify="flex-end" mt="xl">
-                    {active > 0 && (
-                      <Button
-                        variant="outline"
-                        onClick={() => setActive((prev) => prev - 1)}
-                        disabled={isSubmitting}
-                      >
-                        Quay lại
-                      </Button>
-                    )}
-                    {active < 3 ? (
-                      <Button
-                        onClick={() => {
-                          if (active === 0 && !validateForm()) return;
-                          setActive((prev) => prev + 1);
-                        }}
-                        disabled={isSubmitting}
-                      >
-                        Tiếp theo
-                      </Button>
-                    ) : (
-                      <Button
-                        onClick={handleSubmit}
-                        color="green"
-                        loading={isSubmitting}
-                      >
-                        Xác nhận tạo đơn
-                      </Button>
-                    )}
-                  </Group>
-                </Box>
-              </Paper>
-            </Grid.Col>
+              <Group justify="flex-end" mt="xl">
+                {active > 0 && (
+                  <Button
+                    variant="outline"
+                    onClick={() => setActive((prev) => prev - 1)}
+                    disabled={isSubmitting}
+                  >
+                    Quay lại
+                  </Button>
+                )}
+                {active < 3 ? (
+                  <Button
+                    onClick={() => {
+                      if (active === 0 && !validateForm()) return;
+                      setActive((prev) => prev + 1);
+                    }}
+                    disabled={isSubmitting}
+                  >
+                    Tiếp theo
+                  </Button>
+                ) : (
+                  <Button
+                    onClick={handleSubmit}
+                    color="green"
+                    loading={isSubmitting}
+                  >
+                    Xác nhận tạo đơn
+                  </Button>
+                )}
+              </Group>
+            </Box>
+          </Paper>
+          {/* </Grid.Col>
 
             {/* <Grid.Col span={{ base: 12, md: 4 }}>
               <OrderSummary
@@ -355,7 +345,7 @@ export default function NewModal({
                 additionalServices={formData.additionalServices}
               />
             </Grid.Col> */}
-          </Grid>
+          {/* </Grid> */}
         </div>
       </Box>
     </Box>

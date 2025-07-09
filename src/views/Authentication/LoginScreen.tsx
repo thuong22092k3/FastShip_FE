@@ -58,7 +58,11 @@ const LoginScreen = () => {
       };
 
       dispatch(loginSuccess(authUser));
-      navigate(NAV_LINK.STATISTICS);
+      if (authUser.role === "Admin") {
+        navigate(NAV_LINK.STATISTICS);
+      } else {
+        navigate(NAV_LINK.ORDER_MANAGEMENT);
+      }
     } catch (err: unknown) {
       let errorMessage = "Đăng nhập thất bại";
       if (err instanceof Error) {

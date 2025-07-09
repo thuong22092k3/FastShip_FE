@@ -250,7 +250,7 @@ export default function UpdateDriverModal({
               />
             </Grid.Col>
 
-            <Grid.Col span={6}>
+            {/* <Grid.Col span={6}>
               <TextInputCustom
                 label="Hiệu suất"
                 labelFontWeight="bold"
@@ -263,7 +263,7 @@ export default function UpdateDriverModal({
                 pattern="[0-9]*"
                 labelColor={COLORS.black}
               />
-            </Grid.Col>
+            </Grid.Col> */}
 
             <Grid.Col span={6}>
               <TextInputCustom

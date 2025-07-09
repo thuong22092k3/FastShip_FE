@@ -363,7 +363,7 @@ export default function CreateEmployeeModal({
               />
             </Grid.Col>
 
-            <Grid.Col span={6}>
+            {/* <Grid.Col span={6}>
               <TextInputCustom
                 label="Hiệu suất (%)"
                 labelFontWeight="bold"
@@ -376,7 +376,7 @@ export default function CreateEmployeeModal({
                 pattern="[0-9]*"
                 labelColor={COLORS.black}
               />
-            </Grid.Col>
+            </Grid.Col> */}
 
             {employeeType === "TaiXe" && (
               <Grid.Col span={6}>

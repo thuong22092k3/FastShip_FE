@@ -1,8 +1,16 @@
-import { Button, Grid, Group, LoadingOverlay, Title } from "@mantine/core";
+import {
+  Button,
+  Grid,
+  Group,
+  LoadingOverlay,
+  NativeSelect,
+  Title,
+} from "@mantine/core";
 import { showNotification } from "@mantine/notifications";
 import "@mantine/notifications/styles.css";
 import { useEffect, useState } from "react";
 import { employeeService } from "../../api/service/EmployeeService";
+import { LocationService } from "../../api/service/LocationService";
 import { NhanVien } from "../../api/type/EmployeeType";
 import TextInputCustom from "../../components/TextInput/TextInputComponent";
 import { COLORS } from "../../constants/colors";
@@ -22,6 +30,10 @@ export default function UpdateEmployeeModal({
 }: UpdateEmployeeModalProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [locations, setLocations] = useState<
+    { value: string; label: string }[]
+  >([]);
+  const [selectedLocation, setSelectedLocation] = useState<string | null>(null);
 
   const [formData, setFormData] = useState<Partial<NhanVien>>({
     NhanVienID: "",
@@ -30,6 +42,7 @@ export default function UpdateEmployeeModal({
     Password: "",
     UserName: "",
     HieuSuat: 0,
+    DiaDiemId: "",
   });
 
   // Update formData when employeeData changes
@@ -42,10 +55,27 @@ export default function UpdateEmployeeModal({
         UserName: employeeData.UserName,
         Password: employeeData.Password,
         HieuSuat: employeeData.HieuSuat,
+        DiaDiemId: employeeData.DiaDiemId,
       });
+      setSelectedLocation(employeeData.DiaDiemId ?? "");
     }
   }, [employeeData]);
+  useEffect(() => {
+    const fetchLocations = async () => {
+      try {
+        const response = await LocationService.getAll();
+        const formattedLocations = response.map((loc) => ({
+          value: loc.DiaDiemId,
+          label: `${loc.name} - ${loc.district}, ${loc.province}`,
+        }));
+        setLocations(formattedLocations);
+      } catch (error) {
+        console.error("Error fetching locations:", error);
+      }
+    };
 
+    fetchLocations();
+  }, []);
   const handleInputChange = (name: string, value: string) => {
     if (name === "Salary") {
       if (value === "" || /^[0-9]*$/.test(value)) {
@@ -126,12 +156,13 @@ export default function UpdateEmployeeModal({
     console.log("Chuẩn bị gửi dữ liệu cập nhật:", formData);
     try {
       const updateData = {
-        TaiXeID: formData.NhanVienID || "",
+        NhanVienID: formData.NhanVienID || "",
         HoTen: formData?.HoTen,
         UserName: formData?.UserName || "",
         Email: formData?.Email,
         HieuSuat: Number(formData?.HieuSuat),
         Password: formData?.Password,
+        DiaDiemId: formData?.DiaDiemId,
       };
       console.log("Dữ liệu sẽ gửi đến API:", updateData);
 
@@ -140,7 +171,7 @@ export default function UpdateEmployeeModal({
 
       showNotification({
         title: "Thành công",
-        message: "Đã cập nhật tài xế thành công",
+        message: "Đã cập nhật nhân viên điều phối thành công",
         color: "green",
       });
 
@@ -151,7 +182,7 @@ export default function UpdateEmployeeModal({
       console.error("Lỗi khi cập nhật:", error);
       showNotification({
         title: "Lỗi",
-        message: "Không thể cập nhật tài xế",
+        message: "Không thể cập nhật nhân viên điều phối",
         color: "red",
       });
     } finally {
@@ -280,7 +311,20 @@ export default function UpdateEmployeeModal({
               />
             </Grid.Col>
 
-            <Grid.Col span={6}>
+            <Grid.Col span={6} style={{ display: "flex", alignItems: "end" }}>
+              <NativeSelect
+                label="Bưu cục làm việc"
+                data={[{ value: "", label: "Chọn bưu cục" }, ...locations]}
+                value={selectedLocation ?? ""}
+                onChange={(event) =>
+                  setSelectedLocation(event.currentTarget.value)
+                }
+                required
+                error={errors.selectedLocation}
+              />
+            </Grid.Col>
+
+            {/* <Grid.Col span={6}>
               <TextInputCustom
                 label="Hiệu suất"
                 labelFontWeight="bold"
@@ -293,7 +337,7 @@ export default function UpdateEmployeeModal({
                 pattern="[0-9]*"
                 labelColor={COLORS.black}
               />
-            </Grid.Col>
+            </Grid.Col> */}
           </Grid>
           <Group justify="flex-end" mt="xl">
             <Button variant="outline" onClick={onClose} disabled={isSubmitting}>
